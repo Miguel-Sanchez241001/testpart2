@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.eclipse.jst.j2ee.commonarchivecore.looseconfig:LooseArchive xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:org.eclipse.jst.j2ee.commonarchivecore.looseconfig="commonarchive.looseconfig.xmi" uri="D:\workspace-aplicaciones-web\sate-operativo-vbn\SATE_opeEAR" binariesPath="D:\workspace-aplicaciones-web\sate-operativo-vbn\SATE_opeEAR" resourcesPath="D:\workspace-aplicaciones-web\sate-operativo-vbn\SATE_opeEAR" archiveType="EAR">
+  <looseChildren uri="SATE_ope.war" binariesPath="D:\workspace-aplicaciones-web\sate-operativo-vbn\SATE_ope\WebContent" resourcesPath="D:\workspace-aplicaciones-web\sate-operativo-vbn\SATE_ope\WebContent" archiveType="WAR"/>
+</org.eclipse.jst.j2ee.commonarchivecore.looseconfig:LooseArchive>

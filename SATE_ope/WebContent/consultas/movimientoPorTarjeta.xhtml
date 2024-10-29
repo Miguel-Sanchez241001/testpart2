@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/plantilla/plantilla.xhtml">
+
+
+	<ui:define name="metadata">
+	</ui:define>
+	<ui:define name="content">
+		<h2>MOVIMIENTOS POR TARJETA</h2>
+
+		<h:form id="formMovimientoTarjeta">
+			<center>
+				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
+					<h:panelGrid style="width:80%;text-align:center;">
+						<p:panelGrid id="pgBusqueda" columns="4" style="margin:0 auto 10px;">
+
+							<h:outputText value="Consultar por" />
+							<p:selectOneMenu id="somTipoBusqueda"
+								widgetVar="selectTipoBusqueda" onchange="onCall(this)"
+								style="width:162px;vertical-align:middle;margin-left:20px;"
+								value="#{consultarMovimientosController.consultarMovimientosModel.tipoBusqueda}"
+								required="true" requiredMessage="Seleccione tipo de documento">
+								 <p:ajax event="change" update="formMovimientoTarjeta:pgBusqueda" /> 
+								<f:selectItems
+									value="#{consultarMovimientosController.consultarMovimientosModel.listaTipoBusqueda}"
+									var="item" itemLabel="#{item.descripcion}"
+									itemValue="#{item.id}" />
+							</p:selectOneMenu>  
+							<p:inputText id="numDocumento" required="true"
+							value="#{consultarMovimientosController.consultarMovimientosModel.numeroTarjeta}"
+							 onkeypress="javascript:return jsValidarKey(event,/[0-9]/);"
+								
+								maxlength="19"
+								requiredMessage="#{consultarMovimientosController.consultarMovimientosModel.obtenerBusquedaRequiredMessage()}"
+								validatorMessage="#{consultarMovimientosController.consultarMovimientosModel.obtenerBusquedaValidatorMessage()}">
+								
+								<f:validateLength minimum="#{consultarMovimientosController.consultarMovimientosModel.obtenerBusquedaLength()}" />
+							</p:inputText>
+						</p:panelGrid>
+
+						<p:commandButton id="buscarMovimientos" value="Buscar"
+							styleClass="btnGrande"
+							actionListener="#{consultarMovimientosController.buscarAsignaciones()}"
+							process="@this somTipoBusqueda,numDocumento"
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('statusDialog').hide()"
+							update="formMovimientoTarjeta:pgResultado" />							
+						
+						<p:messages id="msgs" autoUpdate="true" showDetail="true"
+							showSummary="false" closable="true" />
+
+						<div class="dashed"></div>
+						
+						<p:panelGrid id="pgExporter" columns="2"
+                        	style="float:right;margin-right:2px;">
+							<h:commandLink>
+								<img
+                                src="#{request.contextPath}/resources/img/plantillaBN/iconos/xls.gif" />
+								<p:dataExporter type="xls" target="dtSolicitudes"
+                                fileName="Movimientos por tarjeta" />
+							</h:commandLink>
+						</p:panelGrid>
+
+						<h:panelGrid id="pgResultado" style="width:100%;">
+							<p:dataTable var="movimiento" id="dtSolicitudes"
+								
+								value="#{consultarMovimientosController.consultarMovimientosModel.movimientosTarjetaExp}"
+								rowKey="#{movimiento.id}"
+								style="table-layout: fixed;margin-top:10px;width:100%;"
+								rowIndexVar="index">
+															
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Nro." />
+									</f:facet>
+									<h:outputText value="#{movimiento.id}" />
+								</p:column>	
+																
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Fecha de la Transacción" />
+									</f:facet>
+									<h:outputText value="#{movimiento.fechaTxn}">
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss a" />
+									</h:outputText>
+								</p:column>	
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Descripción de Transacción" />
+									</f:facet>
+									<h:outputText value="#{movimiento.descripcionTxn}" />
+								</p:column>
+														
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Moneda" />
+									</f:facet>
+									<h:outputText
+										value="#{consultarMovimientosController.consultarMovimientosModel.tipoMonedaLetras(movimiento.monOriginalTxn)}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Monto" />
+									</f:facet>
+									<h:outputText value="#{movimiento.montoTxn}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Tipo de Monto" />
+									</f:facet>
+									<h:outputText
+										value="#{consultarMovimientosController.consultarMovimientosModel.tipoMontoLetras(movimiento.sigMontoTxn)}" />
+								</p:column>
+																
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Operación del Movimiento" />
+									</f:facet>
+									<h:outputText
+										value="#{consultarMovimientosController.consultarMovimientosModel.operacionMovLetras(movimiento.operacionTxn)}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Código Autorización" />
+									</f:facet>
+									<h:outputText value="#{movimiento.codAutTxn}" />
+								</p:column>
+								
+								
+								
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="4 Últimos Números de la Tarjeta" />
+									</f:facet>
+									<h:outputText value="#{movimiento.numTarjetaTxn}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Tipo de Tarjeta" />
+									</f:facet>
+									<h:outputText value="#{movimiento.tipoTarjeta}" />
+								</p:column>			
+								
+								
+								
+							</p:dataTable>
+						</h:panelGrid>
+
+					</h:panelGrid>
+
+				</p:panel>
+			</center>
+		</h:form>
+
+
+	<p:dialog id="dgSeleccionarAsignacion" modal="true" closable="true"
+			appendTo="@(body)" resizable="false" closeOnEscape="false"
+			draggable="false" position="center" showEffect="clip"
+			header="Seleccionar Asignacion" widgetVar="wvSeleccionarAsignacion">
+		<h:form id="formSeleccionarAsignacion">
+			
+			<p:panelGrid id="panel-seleccionarAsignacion" columns="1"
+					style="widht:100%">
+				<h:outputText value="Lista de Asignacions" />
+ 
+					<p:dataTable id="tablaAsignacions"
+						selection="#{consultarMovimientosController.consultarMovimientosModel.asignacionSeleccionada}"
+						value="#{consultarMovimientosController.consultarMovimientosModel.asignacionesTotal}"
+						selectionMode="single" var="asignacion"
+						rowKey="#{asignacion.idAsi}" emptyMessage="No hay Asignacions"
+						style="width:100%;table-layout: fixed;" rowIndexVar="index">
+ 
+						<p:ajax event="rowSelect"
+							listener="#{consultarMovimientosController.seleccionarAsignacion}"
+							update=":formMovimientoTarjeta"
+							oncomplete="PF('wvSeleccionarAsignacion').hide()" />
+ 
+						<!-- Nro. -->
+						<p:column headerText="Nro."
+													style="width:5%;text-align:center; vertical-align: middle;">
+						<h:outputText value="#{index + 1}" />
+						</p:column>
+ 
+						<!-- Número de Asignación -->
+						<p:column headerText="Número de Asignación"
+													style="width:15%;text-align:left; vertical-align: middle;">
+						<h:outputText value="#{asignacion.codigoAsignacion}" />
+						</p:column>
+						 
+												<!-- Fecha de Inicio -->
+						<p:column headerText="Fecha de Inicio Linea"
+													style="width:10%;text-align:left; vertical-align: middle;">
+						<h:outputText value="#{asignacion.fechaInicioLinea}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+						</p:column>
+ 
+						<!-- Fecha de Fin -->
+						<p:column headerText="Fecha de Fin Linea"
+													style="width:10%;text-align:left; vertical-align: middle;">
+						<h:outputText value="#{asignacion.fechaFinLinea}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+						</p:column>
+  
+						<!-- Estado -->
+						<p:column headerText="Estado"
+													style="width:10%;text-align:left; vertical-align: middle;">
+						<h:outputText value="#{asignacion.estado}" />
+						</p:column>
+ 
+ 
+					</p:dataTable>
+ 
+				</p:panelGrid>
+				
+				
+				<script type="text/javascript">
+					var tipDoc;
+
+					function validarNumDocumento(e) {
+						var tecla = e.keyCode;
+						if (tecla == 8 || tecla == 9 || tecla == 13) {
+							return true;
+						}
+						var patron;
+						if (tipDoc == '1' || tipDoc == 'N') {
+							patron = /[0-9]/;
+						} else if (tipDoc == '2') {
+							patron = /^[a-z0-9]+$/i;
+						}
+
+						var tecla_final = String.fromCharCode(tecla);
+						return patron.test(tecla_final);
+					}
+
+					function validarSoloLetras(e) {
+						var tecla = e.keyCode;
+						if (tecla == 8 || tecla == 9 || tecla == 13) {
+							return true;
+						}
+						var patron = /^[a-zA-Z]*$/;
+						var tecla_final = String.fromCharCode(tecla);
+						return patron.test(tecla_final);
+					}
+
+					function validarSoloNumeros(e) {
+						var tecla = e.keyCode;
+						if (tecla == 8 || tecla == 9 || tecla == 13) {
+							return true;
+						}
+						var patron = /[0-9]/;
+						var tecla_final = String.fromCharCode(tecla);
+						return patron.test(tecla_final);
+					}
+
+					function onCall() {
+						tipDoc = PF("selectTipoBusqueda").getSelectedValue();
+						console.log("tipoDocumento:" + tipDoc);
+					}
+				</script>
+				
+				
+				
+			</h:form>
+		</p:dialog>
+ 
+
+
+
+
+
+	</ui:define>
+</ui:composition>
