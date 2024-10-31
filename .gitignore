@@ -1,0 +1,72 @@
+# Archivos generados por el sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de RAD específicos
+.metadata/
+.project
+.classpath
+.settings/
+target/
+temp/
+temp_was/
+
+# Archivos de construcción
+bin/
+build/
+output/
+
+
+# Archivos de configuración de WAS específicos
+.wasTemp/
+wstemp/
+profiles/
+logs/
+tranlog/
+temp/
+
+# Configuraciones y archivos generados por WebSphere
+config/
+config/cells/
+config/nodes/
+config/servers/
+config/backup/
+config/temp/
+logs/
+tranlog/
+SystemOut.log
+SystemErr.log
+
+# Archivos de despliegue y empaquetado
+*.war
+*.ear
+
+
+# Archivos de configuración de entorno
+*.iml
+.idea/
+.vscode/
+*.classpath
+*.project
+*.jmx
+*.launch
+*.metadata
+*.bak
+*.swp
+
+# Archivos de RAD temporales
+*.snap
+tmp/
+
+# Archivos de compilación y caché
+*.class
+*.log
+
+# Otros archivos
+*.old
+*.orig
+*.rej
+
+# Docker (si estás utilizando contenedores)
+docker-compose.yml
+Dockerfile
