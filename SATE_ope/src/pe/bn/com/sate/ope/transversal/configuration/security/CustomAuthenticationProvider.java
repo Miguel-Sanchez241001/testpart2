@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
- import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
+import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.facade.InterfaceGatewayFacade;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.comp.ParametroInterfazKeyProxy;

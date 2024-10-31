@@ -129,12 +129,13 @@
 		            onkeypress="return validarSoloLetras(event)"
 		            readonly="#{solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}"
 		            value="#{solicitarTarjetaController.solicitarTarjetaModel.clienteSeleccionado.apMaterno}" />
- 
-			 
+		
 		        <p:calendar id="itFechaNacimiento"
 		            locale="es"
 		            style="margin-left:20px;"
 		            readonlyInput="true"
+		            
+ 		            
 		            placeholder="DD/MM/AAAA"
 		            disabled="#{solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}"
 		            navigator="true"

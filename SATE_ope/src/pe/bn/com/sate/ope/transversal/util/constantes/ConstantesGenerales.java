@@ -177,9 +177,16 @@ public class ConstantesGenerales {
 	public static String ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_IGF = "Error con WS InterfaceGatewayFacade, consulte con el administrador.";
 	public static String ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC = "Error con WS MC, consulte con el administrador.";
 	public static String ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_RENIEC = "Error con WS RENIEC, consulte con el administrador.";
+	
+	
 
 	
 	/*MGL*/
 	public static final String certificadoIzipay = "D:/certificado/certificadoIzipay.crt";
+	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO = "No existe tarjeta empresarial asociada a tipo y número de documento.";
+	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA = "No existe tarjeta empresarial asociada a número de tarjeta.";
+	
+	public static final String COD_TARJETA = "2";
+	public static final String COD_TIPODOC = "1";
 
 }

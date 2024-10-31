@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 
 import pe.bn.com.sate.ope.application.model.ModificarUsuarioModel;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
-import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.facade.InterfaceGatewayFacade;
 import pe.bn.com.sate.ope.infrastructure.service.internal.RolService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.UsuarioService;

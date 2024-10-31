@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import pe.bn.com.sate.ope.application.view.CrearUsuarioController;
 import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceWsReniecException;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.reniec.Identidad2;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.reniec.ServiceReniec2Proxy;

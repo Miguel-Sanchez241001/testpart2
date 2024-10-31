@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
-import pe.bn.com.sate.ope.transversal.dto.sate.SaldoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;

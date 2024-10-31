@@ -1,5 +1,6 @@
 package pe.bn.com.sate.ope.infrastructure.service.external.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,23 @@ public class AgenciaServiceImpl implements AgenciaService {
 
 	@Override
 	public List<Agencia> buscarAgenciasPorUbigeo(String codDepartamento,
-			String codProvincia, String codDistrito) {
-		try {
-			return agenciaMapper.buscarAgenciasPorUbigeo(codDepartamento,
-					codProvincia, codDistrito);
-		} catch (Exception ex) {
-			throw new ExternalServiceBnTablasException(ex.getMessage(),ex);
-		}
+	                                             String codProvincia, String codDistrito) {
+	    try {
+ 	        String agenciaUbigeoReal = agenciaMapper.buscarUbigeoReal(codDepartamento, codProvincia, codDistrito);
+	        
+ 	        if (agenciaUbigeoReal != null && agenciaUbigeoReal.length() == 6) {
+ 	            String departamento = agenciaUbigeoReal.substring(0, 2);
+	            String provincia = agenciaUbigeoReal.substring(2, 4);
+	            String distrito = agenciaUbigeoReal.substring(4, 6);
+	            
+ 	            return agenciaMapper.buscarAgenciasPorUbigeo(departamento, provincia, distrito);
+	        }
+	        
+ 	        return new ArrayList<>();
+	        
+	    } catch (Exception ex) {
+ 	        throw new ExternalServiceBnTablasException(ex.getMessage(), ex);
+	    }
 	}
 
 	@Override

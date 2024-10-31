@@ -1,17 +1,6 @@
 package pe.bn.com.sate.ope.infrastructure.facade;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,33 +8,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.WebServiceException;
-import javax.xml.ws.soap.SOAPFaultException;
-import com.ibm.wsspi.webservices.Constants; // Importa las constantes relevantes
 
 import org.apache.log4j.Logger;
- import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import pe.bn.com.sate.ope.application.view.AutorizarSolicitudesController;
 import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceMCProcesosException;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
@@ -59,11 +29,11 @@ import pe.bn.com.sate.ope.transversal.dto.sate.SaldoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.ConsultaMovimientos;
 import pe.bn.com.sate.ope.transversal.dto.ws.ConsultaSaldos;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosCliente;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionClientes;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOwservice;
 import pe.bn.com.sate.ope.transversal.util.Fecha;
 import pe.bn.com.sate.ope.transversal.util.NumeroALetras;

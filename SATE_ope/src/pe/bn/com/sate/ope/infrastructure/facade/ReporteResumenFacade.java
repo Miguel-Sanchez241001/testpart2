@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
@@ -63,41 +62,47 @@ public class ReporteResumenFacade {
 	}
 
 	
-	public List<Asignacion> obtenerAsignacionesPorTarjeta(String numTarjeta,String tipoGasto ,String tipoTar )
+	public List<Asignacion> obtenerAsignacionesPorTarjeta(String numTarjeta, String diseno, String tipoTar )
 			throws InternalExcepcion {
 		try {
-			return asignacionMapper.obtenerAsignacionesPorTarjeta(numTarjeta,tipoGasto,tipoTar);
+			return asignacionMapper.obtenerAsignacionesPorTarjeta(numTarjeta, diseno, tipoTar);
 		} catch (Exception ex) {
 			throw new InternalExcepcion(ex.getMessage(), ex);
 		}
 		
 	}
 
-	public List<Asignacion> obtenerAsignacionesPorDocumento(String tipoDocumento, String numDocumento,String tipoGasto ,String tipoTar)
+	public List<Asignacion> obtenerAsignacionesPorDocumento(String tipoDocumento, String numDocumento, String diseno, String tipoTar)
 			throws InternalExcepcion {
 		try {
-			return asignacionMapper.obtenerAsignacionesPorDocumento(tipoDocumento, numDocumento,tipoGasto,tipoTar);
+			return asignacionMapper.obtenerAsignacionesPorDocumento(tipoDocumento, numDocumento, diseno, tipoTar);
 		} catch (Exception ex) {
 			throw new InternalExcepcion(ex.getMessage(), ex);
 		}
 		
 	}
-	public List<Asignacion> obtenerAsignacionesPorDocumento(String tipoDocumento, String numDocumento)
+	
+	/*************/
+	
+	public List<Asignacion> obtenerAsignacionesPorTarjetaSimple(String numTarjeta)
 			throws InternalExcepcion {
 		try {
-			return asignacionMapper.obtenerAsignacionesPorDocumentoOnly(tipoDocumento, numDocumento);
+			return asignacionMapper.obtenerAsignacionesPorTarjetaSimple(numTarjeta);
 		} catch (Exception ex) {
 			throw new InternalExcepcion(ex.getMessage(), ex);
 		}
 		
 	}
-	public List<Asignacion> obtenerAsignacionesPorTarjeta(String numTarjeta  )
+
+	public List<Asignacion> obtenerAsignacionesPorDocumentoSimple(String tipoDocumento, String numDocumento)
 			throws InternalExcepcion {
 		try {
-			return asignacionMapper.obtenerAsignacionesPorTarjetaOnly(numTarjeta );
+			return asignacionMapper.obtenerAsignacionesPorDocumentoSimple(tipoDocumento, numDocumento);
 		} catch (Exception ex) {
 			throw new InternalExcepcion(ex.getMessage(), ex);
 		}
 		
 	}
+
+
 }

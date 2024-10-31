@@ -1,7 +1,6 @@
 package pe.bn.com.sate.ope.application.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -9,10 +8,10 @@ import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
+import pe.bn.com.sate.ope.transversal.util.enums.OperacionMovimientoMC;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMoneda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMontoMC;
-import pe.bn.com.sate.ope.transversal.util.enums.OperacionMovimientoMC;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaMC;
 
 public class ConsultarMovimientosModel {
@@ -26,7 +25,14 @@ public class ConsultarMovimientosModel {
 	
 	private Asignacion asignacionSeleccionada;
 	
+	private boolean busquedaRealizada;
+	
 	private List<Asignacion> asignacionesTotal;
+	
+	
+	private List<String> listaTipoBusquedaPor;
+	private String tipoBusquedaPor;
+	
 		
 	public Asignacion getAsignacionSeleccionada() {
 		return asignacionSeleccionada;
@@ -51,8 +57,13 @@ public class ConsultarMovimientosModel {
 	private DatosTarjetaCliente datosTarjetaCliente;
 
 	public ConsultarMovimientosModel() {
-		listaTipoBusqueda = Arrays.asList(TipoBusqueda.values());
-		tipoBusqueda = TipoBusqueda.NUM_TARJETA.getId();		 
+		//listaTipoBusqueda = Arrays.asList(TipoBusqueda.values());
+		tipoBusqueda = TipoBusqueda.NUM_TARJETA.getId();	
+		
+		listaTipoBusquedaPor = new ArrayList<>();
+        listaTipoBusquedaPor.add("Por Documento");
+        listaTipoBusquedaPor.add("Por Tarjeta");
+		
 		datosTarjetaCliente = new DatosTarjetaCliente();
 		asignacionesTotal = new ArrayList<>();
 	}
@@ -174,5 +185,43 @@ public class ConsultarMovimientosModel {
 		return "Ingrese un número de "
 				+ TipoBusqueda.tipoBusquedaLetras(tipoBusqueda);
 	}
+	
+	
+	
+	public boolean isBusquedaRealizada() {
+		return busquedaRealizada;
+	}
 
+	public void setBusquedaRealizada(boolean busquedaRealizada) {
+		this.busquedaRealizada = busquedaRealizada;
+	}
+
+	public void inicializarFormulario() {
+		datosTarjetaCliente = new DatosTarjetaCliente();
+		busquedaRealizada = false;
+		numeroTarjeta = null;
+		tipoBusqueda = null;	
+		movimientosTarjetaExp = null;
+		
+	}
+
+	public List<String> getListaTipoBusquedaPor() {
+		return listaTipoBusquedaPor;
+	}
+
+	public void setListaTipoBusquedaPor(List<String> listaTipoBusquedaPor) {
+		this.listaTipoBusquedaPor = listaTipoBusquedaPor;
+	}
+
+	public String getTipoBusquedaPor() {
+		return tipoBusquedaPor;
+	}
+
+	public void setTipoBusquedaPor(String tipoBusquedaPor) {
+		this.tipoBusquedaPor = tipoBusquedaPor;
+	}
+	
+
+	
+	
 }

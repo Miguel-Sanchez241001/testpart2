@@ -1,8 +1,5 @@
 package pe.bn.com.sate.ope.application.model;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,12 +10,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import javax.imageio.ImageIO;
-
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.novatronic.captcha.Captcha;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;

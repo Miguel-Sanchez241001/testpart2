@@ -57,4 +57,13 @@ public interface AgenciaMapper {
 	@ResultMap("mapAgencia")
 	public List<Agencia> buscarAgenciaPorCodAgencia(
 			@Param("codAgencia") String codAgencia);
+	
+	@Select("SELECT ubi.f02_ubigeo_bnsif50 " +
+	        "FROM [BN_Tablas].[dbo].[BNTGF02_Ubigeo] ubi " +
+	        "WHERE ubi.f02_cdepartamento = #{codDepartamento} " +
+	        "AND ubi.f02_cprovincia = #{codProvincia} " +
+	        "AND ubi.f02_cdistrito = #{codDistrito}")
+	public String buscarUbigeoReal(@Param("codDepartamento") String codDepartamento,
+	                               @Param("codProvincia") String codProvincia,
+	                               @Param("codDistrito") String codDistrito);
 }

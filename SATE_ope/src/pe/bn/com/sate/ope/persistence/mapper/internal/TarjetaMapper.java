@@ -19,7 +19,7 @@ public interface TarjetaMapper {
             "B00_ID_EMP," +
             "B02_REP," +
             "B06_ID_CLI," +
-            
+            "B05_NOM_AGENCIA," +
             "B05_USO_DISP_EFECT," +
             "B05_PORCENTAJE_DISP_EFECT," +
             "B05_USO_EXTRANJERO," +
@@ -38,7 +38,7 @@ public interface TarjetaMapper {
             "B05_NUM_CELULAR," +
             "B05_FLAG_ACT_CONTACTO," +
             "B05_DISENO) " +
-            "VALUES (#{idEmpresa}, #{idUsu}, #{idCli}, #{usoDispocionEfectivo}, #{porcentajeDisposicionEfectivo}, #{usoExtranjero}, #{usoComprasWeb}, #{tipoTarjeta}, #{observaciones}, #{tipoMoneda}, #{entregaUbicacion}, #{entregaAgenciaBN}, #{entregaUbigeo}, #{entregaDireccion}, #{entregaReferencia}, #{fechaCreacion}, #{email}, #{operadorCelular}, #{numeroCelular}, #{flagActualizarContacto}, #{diseno})")
+            "VALUES (#{idEmpresa}, #{idUsu}, #{idCli},#{entregaAgenciaBNombre},  #{usoDispocionEfectivo}, #{porcentajeDisposicionEfectivo}, #{usoExtranjero}, #{usoComprasWeb}, #{tipoTarjeta}, #{observaciones}, #{tipoMoneda}, #{entregaUbicacion}, #{entregaAgenciaBN}, #{entregaUbigeo}, #{entregaDireccion}, #{entregaReferencia}, #{fechaCreacion}, #{email}, #{operadorCelular}, #{numeroCelular}, #{flagActualizarContacto}, #{diseno})")
     public void registrarTarjeta(Tarjeta tarjeta);
 
     @Insert("INSERT INTO BN_SATE.BNSATE07_EST_TARJETA(" +

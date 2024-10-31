@@ -1,10 +1,9 @@
 package pe.bn.com.sate.ope.infrastructure.service.external.domain.comp;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import java.net.URL;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.ws.BindingProvider;

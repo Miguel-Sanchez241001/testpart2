@@ -15,15 +15,12 @@ public enum Funcionalidad {
 
 	CONSULTAS_MENU("06", ""),
 
-	CONSULTAS_MOVIMIENTOS_POR_TARJETA("07", "Movimientos por tarjeta"), CONSULTAS_RENDICION_DE_CUENTAS_POR_TARJETA(
-			"08", "Rendicion de cuentas por tarjeta"),
+	CONSULTAS_MOVIMIENTOS_POR_TARJETA("07", "Movimientos por tarjeta"), 	
+	CONSULTAS_RENDICION_DE_CUENTAS_POR_TARJETA(	"08", "Rendicion de cuentas por tarjeta"),
 
 	REPORTE_MENU("09", ""),
-
 	REPORTE_TARJETA_EMPRESARIAL("10", "Reporte tarjeta empresarial"),
-
 	CUENTAS_MENU("11", ""),
-
 	CUENTAS_CREAR_CUENTA_USUARIO("11", "Crear cuenta de usuario"), CUENTAS_MODIFICAR_CUENTA_USUARIO(
 			"12", "Modificar cuenta de usuario");
 

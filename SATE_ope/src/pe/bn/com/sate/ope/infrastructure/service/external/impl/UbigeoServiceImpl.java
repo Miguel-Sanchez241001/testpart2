@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceBnTablasException;
-import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.external.UbigeoService;
 import pe.bn.com.sate.ope.persistence.mapper.external.UbigeoMapper;
 import pe.bn.com.sate.ope.transversal.dto.tablas.Ubigeo;

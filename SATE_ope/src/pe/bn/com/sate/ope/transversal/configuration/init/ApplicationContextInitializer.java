@@ -1,6 +1,6 @@
 package pe.bn.com.sate.ope.transversal.configuration.init;
 
-import org.springframework.context.annotation.ComponentScan;	
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

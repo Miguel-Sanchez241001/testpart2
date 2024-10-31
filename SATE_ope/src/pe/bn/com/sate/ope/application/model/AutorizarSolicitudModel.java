@@ -2,15 +2,8 @@ package pe.bn.com.sate.ope.application.model;
 
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-
 import pe.bn.com.sate.ope.transversal.dto.sate.SolicitudTarjeta;
 import pe.bn.com.sate.ope.transversal.util.NumeroALetras;
-import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
-import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.DisposicionEfectivo;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;

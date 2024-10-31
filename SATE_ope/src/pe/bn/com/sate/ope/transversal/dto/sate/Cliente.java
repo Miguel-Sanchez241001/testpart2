@@ -23,6 +23,8 @@ public class Cliente {
 	private String direccion;//null
 	private String ubigeo;//null
 	private String referencia;//null
+	
+	private String apCompleto;
 
 	public Cliente() {
 		
@@ -152,6 +154,16 @@ public class Cliente {
 
 	public void setTelefonoCasa(String telefonoCasa) {
 		this.telefonoCasa = telefonoCasa;
+	}
+
+	
+	
+	public String getApCompleto() {
+		return apCompleto;
+	}
+
+	public void setApCompleto(String apCompleto) {
+		this.apCompleto = apCompleto;
 	}
 
 	@Override

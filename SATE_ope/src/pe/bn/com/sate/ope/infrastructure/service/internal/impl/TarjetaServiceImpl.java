@@ -15,7 +15,6 @@ import pe.bn.com.sate.ope.persistence.mapper.internal.ClienteMapper;
 import pe.bn.com.sate.ope.persistence.mapper.internal.EmpresaMapper;
 import pe.bn.com.sate.ope.persistence.mapper.internal.TarjetaMapper;
 import pe.bn.com.sate.ope.transversal.configuration.security.SecurityContextFacade;
-import pe.bn.com.sate.ope.transversal.dto.host.Solicitud;
 import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;

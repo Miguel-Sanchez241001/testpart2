@@ -1,5 +1,4 @@
 package pe.bn.com.sate.ope.transversal.util.enums;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ public enum TipoBusqueda {
 			"4", "CARNET DE EXTRANJERÍA", 12), CARNET_POLICIA_NACIONAL("2",
 			"CARNET DE POLICÍA NACIONAL", 9), PASAPORTTE("5", "PASAPORTE", 12);*/
 	// TODO ENUM tipo busquedas
-	NUM_TARJETA("N", "NÚMERO DE TARJETA", 19), DNI("1", "DNI", 8), CARNET_EXTRANJERIA(
+	NUM_TARJETA("N", "NÚMERO DE TARJETA", 16), DNI("1", "DNI", 8), CARNET_EXTRANJERIA(
 			"4", "CARNET DE EXTRANJERÍA", 12)   ;
 	private String id;
 	private String descripcion;
@@ -38,6 +37,28 @@ public enum TipoBusqueda {
 			}
 		return 0;
 	}
+	
+	
+	 public static List<TipoBusqueda> obtenerTiposDocumento() {
+	        List<TipoBusqueda> tiposDocumento = new ArrayList<>();
+	        for (TipoBusqueda tipo : TipoBusqueda.values()) {
+	            if (!tipo.equals(NUM_TARJETA)) {  
+	                tiposDocumento.add(tipo);
+	            }
+	        }
+	        return tiposDocumento;
+	    }
+
+	    public static List<TipoBusqueda> obtenerTiposNumeroTarjeta() {
+	        List<TipoBusqueda> tiposNumeroTarjeta = new ArrayList<>();
+	        for (TipoBusqueda tipo : TipoBusqueda.values()) {
+	            if (tipo.equals(NUM_TARJETA)) { 
+	                tiposNumeroTarjeta.add(tipo);
+	            }
+	        }
+	        return tiposNumeroTarjeta;
+	    }
+	
 
 	public String getId() {
 		return id;
@@ -62,23 +83,5 @@ public enum TipoBusqueda {
 	public void setLength(int length) {
 		this.length = length;
 	}
-	  public static List<TipoBusqueda> obtenerTiposDocumento() {
-	        List<TipoBusqueda> tiposDocumento = new ArrayList<>();
-	        for (TipoBusqueda tipo : TipoBusqueda.values()) {
-	            if (!tipo.equals(NUM_TARJETA)) {  
-	                tiposDocumento.add(tipo);
-	            }
-	        }
-	        return tiposDocumento;
-	    }
 
-	    public static List<TipoBusqueda> obtenerTiposNumeroTarjeta() {
-	        List<TipoBusqueda> tiposNumeroTarjeta = new ArrayList<>();
-	        for (TipoBusqueda tipo : TipoBusqueda.values()) {
-	            if (tipo.equals(NUM_TARJETA)) { 
-	                tiposNumeroTarjeta.add(tipo);
-	            }
-	        }
-	        return tiposNumeroTarjeta;
-	    }
 }

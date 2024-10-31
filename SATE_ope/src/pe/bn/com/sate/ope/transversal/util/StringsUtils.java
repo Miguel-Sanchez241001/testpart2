@@ -55,5 +55,11 @@ public class StringsUtils {
 		return rpta;
 	}
 	
+	public static String llenarCerosAlaIzquierdaV2(String text, int longitud){
+		
+		 String formatted = String.format("%0" + longitud + "d", Long.valueOf(text));
+		
+		return formatted;
+	}
 
 }

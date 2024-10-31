@@ -1,23 +1,15 @@
 package pe.bn.com.sate.ope.transversal.configuration.security;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
-
-import pe.bn.com.sate.ope.transversal.util.StringsUtils;
-import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
-import pe.bn.com.sate.ope.transversal.util.constantes.ExceptionConstants;
-import pe.bn.com.sate.ope.transversal.util.constantes.FormatConstants;
-import pe.bn.com.sate.ope.transversal.util.excepciones.LoginException;
 
 @Component
 public class CustomFailureLoginHandler extends

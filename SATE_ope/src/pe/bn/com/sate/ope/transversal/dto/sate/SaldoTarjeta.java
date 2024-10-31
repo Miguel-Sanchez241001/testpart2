@@ -1,9 +1,9 @@
 package pe.bn.com.sate.ope.transversal.dto.sate;
 
+import java.util.Date;
+
 import pe.bn.com.sate.ope.transversal.dto.ws.ConsultaSaldos;
 import pe.bn.com.sate.ope.transversal.util.Fecha;
-
-import java.util.Date;
 
 public class SaldoTarjeta {
 

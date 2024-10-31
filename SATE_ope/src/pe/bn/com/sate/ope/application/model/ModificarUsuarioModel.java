@@ -5,8 +5,6 @@ import java.util.List;
 
 import pe.bn.com.sate.ope.transversal.dto.sate.Rol;
 import pe.bn.com.sate.ope.transversal.dto.sate.Usuario;
-import pe.bn.com.sate.ope.transversal.util.NumeroALetras;
-import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.OperadorMovil;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstado;

@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.ResponseMessage;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.ArrayOfTns1ReqListMessage;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.DatosCorreo;

@@ -8,6 +8,7 @@ public enum TipoTarjeta {
 	CORPORATE("MC CORP","530927");
 	String descripcion;
 	String codigoBim;
+	
 	TipoTarjeta(String descripcion, String codigoBim) {
 		this.descripcion = descripcion;
 		this.codigoBim = codigoBim;
@@ -29,5 +30,15 @@ public enum TipoTarjeta {
 		listaTipoTarjeta.add(TipoTarjeta.CORPORATE);
 		listaTipoTarjeta.add(TipoTarjeta.BLACK);
  		return listaTipoTarjeta;
+	}
+	
+	public static String descripcionTipotarjeta(String codigo) {
+		if (codigo != null)
+			for (TipoTarjeta tipoTarjeta : values()) {
+				if (codigo.equals(tipoTarjeta.getCodigoBim())) {
+					return tipoTarjeta.getDescripcion();
+				}
+			}
+		return "Ninguno";
 	}
 }

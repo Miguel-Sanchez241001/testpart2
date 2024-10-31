@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.SocketTimeoutException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
@@ -123,20 +122,7 @@ public class LoginController implements PhaseListener, Serializable {
 		}
     }
     
-    public void prueba() {
-       
-    	System.out.println("entro a prueba");
-    	try {
-			fwmcProcesos.consultaDatosCliente(1);
-		} catch (ExternalServiceMCProcesosException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InternalExcepcion e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
  
-    }
 
     
     /**

@@ -1,11 +1,7 @@
 package pe.bn.com.sate.ope.application.view;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
@@ -15,17 +11,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import pe.bn.com.sate.ope.application.model.CambiarEstadoTarjetaModel;
-import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceMCProcesosException;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.facade.FWMCProcesos;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.sate.ModificacionTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionTarjeta;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.componentes.Parametros;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
-import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesWS;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoCuenta;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;

@@ -20,53 +20,57 @@
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 
 					<h:panelGrid style="width:90%;" columns="1">
-						
-						<p:panelGrid columns="2" id="pgBusqueda" style="margin:20px auto 20px auto;" layout="grid">
-							<h:outputText value="Tipo de tarjeta *"	 style="margin-left:20px;" />
- 							<h:outputText value="Tipo de gasto *"	 style="margin-left:20px;" />
+						<p:panelGrid columns="4" id="pgBusqueda"
+							style="margin:20px auto 20px auto;" layout="grid">
 							
- 							
-							<p:selectOneMenu style="width:162px;margin-left:20px;"
-									id="somTipoTarjeta" required="true"
-									requiredMessage="#{valMsg['required.tipoTarjeta']}"
-									value="#{buscarTarjetaController.buscarTarjetaModel.tipoTarjetaSeleccionada}"
-									 >
-									<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
-									<p:ajax update=":formBuscarTarjeta:somTipoGasto"
+							
+							<h:outputText value="Tipo de tarjeta"	 style="margin-left:20px;" />
+								<p:selectOneMenu style="width:162px;margin-left:20px;"
+									id="somTipoTarjeta"	required="true"
+									requiredMessage="#{valMsg['required.tipoTarjeta']}"								
+									value="#{buscarTarjetaController.buscarTarjetaModel.tipoTarjetaSeleccionada}">									
+									<p:ajax event="change" update=":formBuscarTarjeta:somTipoGasto"
 										listener="#{buscarTarjetaController.buscarTipoTarjetaNegocio()}" />
+									<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 									<f:selectItems
 										value="#{buscarTarjetaController.buscarTarjetaModel.listaTipoTarjeta}"
 										var="item" itemLabel="#{item.descripcion}" itemValue="#{item}" />
-								</p:selectOneMenu>
-								
- 							<p:selectOneMenu id="somTipoGasto" style="width:162px;margin-left:20px;"
-									 required="true" requiredMessage="#{valMsg['required.tipoTarjetaGasto']}"
-									value="#{buscarTarjetaController.buscarTarjetaModel.tarjetaNegocioSeleccionada}">
+								</p:selectOneMenu>							
+							
+ 							<h:outputText value="Tipo de gasto"	  style="margin-left:20px;"  />							 								
+						 		<p:selectOneMenu style="width:162px;margin-left:20px;"
+									id="somTipoGasto" required="true"
+									requiredMessage="#{valMsg['required.tipoTarjetaGasto']}"
+									value="#{buscarTarjetaController.buscarTarjetaModel.tipoTarjetaNegocioSeleccionada}">
 									<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
-								 
+									
 									<f:selectItems
 										value="#{buscarTarjetaController.buscarTarjetaModel.listaTipoTarjetaNegocio}"
 										var="item" itemLabel="#{item.descripcion}" itemValue="#{item}" />
 								</p:selectOneMenu>
-							<h:outputText value="Tipo de Busqueda *"	 style="margin-left:20px;" />	
-							<h:outputText value="Tipo de documento *"	 style="margin-left:20px;" />
+							
+							
+							
+							
+							<h:outputText value="Consultar por"  style="margin-left:20px;" />
 							<p:selectOneMenu id="somTipoBusquedaPor"
-								 
 								style="width:162px;vertical-align:middle;margin-left:20px;"
 								value="#{buscarTarjetaController.buscarTarjetaModel.tipoBusquedaPor}"
 								required="true" requiredMessage="Seleccione tipo de busqueda">
 								<p:ajax  update="formBuscarTarjeta:somTipoBusqueda"
-								listener="#{buscarTarjetaController.buscarTipoBusqueda()}" />
+									listener="#{buscarTarjetaController.buscarTipoBusqueda()}" />
 								<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 								<f:selectItems
 									value="#{buscarTarjetaController.buscarTarjetaModel.listaTipoBusquedaPor}"
 									var="item" itemLabel="#{item}"
 									itemValue="#{item}" />
-							</p:selectOneMenu>
- 							
+								</p:selectOneMenu>
 							
 							
-							 
+							
+							
+														
+							<h:outputText value="seleccionar"  style="margin-left:20px;" />
 							<p:selectOneMenu id="somTipoBusqueda"
 								widgetVar="selectTipoBusqueda"  
 								style="width:162px;vertical-align:middle;margin-left:20px;"
@@ -79,11 +83,10 @@
 									var="item" itemLabel="#{item.descripcion}"
 									itemValue="#{item.id}" />
 							</p:selectOneMenu>
-							<h:outputText value="Numero *"	 style="margin-left:20px;" />
-							<h:outputText value=""	 style="margin-left:20px;" />
+														
+							<h:outputText value="Número"  style="margin-left:20px;" />
 							<p:inputText style="margin-left:20px;" id="numDocumento"
 								required="true"
-							 
 								onkeypress="javascript:return jsValidarKey(event,/[0-9]/);"
 								value="#{buscarTarjetaController.buscarTarjetaModel.numDocumento}"
 								maxlength="#{buscarTarjetaController.buscarTarjetaModel.obtenerBusquedaLength()}"
@@ -93,15 +96,17 @@
 									minimum="#{buscarTarjetaController.buscarTarjetaModel.obtenerBusquedaLength()}" />
 							</p:inputText>
 							
-							
 							<p:commandButton id="buscarMovimientos" value="Buscar"
 							styleClass="btnGrande"
-							 style="margin-left:20px; width:162px;" 
+							style="margin-left:20px;"
 							actionListener="#{buscarTarjetaController.buscarAsignaciones()}"
-						    process="@form"
+							process="@form"
 							onstart="PF('statusDialog').show()"
 							oncomplete="PF('statusDialog').hide()"
 							update="formBuscarTarjeta:pgResultado" />
+							
+							
+
 						</p:panelGrid>
 						<div class="dashed"></div>
 					</h:panelGrid>
@@ -132,7 +137,7 @@
 										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.cliente.nombres}" />
 									<p:inputText id="itApellidos" style="margin-left:20px;"
 										readonly="true"
-										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.cliente.apPaterno}" />
+										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.cliente.apCompleto}" />
 								</h:panelGrid>
 
 							</p:panel>
@@ -146,36 +151,36 @@
 									<h:outputText value="Número de celular"
 										style="margin-left:20px;" />
 									<p:selectOneMenu style="width:162px" id="somOperador"
-										required="true"
-										disabled="#{!buscarTarjetaController.buscarTarjetaModel.tipoOperacionActualizar}"
+										required="true"  readonly="true"
+										disabled="true"
 										requiredMessage="Seleccione un operador celular"
 										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.operadorCelular}">
 										<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
-										<f:selectItems var="item" itemLabel="#{item.descripcion}"
+										<f:selectItems var="item" itemLabel="#{item.descripcion}" 
 											value="#{buscarTarjetaController.buscarTarjetaModel.listaOperadorMovil}"
 											itemValue="#{item.id}" />
 									</p:selectOneMenu>
 									<p:inputText id="numCelular" style="margin-left:20px;"
-										maxlength="9" required="true"
+										maxlength="9" required="true" readonly="true"
 										onkeypress="return validarSoloNumeros(event)"
-										readonly="#{!buscarTarjetaController.buscarTarjetaModel.tipoOperacionActualizar}"
+										
 										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.numeroCelular}"
 										requiredMessage="Ingrese el número de celular">
 									</p:inputText>
 									<h:outputText value="Correo electrónico" />
 									<h:outputText value="Teléfono de casa"
 										style="margin-left:20px;" />
-									<p:inputText id="email" maxlength="30"
-										readonly="#{!buscarTarjetaController.buscarTarjetaModel.tipoOperacionActualizar}"
+									<p:inputText id="email" maxlength="30" readonly="true"
+										
 										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.email}"
 										validatorMessage="Correo electrónico no válido">
 										<p:ajax update="msgs" event="keyup" />
 										<f:validateRegex
 											pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 									</p:inputText>
-									<p:inputText id="telefonoCasa" style="margin-left:20px;"
+									<p:inputText id="telefonoCasa" style="margin-left:20px;" readonly="true"
 										maxlength="7" onkeypress="return validarSoloNumeros(event)"
-										readonly="#{!buscarTarjetaController.buscarTarjetaModel.tipoOperacionActualizar}"
+										
 										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.cliente.telefonoCasa}"
 										required="true" requiredMessage="Ingrese teléfono de casa">
 									</p:inputText>
@@ -203,7 +208,7 @@
 									<h:outputText value="Tipo de tarjeta" />
 									<h:outputText value="Tipo de moneda" style="margin-left:20px;" />
 									<p:inputText id="itTipoTarjeta" readonly="true"
-										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionTipoTarjeta(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.tipoTarjeta,buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.diseno)}" />
+										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionTipoTarjetaBC(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.tipoTarjeta)}" />
 									<p:inputText style="margin-left:20px;" readonly="true"
 										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionTipoMoneda(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.tipoMoneda)}" />
 
@@ -306,7 +311,7 @@
 									<h3 style="text-align: center">Datos de entrega</h3>
 									<div class="dashed"></div>
 									<h:panelGrid>
-										<h:outputText value="Entregar tarjeta en" />
+										<h:outputText value="Entregar tarjeta en agencia" />
 										<p:inputText readonly="true" style="width:340px;"
 											value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.descripcionUbicacion}" />
 									</h:panelGrid>
@@ -359,18 +364,18 @@
 	<p:dialog id="dgSeleccionarAsignacion" modal="true" closable="true"
 			appendTo="@(body)" resizable="false" closeOnEscape="false"
 			draggable="false" position="center" showEffect="clip"
-			header="Seleccionar Asignacion" widgetVar="wvSeleccionarAsignacion">
+			header="Seleccionar Asignación" widgetVar="wvSeleccionarAsignacion">
 		<h:form id="formSeleccionarAsignacion">
 			
 			<p:panelGrid id="panel-seleccionarAsignacion" columns="1"
 					style="widht:100%">
-				<h:outputText value="Lista de Asignacions" />
+				<h:outputText value="Lista de Asignación" />
  
 					<p:dataTable id="tablaAsignacions"
 						selection="#{buscarTarjetaController.buscarTarjetaModel.asignacionSeleccionada}"
 						value="#{buscarTarjetaController.buscarTarjetaModel.asignacionesTotal}"
 						selectionMode="single" var="asignacion"
-						rowKey="#{asignacion.idAsi}" emptyMessage="No hay Asignacions"
+						rowKey="#{asignacion.idAsi}" emptyMessage="No hay Asignación"
 						style="width:100%;table-layout: fixed;" rowIndexVar="index">
  
 						<p:ajax event="rowSelect"
@@ -391,7 +396,7 @@
 						</p:column>
 						 
 												<!-- Fecha de Inicio -->
-						<p:column headerText="Fecha de Inicio Linea"
+						<p:column headerText="Fecha de Inicio Línea"
 													style="width:10%;text-align:left; vertical-align: middle;">
 						<h:outputText value="#{asignacion.fechaInicioLinea}">
 						<f:convertDateTime pattern="dd/MM/yyyy" />
@@ -399,7 +404,7 @@
 						</p:column>
  
 						<!-- Fecha de Fin -->
-						<p:column headerText="Fecha de Fin Linea"
+						<p:column headerText="Fecha de Fin Línea"
 													style="width:10%;text-align:left; vertical-align: middle;">
 						<h:outputText value="#{asignacion.fechaFinLinea}">
 						<f:convertDateTime pattern="dd/MM/yyyy" />

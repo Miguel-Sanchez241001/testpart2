@@ -1,7 +1,9 @@
 package pe.bn.com.sate.ope.transversal.util.host;
 
 import javax.xml.ws.BindingProvider;
+
 import org.apache.log4j.Logger;
+
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.interfaz.GatewayInterfaceProxy;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.interfaz.RequestGateway;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.interfaz.ResponseGateway;

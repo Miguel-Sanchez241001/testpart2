@@ -31,6 +31,15 @@ public class Tarjeta {
 	private String tipoMoneda;
 	private String entregaUbicacion;
 	private String entregaAgenciaBN;
+	private String entregaAgenciaBNombre;
+	public String getEntregaAgenciaBNombre() {
+		return entregaAgenciaBNombre;
+	}
+
+	public void setEntregaAgenciaBNombre(String entregaAgenciaBNombre) {
+		this.entregaAgenciaBNombre = entregaAgenciaBNombre;
+	}
+
 	private String entregaDepartamento;
 	private String entregaProvincia;
 	private String entregaDistrito;

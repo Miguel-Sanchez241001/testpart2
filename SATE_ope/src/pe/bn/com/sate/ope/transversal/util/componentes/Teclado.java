@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
-
 public class Teclado {
 
 	private List<String> listaTeclas;
