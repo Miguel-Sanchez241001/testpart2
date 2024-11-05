@@ -1,5 +1,6 @@
 package pe.bn.com.sate.ope.application.view;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,8 @@ import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.facade.FWMCProcesos;
 import pe.bn.com.sate.ope.infrastructure.facade.ReporteResumenFacade;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
+import pe.bn.com.sate.ope.persistence.mapper.internal.AsignacionMapper;
+import pe.bn.com.sate.ope.persistence.mapper.internal.CargoMapper;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
@@ -21,8 +24,19 @@ import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
+
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.excepciones.InternalExcepcion;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.*;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.util.List;
 
 
 

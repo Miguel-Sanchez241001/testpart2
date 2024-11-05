@@ -197,8 +197,8 @@
 								<div class="dashed"></div>
 								<h:panelGrid columns="2">
 
-									<h:outputText value="Número" />
-									<h:outputText value="Estado" style="margin-left:20px;" />
+									<h:outputText value="Número de tarjeta" />
+									<h:outputText value="Estado de la tarjeta" style="margin-left:20px;" />
 									<p:inputText id="itNumeroTarjeta" readonly="true"
 										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionNumeroTarjeta(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.numTarjeta)}" />
 									<p:inputText id="itEstadoTarjeta" style="margin-left:20px;"
@@ -213,8 +213,8 @@
 										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionTipoMoneda(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.tipoMoneda)}" />
 
 
-									<h:outputText value="Disposición de efectivo?" />
-									<h:outputText value="Uso en el extranjero?"
+									<h:outputText value="Disposición de efectivo" />
+									<h:outputText value="Uso en el extranjero"
 										style="margin-left:20px;" />
 									<p:inputText readonly="true"
 										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionDisposicionEfectivo(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.usoDispocionEfectivo)}" />
@@ -222,7 +222,7 @@
 										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.usoExtranjero}" />
 
 
-									<h:outputText value="Nro.Autorización vigente" />
+									<h:outputText value="Número Autorización vigente" />
 									<h:outputText value="Fecha de autorización vigente"
 										style="margin-left:20px;" />
 

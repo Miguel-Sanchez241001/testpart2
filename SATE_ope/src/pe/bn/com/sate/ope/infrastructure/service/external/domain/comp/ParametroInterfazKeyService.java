@@ -6,7 +6,6 @@
 package pe.bn.com.sate.ope.infrastructure.service.external.domain.comp;
 
 import java.net.URL;
-
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;

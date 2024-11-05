@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
+import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosCliente;
 import pe.bn.com.sate.ope.transversal.util.NumeroALetras;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
@@ -21,14 +24,27 @@ public class ConsultarClienteModel {
 	private String tipoBusqueda;
 	private String numDocumento;
 
-
+	private boolean busquedaRealizada;
+	private DatosTarjetaCliente datosTarjetaCliente;
+	private DTOConsultaDatosCliente consultaDatosCliente;
+	private Cliente cliente;
 
 	public ConsultarClienteModel() {
+		
+		datosTarjetaCliente = new DatosTarjetaCliente();
 		listaTipoBusqueda = Arrays.asList(TipoBusquedaPN.values());
-		tipoBusqueda = "N";
+		tipoBusqueda = "1";
 	}
 	
-	
+	public void inicializarFormulario() {
+		datosTarjetaCliente = new DatosTarjetaCliente();
+		cliente = new Cliente();
+		busquedaRealizada = false;
+		numDocumento = null;
+		tipoBusqueda = null;
+		
+		
+	}
 
 	public List<TipoBusquedaPN> getListaTipoBusqueda() {
 		return listaTipoBusqueda;
@@ -52,6 +68,14 @@ public class ConsultarClienteModel {
 
 	public void setNumDocumento(String numDocumento) {
 		this.numDocumento = numDocumento;
+	}
+	
+	public boolean isBusquedaRealizada() {
+		return busquedaRealizada;
+	}
+
+	public void setBusquedaRealizada(boolean busquedaRealizada) {
+		this.busquedaRealizada = busquedaRealizada;
 	}
 
 	
@@ -107,17 +131,16 @@ public class ConsultarClienteModel {
 				: NumeroALetras.numeroFormateado(monto);
 	}
 
-	public void inicializarFormulario() {		
-		numDocumento = null;
-		tipoBusqueda = null;
-	}
+	
 
 	public int obtenerBusquedaLength() {
 
 		return TipoBusquedaPN.obtenerLength(tipoBusqueda);
+		
 	}
 
 	public String obtenerBusquedaValidatorMessage() {
+		
 		return "El " + TipoBusquedaPN.tipoBusquedaLetras(tipoBusqueda)
 				+ " debe  tener " + TipoBusquedaPN.obtenerLength(tipoBusqueda)
 				+ " dígitos";
@@ -127,6 +150,32 @@ public class ConsultarClienteModel {
 		return "Ingrese un número de "
 				+ TipoBusquedaPN.tipoBusquedaLetras(tipoBusqueda);
 	}
+
+	public DatosTarjetaCliente getDatosTarjetaCliente() {
+		return datosTarjetaCliente;
+	}
+
+	public void setDatosTarjetaCliente(DatosTarjetaCliente datosTarjetaCliente) {
+		this.datosTarjetaCliente = datosTarjetaCliente;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public DTOConsultaDatosCliente getConsultaDatosCliente() {
+		return consultaDatosCliente;
+	}
+
+	public void setConsultaDatosCliente(DTOConsultaDatosCliente consultaDatosCliente) {
+		this.consultaDatosCliente = consultaDatosCliente;
+	}
+	
+	
 	
 	
 }

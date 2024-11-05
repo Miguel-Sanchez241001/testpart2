@@ -1,6 +1,7 @@
 package pe.bn.com.sate.ope.transversal.util.enums;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public enum BuscarTarjetaTD {	 	

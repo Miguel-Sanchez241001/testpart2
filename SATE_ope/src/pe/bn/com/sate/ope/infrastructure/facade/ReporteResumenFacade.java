@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;

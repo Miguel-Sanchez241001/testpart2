@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.SocketTimeoutException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;

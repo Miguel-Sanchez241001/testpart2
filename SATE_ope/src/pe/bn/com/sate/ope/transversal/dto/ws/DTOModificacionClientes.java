@@ -18,9 +18,9 @@ public class DTOModificacionClientes {
     private String titularNumCelular;
     private String titularTelefonoDomicilio;
     private String titularEmail;
-    private String titularTipoDocumento;
-    
+    private String titularTipoDocumento;    
     private String titularNumDocumento;
+    
     private String tipoDireccionEntrega;
     private String numDependiente;
     private String titularNombreTrabajo;

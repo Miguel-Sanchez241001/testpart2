@@ -1,6 +1,7 @@
 package pe.bn.com.sate.ope.application.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -8,10 +9,10 @@ import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
-import pe.bn.com.sate.ope.transversal.util.enums.OperacionMovimientoMC;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMoneda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMontoMC;
+import pe.bn.com.sate.ope.transversal.util.enums.OperacionMovimientoMC;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaMC;
 
 public class ConsultarMovimientosModel {

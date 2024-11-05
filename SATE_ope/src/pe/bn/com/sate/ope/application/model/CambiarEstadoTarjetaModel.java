@@ -1,9 +1,11 @@
 package pe.bn.com.sate.ope.application.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
@@ -41,13 +43,25 @@ public class CambiarEstadoTarjetaModel {
 
 	private String tipoBloqueoSeleccionado;
 
+	private List<String> listaTipoBusquedaPor;
+	private String tipoBusquedaPor;
+	private List<Asignacion> asignacionesTotal;
+	
 	public CambiarEstadoTarjetaModel() {
-		listaTipoBusqueda = Arrays.asList(TipoBusqueda.values());
+		//listaTipoBusqueda = Arrays.asList(TipoBusqueda.values());
 		datosTarjetaCliente = new DatosTarjetaCliente();
 		// motivosBloqueoTarjetas =
 		// Arrays.asList(MotivosBloqueoTarjeta.values());
-		tipoBusqueda = "N";
+		
+		tipoBusqueda = TipoBusqueda.NUM_TARJETA.getId();	
+		
+		listaTipoBusquedaPor = new ArrayList<>();
+        listaTipoBusquedaPor.add("Por Documento");
+        listaTipoBusquedaPor.add("Por Tarjeta");
+		
+//		tipoBusqueda = "N";
 		tipoBloqueoSeleccionado = "T";
+		asignacionesTotal = new ArrayList<>();
 	}
 
 	public String getMotivoSeleccionado() {
@@ -252,4 +266,32 @@ public class CambiarEstadoTarjetaModel {
 	public String obtenerEstadoCuenta(String id,String descripcion){
 		return (id+"-"+descripcion);
 	}
+
+	public List<String> getListaTipoBusquedaPor() {
+		return listaTipoBusquedaPor;
+	}
+
+	public void setListaTipoBusquedaPor(List<String> listaTipoBusquedaPor) {
+		this.listaTipoBusquedaPor = listaTipoBusquedaPor;
+	}
+
+	public String getTipoBusquedaPor() {
+		return tipoBusquedaPor;
+	}
+
+	public void setTipoBusquedaPor(String tipoBusquedaPor) {
+		this.tipoBusquedaPor = tipoBusquedaPor;
+	}
+
+	public List<Asignacion> getAsignacionesTotal() {
+		return asignacionesTotal;
+	}
+
+	public void setAsignacionesTotal(List<Asignacion> asignacionesTotal) {
+		this.asignacionesTotal = asignacionesTotal;
+	}
+	
+	
+	
+	
 }

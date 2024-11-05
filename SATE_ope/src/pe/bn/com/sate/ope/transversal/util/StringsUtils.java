@@ -61,5 +61,16 @@ public class StringsUtils {
 		
 		return formatted;
 	}
+	
+	public static String formateo_DNI(String valor){
+		String n = "";
+		
+		try{
+			n = valor.substring(4,12);
+			
+		}catch(Exception e){}
+			
+		return n;
+	}
 
 }

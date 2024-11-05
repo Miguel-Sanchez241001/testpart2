@@ -121,7 +121,7 @@ public class ConstantesGenerales {
 	public final static String PARAM_RESPUESTATIEMPO = "RESPUESTATIEMPO";
 
 	// TODO MODIFICAR =========> RUTA CLAVE SEGURA SATE OPE
-	public static final String RUTA_CLAVE_SEGURA = "C://opt//software//key//sate//clavesegurades.key";
+	public static final String RUTA_CLAVE_SEGURA = "D://opt//software//key//sate//clavesegurades.key";
 	 //public static final String RUTA_CLAVE_SEGURA = "//opt//software//key//sate//clavesegurades.key";
 
 
@@ -188,5 +188,10 @@ public class ConstantesGenerales {
 	
 	public static final String COD_TARJETA = "2";
 	public static final String COD_TIPODOC = "1";
+	
+	public static final String CODIGO_DNI = "1";
+	public static final String CODIGO_CE = "4";
 
+	
+	public static final String ACTUALIZA_EXITO = "Se actualizo correctamente";
 }

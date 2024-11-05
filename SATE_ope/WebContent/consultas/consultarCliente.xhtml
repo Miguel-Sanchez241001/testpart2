@@ -24,11 +24,11 @@
 							style="margin:20px auto 20px auto;" layout="grid">
 							<h:outputText value="Consultar por" />
 							<p:selectOneMenu id="somTipoBusqueda"
-								widgetVar="selectTipoBusqueda" onchange="onCall(this)"
+								widgetVar="selectTipoBusqueda" 
 								style="width:162px;vertical-align:middle;margin-left:20px;"
 								value="#{consultarClienteController.consultarClienteModel.tipoBusqueda}"
 								required="true" requiredMessage="Seleccione tipo de documento">
-								<p:ajax event="change" update="formConsultarCliente:pgBusqueda" />
+								<p:ajax event="change" update="formConsultarCliente:numDocumento" />
 								<f:selectItems
 									value="#{consultarClienteController.consultarClienteModel.listaTipoBusqueda}"
 									var="item" itemLabel="#{item.descripcion}"
@@ -38,6 +38,7 @@
 								required="true"
 								onkeypress="javascript:return jsValidarKey(event,/[0-9]/);"
 								value="#{consultarClienteController.consultarClienteModel.numDocumento}"
+								process="@this pgResultado"
 								maxlength="#{consultarClienteController.consultarClienteModel.obtenerBusquedaLength()}"
 								requiredMessage="#{consultarClienteController.consultarClienteModel.obtenerBusquedaRequiredMessage()}"
 								validatorMessage="#{consultarClienteController.consultarClienteModel.obtenerBusquedaValidatorMessage()}">
@@ -46,20 +47,107 @@
 							</p:inputText>
 							
 							<p:commandButton id="buscarCliente" value="Buscar"
-							styleClass="btnGrande"							
-							process="@this somTipoBusqueda,numDocumento"
+							styleClass="btnGrande"
+							process="@this somTipoBusqueda,numDocumento,pgResultado"
+							actionListener="#{consultarClienteController.consultarCliente()}"
 							onstart="PF('statusDialog').show()"
 							oncomplete="PF('statusDialog').hide()"
-							 />
+							update="formConsultarCliente:pgResultado"
+							 />						
+
 							
-						<!-- 	actionListener="#{consultarClienteController.buscarAsignaciones()}"
-							update="formConsultarCliente:pgResultado" -->
 
 						</p:panelGrid>
+						
+						<p:panelGrid columns="1" id="pgBus"
+							style="margin:20px auto 20px auto;" layout="grid">
+							<p:messages id="msgs" autoUpdate="true" showDetail="true"
+							showSummary="false" closable="true" />
+						</p:panelGrid>
+						
+							
 						<div class="dashed"></div>
+						
+						
+						
 					</h:panelGrid>
+								
+					
+					<h:panelGrid id="pgResultado" style="width:90%;text-align:center;"
+						columns="1">
+						<p:panelGrid style="margin:auto;text-align:left;" columns="2"
+							rendered="#{consultarClienteController.consultarClienteModel.busquedaRealizada}"
+							layout="grid">
 
+							<p:panel style="margin:10px 20px;padding:20px;">
+								<h3 style="text-align: center">Datos del cliente</h3>
+								<div class="dashed"></div>
+								<h:panelGrid columns="2">
+									<h:outputText value="Tipo de documento" />
+									<h:outputText value="Número de documento"
+										style="margin-left:20px;" />
+									<p:inputText id="somTipoDocumento" readonly="true"
+										value="#{consultarClienteController.consultarClienteModel.descripcionTipoDocumento(consultarClienteController.consultarClienteModel.datosTarjetaCliente.cliente.tipoDocumento)}" 
+										/>
+									<p:inputText id="numeroDocumento" readonly="true"
+										style="margin-left:20px;"
+										value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.cliente.nroDocumento}"
+										 />
 
+									<h:outputText value="Nombres" />
+									<h:outputText value="Apellidos" style="margin-left:20px;" />
+									<p:inputText id="itNombres" readonly="true"
+										value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.cliente.nombres}" 
+										/>
+									<p:inputText id="itApellidos" style="margin-left:20px;"
+										readonly="true"
+										value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.cliente.apCompleto}" 
+										/>
+										
+										
+									<h:outputText value="Correo electrónico" />
+									<h:outputText value="Teléfono de casa"
+										style="margin-left:20px;" />
+									<p:inputText id="email" maxlength="30" 									
+										value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.tarjeta.email}"
+										validatorMessage="Correo electrónico no válido">
+										<p:ajax update="msgs" event="keyup" />
+										<f:validateRegex
+											pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+									</p:inputText>
+									
+									<p:inputText id="telefonoCasa" style="margin-left:20px;" 
+										maxlength="7" onkeypress="return validarSoloNumeros(event)"
+										
+										value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.cliente.telefonoCasa}"
+										required="true" requiredMessage="Ingrese teléfono de casa">
+									</p:inputText>	
+								</h:panelGrid>
+
+							</p:panel>
+						</p:panelGrid>
+						
+						<p:panelGrid columns="1"
+							style="margin-top:30px;width:90%;margin:auto;"
+							rendered="#{consultarClienteController.consultarClienteModel.busquedaRealizada}"
+							>
+							<div class="dashed"></div>
+
+							
+							<p:commandButton id="actualizarDatos" value="Actualizar"
+								styleClass="btnGrande"	
+								process="@this email,telefonoCasa"							
+								actionListener="#{consultarClienteController.actualizarDatosCliente()}"
+								onstart="PF('statusDialog').show()"
+							oncomplete="PF('statusDialog').hide()"
+							update="formConsultarCliente"
+								 />
+						</p:panelGrid>
+						
+								
+						
+						
+					</h:panelGrid>
 					
 				</p:panel>
 			</center>

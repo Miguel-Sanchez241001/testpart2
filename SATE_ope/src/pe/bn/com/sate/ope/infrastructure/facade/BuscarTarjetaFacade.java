@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
+import pe.bn.com.sate.ope.transversal.dto.sate.SaldoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
@@ -156,7 +157,7 @@ public class BuscarTarjetaFacade {
 				}
 						
 				tarjeta.setMontoLineaAsignado(Double.parseDouble(consDatoExp.getSaldoLineaCredito()));//saldoTarjeta.getLineaCredito()
-				tarjeta.setMontoLineaActual(Double.parseDouble(consDatoExp.getSaldoActual()));//saldoTarjeta.getDispActual()
+				tarjeta.setMontoLineaActual(Double.parseDouble(consDatoExp.getSaldoDispEfectivo()));//saldoTarjeta.getDispActual()=> consDatoExp.getSaldoActual()
 				tarjeta.setMontoCompraUsado(Double.parseDouble(consDatoExp.getSaldoPagoTotal()));//saldoTarjeta.getPagoTotal()
 				
 				//tarjeta.setMontoPorProcesar(Double.parseDouble(consDatoExp.getSaldoImporteMora()));//saldoTarjeta.getImporteMora()

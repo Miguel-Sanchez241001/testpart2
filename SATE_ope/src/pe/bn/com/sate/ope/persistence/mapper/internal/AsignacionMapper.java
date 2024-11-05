@@ -1,12 +1,12 @@
 package pe.bn.com.sate.ope.persistence.mapper.internal;
  
-import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
-
+ 
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
+ 
+import java.util.List;
 public interface AsignacionMapper {
  
 	@Select("SELECT t1.B04_ID_CAS , " +

@@ -1,6 +1,17 @@
 package pe.bn.com.sate.ope.infrastructure.facade;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,14 +19,33 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.WebServiceException;
+import javax.xml.ws.soap.SOAPFaultException;
+import com.ibm.wsspi.webservices.Constants; // Importa las constantes relevantes
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import pe.bn.com.sate.ope.application.view.AutorizarSolicitudesController;
 import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceMCProcesosException;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
@@ -29,11 +59,11 @@ import pe.bn.com.sate.ope.transversal.dto.sate.SaldoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.ConsultaMovimientos;
 import pe.bn.com.sate.ope.transversal.dto.ws.ConsultaSaldos;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosCliente;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionClientes;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionTarjeta;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOwservice;
 import pe.bn.com.sate.ope.transversal.util.Fecha;
 import pe.bn.com.sate.ope.transversal.util.NumeroALetras;
@@ -470,7 +500,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -1071,9 +1101,36 @@ public class FWMCProcesos {
 		return responseDTO;
 	}
 
-	//Modificación de Cliente	
-	public DTOModificacionClientes modificacionCliente(int idTarjeta, String nuevosDatos) throws InternalExcepcion {
-		String wsdlUrl = parametros.getWsSoapMc();
+	//Modificación de Cliente	proceso
+	public DTOModificacionClientes actualizarCliente(
+			String tipoDoc,
+			String numDoc,
+			String nombres, 
+			String apellidos, 
+			String email, 
+			String telefono,
+			String celular) throws InternalExcepcion {
+		
+		/*obtener valores*/
+		String wsdlUrl = parametros.getWsSoapMc();		
+		String wsdlAS = parametros.getPrefijoNumReferenciaMc();
+		
+		String codEmisor = parametros.getCodigoEmisorMc();	
+		String codUsuario = parametros.getCodigoUsuarioMc();	
+		String numTerminal = parametros.getNumTerminalMc();			
+		String numReferenciaWS = wsdlAS+NumeroALetras.llenarCerosAlaIzquierda(Long.toString(parametroMapper.obtenerNumeroReferenciaWS()),10);
+		
+		String usuario = parametros.getWsUsuarioMc();
+		String clave = parametros.getWsClaveMc();		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+	    String fechaTerminal = sdf.format(new Date());
+	    System.out.println("fechaTerminal:"+fechaTerminal);
+	        
+	    DateFormat dateFormat = new SimpleDateFormat("HHmmss");
+	    String horaTerminal = dateFormat.format(new Date());	       
+	    System.out.println("horaTerminal:"+horaTerminal);		
+		
 		DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_MODIFICACION_CLIENTES);
 		Class<DTOModificacionClientes> dtoClass = DTOModificacionClientes.class;
 
@@ -1082,23 +1139,28 @@ public class FWMCProcesos {
 				.getModificacionClienteMap();
 		
 		
-		inputRequest.put(ConstantesWS.COD_EMISOR, "941");
-		inputRequest.put(ConstantesWS.COD_USUARIO, "CS00000001");
-		inputRequest.put(ConstantesWS.NUM_TERMINAL, "12345678");
-		inputRequest.put(ConstantesWS.NUM_REFERENCIA, "ORD000123456789");		
+		inputRequest.put(ConstantesWS.COD_EMISOR, codEmisor);
+		inputRequest.put(ConstantesWS.COD_USUARIO, codUsuario);
+		inputRequest.put(ConstantesWS.NUM_TERMINAL, numTerminal);
+		inputRequest.put(ConstantesWS.NUM_REFERENCIA, numReferenciaWS);		
 		inputRequest.put(ConstantesWS.MONEDA_PRODUCTO, "1");
-		inputRequest.put(ConstantesWS.TITULAR_APELLIDOS, "Gutierrez Solis");
-		inputRequest.put(ConstantesWS.TITULAR_NOMBRE, "Marianela");
-		inputRequest.put(ConstantesWS.TITULAR_NUM_CELULAR, "975426854");
-		inputRequest.put(ConstantesWS.TITULAR_TELEFONO_DOMICILIO, "2131600");
-		inputRequest.put(ConstantesWS.TITULAR_EMAIL	, "MarianelaGS@miempresa.com.pe");	
-		inputRequest.put(ConstantesWS.NUM_DEPENDIENTE, "3");
-		inputRequest.put(ConstantesWS.TITULAR_PROFESION, "16779");
-		inputRequest.put(ConstantesWS.FECHA_TXN_TERMINAL, "20160224");
-		inputRequest.put(ConstantesWS.HORA_TXN_TERMINAL, "172020");
-		inputRequest.put(ConstantesWS.WS_USUARIO, "0944006748");
-		inputRequest.put(ConstantesWS.WS_CLAVE, "dRUch4hupAvuduBE");
-		inputRequest.put(ConstantesWS.RESERVADO, "OA09123456");
+//		inputRequest.put(ConstantesWS.TITULAR_APELLIDOS, apellidos);
+//		inputRequest.put(ConstantesWS.TITULAR_NOMBRE, nombres);
+		
+		inputRequest.put(ConstantesWS.TITULAR_NUM_CELULAR, celular);
+		inputRequest.put(ConstantesWS.TITULAR_TELEFONO_DOMICILIO, telefono);
+		inputRequest.put(ConstantesWS.TITULAR_EMAIL	, email);	
+		
+		inputRequest.put(ConstantesWS.TIPO_DOCUMENTO, tipoDoc);
+		inputRequest.put(ConstantesWS.NRO_DOCUMENTO, numDoc);		
+		
+//		inputRequest.put(ConstantesWS.NUM_DEPENDIENTE, "3");
+		inputRequest.put(ConstantesWS.TITULAR_PROFESION, "");
+		inputRequest.put(ConstantesWS.FECHA_TXN_TERMINAL, fechaTerminal);
+		inputRequest.put(ConstantesWS.HORA_TXN_TERMINAL, horaTerminal);
+		inputRequest.put(ConstantesWS.WS_USUARIO, usuario);
+		inputRequest.put(ConstantesWS.WS_CLAVE, clave);
+		inputRequest.put(ConstantesWS.RESERVADO, "");
 		
 		String soapRequestPrevie = ConstantesWS.generarXml(
 				ConstantesWS.MODIFICACION_CLIENTE_XML, inputRequest);
@@ -1106,7 +1168,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+	logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -1158,30 +1220,51 @@ public class FWMCProcesos {
 	}
 
 	
-	//Consulta de Datos de Cliente
-	public DTOConsultaDatosCliente consultaDatosCliente(int expedienteId) throws InternalExcepcion {
-		String wsdlUrl = parametros.getWsSoapMc();
-		DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_CONSULTA_DATOS_CLIENTE);
+	//Consulta de Datos de Cliente -- ok
+	public DTOConsultaDatosCliente consultaDatosCliente(String tipDoc, String numDoc) throws InternalExcepcion {
+				
+		/*obtener valores*/
+		String wsdlUrl = parametros.getWsSoapMc();		
+		String wsdlAS = parametros.getPrefijoNumReferenciaMc();
+		
+		String codEmisor = parametros.getCodigoEmisorMc();	
+		String codUsuario = parametros.getCodigoUsuarioMc();	
+		String numTerminal = parametros.getNumTerminalMc();			
+		String numReferenciaWS = wsdlAS+NumeroALetras.llenarCerosAlaIzquierda(Long.toString(parametroMapper.obtenerNumeroReferenciaWS()),10);
+		
+		String usuario = parametros.getWsUsuarioMc();
+		String clave = parametros.getWsClaveMc();		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+	    String fechaTerminal = sdf.format(new Date());
+	    System.out.println("fechaTerminal:"+fechaTerminal);
+	        
+	    DateFormat dateFormat = new SimpleDateFormat("HHmmss");
+	    String horaTerminal = dateFormat.format(new Date());	       
+	    System.out.println("horaTerminal:"+horaTerminal);
+	    	
+		
+	    DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_CONSULTA_DATOS_CLIENTE);
 		Class<DTOConsultaDatosCliente> dtoClass = DTOConsultaDatosCliente.class;
 		DTOConsultaDatosCliente responseDTO = null;
-
+	    
+		String numDocumento = StringsUtils.llenarCerosAlaIzquierdaV2(numDoc, 12);
 
 		Map<String, String> inputRequest = ConstantesWS
-				.getConsultaDatosClienteMap();
+				.getConsultaDatosClienteMap();	
 		
+		inputRequest.put(ConstantesWS.COD_EMISOR, codEmisor);
+		inputRequest.put(ConstantesWS.COD_USUARIO, codUsuario);
+		inputRequest.put(ConstantesWS.NUM_TERMINAL, numTerminal);
+		inputRequest.put(ConstantesWS.NUM_REFERENCIA, numReferenciaWS);
 		
-		inputRequest.put(ConstantesWS.COD_EMISOR, "191");
-		inputRequest.put(ConstantesWS.COD_USUARIO, "TT9999");
-		inputRequest.put(ConstantesWS.NUM_TERMINAL, "11010101");
-		inputRequest.put(ConstantesWS.NUM_REFERENCIA, "AC2023000187");
-		
-		inputRequest.put(ConstantesWS.TIPO_DOCUMENTO, "1");
-		inputRequest.put(ConstantesWS.NUM_DOCUMENTO, "000016727214");
+		inputRequest.put(ConstantesWS.TIPO_DOCUMENTO, tipDoc);
+		inputRequest.put(ConstantesWS.NUM_DOCUMENTO, numDocumento);
 				
-		inputRequest.put(ConstantesWS.FECHA_TXN_TERMINAL, "20160224");
-		inputRequest.put(ConstantesWS.HORA_TXN_TERMINAL, "172020");
-		inputRequest.put(ConstantesWS.WS_USUARIO, "4858643428");
-		inputRequest.put(ConstantesWS.WS_CLAVE, "aza877azutht98b8");
+		inputRequest.put(ConstantesWS.FECHA_TXN_TERMINAL, fechaTerminal);
+		inputRequest.put(ConstantesWS.HORA_TXN_TERMINAL, horaTerminal);
+		inputRequest.put(ConstantesWS.WS_USUARIO, usuario);
+		inputRequest.put(ConstantesWS.WS_CLAVE, clave);
 		inputRequest.put(ConstantesWS.RESERVADO, "");
 		
 		String soapRequestPrevie = ConstantesWS.generarXml(

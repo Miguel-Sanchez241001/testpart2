@@ -1,5 +1,7 @@
 package pe.bn.com.sate.ope.transversal.util.host;
 
+import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
+
 public class BodySolicitud extends WSData {
 
 	// private static LoggerBn log3 =

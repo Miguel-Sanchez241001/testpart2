@@ -1,7 +1,6 @@
 package pe.bn.com.sate.ope.application.model;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -14,14 +13,18 @@ import pe.bn.com.sate.ope.transversal.util.NumeroALetras;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
+import pe.bn.com.sate.ope.transversal.util.enums.BuscarTarjetaTD;
 import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.DisposicionEfectivo;
 import pe.bn.com.sate.ope.transversal.util.enums.OperadorMovil;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoBusquedaTD;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMoneda;
-import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjeta;
+import java.util.ArrayList;
 
 public class BuscarTarjetaModel {
 
