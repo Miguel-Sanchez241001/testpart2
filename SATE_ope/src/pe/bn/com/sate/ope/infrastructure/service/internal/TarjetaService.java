@@ -2,6 +2,8 @@ package pe.bn.com.sate.ope.infrastructure.service.internal;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
@@ -44,4 +46,7 @@ public interface TarjetaService {
 
 	public String verificarSolicitudes(String tipoDocumento, String nroDocuemnto);
 	public String verificarTarjetasDisponible(String tipoDocumento, String nroDocuemnto, Tarjeta tarjeta);
+	
+	
+	public Tarjeta 	buscarPrimeraTarjetaCliente(String tipoDocumento, String numeroDocumento);
 }

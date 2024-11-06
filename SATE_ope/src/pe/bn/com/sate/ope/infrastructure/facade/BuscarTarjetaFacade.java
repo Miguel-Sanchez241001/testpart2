@@ -156,7 +156,7 @@ public class BuscarTarjetaFacade {
 						
 				}
 						
-				tarjeta.setMontoLineaAsignado(Double.parseDouble(consDatoExp.getSaldoLineaCredito()));//saldoTarjeta.getLineaCredito()
+				tarjeta.setMontoLineaAsignado(Double.parseDouble(consDatoExp.getSaldoLineaCredito()));//saldoTarjeta.getLineaCredito()				
 				tarjeta.setMontoLineaActual(Double.parseDouble(consDatoExp.getSaldoDispEfectivo()));//saldoTarjeta.getDispActual()=> consDatoExp.getSaldoActual()
 				tarjeta.setMontoCompraUsado(Double.parseDouble(consDatoExp.getSaldoPagoTotal()));//saldoTarjeta.getPagoTotal()
 				

@@ -8,4 +8,6 @@ public interface ClienteService {
 	public Cliente buscarCliente(String tipoDocumento,String numDocumento);
 	
 	public void actualizarCliente(Cliente cliente);
+	
+	public void actualizarClienteBD(String tipoDocumento, String numDocumento, String teleno, String email);
 }

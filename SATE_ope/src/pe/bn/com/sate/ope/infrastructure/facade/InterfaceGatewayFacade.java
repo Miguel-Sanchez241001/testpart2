@@ -112,7 +112,8 @@ public class InterfaceGatewayFacade {
 			Solicitud solicitud = requestMensajeHost.getSolicitud(ruc,
 					empresa.getCic(), tipoDocumento, numDocumento, clave, null,
 					ConstantesGenerales.GENERAR_CLAVE);
-			logger.debug("**********CLAVE GENERADA*********** : " + clave);
+			System.out
+					.println("**********CLAVE GENERADA*********** : " + clave);
 
 			if (solicitud.getcError().equals(
 					RespuestaInterfaceGateway.EXITO.getCodigo())) {
@@ -145,7 +146,7 @@ public class InterfaceGatewayFacade {
 							&& usuario.getCorreoLaboral().equals(
 									correoElectronico)) {
 						String clave = StringsUtils.random();
-						logger.debug("CLAVE : " + clave);
+						System.out.println("CLAVE : " + clave);
 						
 						Solicitud solicitud = requestMensajeHost.getSolicitud(
 								ruc, empresa.getCic(), tipoDocumento,

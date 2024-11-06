@@ -2,6 +2,7 @@ package pe.bn.com.sate.ope.infrastructure.service.internal.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.ClienteService;
@@ -27,6 +28,18 @@ public class ClienteServiceImpl implements ClienteService {
 	public void actualizarCliente(Cliente cliente) {
 		try {
 			clienteMapper.actualizarCliente(cliente);
+		} catch (Exception ex) {
+			throw new InternalServiceException(ex.getMessage(), ex);
+		}
+	}
+	
+	
+	@Override
+	@Transactional
+	public void actualizarClienteBD(String tipoDocumento, String numDocumento, String telefono, String email) {
+		try {
+			clienteMapper.actualizarTelefonoCliente(tipoDocumento, numDocumento, telefono);
+			clienteMapper.actualizarEmailTarjeta(tipoDocumento, numDocumento, email);
 		} catch (Exception ex) {
 			throw new InternalServiceException(ex.getMessage(), ex);
 		}

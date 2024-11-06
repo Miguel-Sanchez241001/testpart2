@@ -16,14 +16,22 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import pe.bn.com.sate.ope.application.model.CambiarEstadoTarjetaModel;
+import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceBnTablasException;
 import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceMCProcesosException;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
+import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.facade.FWMCProcesos;
 import pe.bn.com.sate.ope.infrastructure.facade.ReporteResumenFacade;
+import pe.bn.com.sate.ope.infrastructure.service.external.AgenciaService;
+import pe.bn.com.sate.ope.infrastructure.service.external.UbigeoService;
+import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
+import pe.bn.com.sate.ope.transversal.configuration.security.SecurityContextFacade;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
+import pe.bn.com.sate.ope.transversal.dto.sate.Empresa;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.ModificacionTarjeta;
+import pe.bn.com.sate.ope.transversal.dto.tablas.Agencia;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionTarjeta;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
@@ -58,6 +66,15 @@ public class CambiarEstadoTarjetaController implements Serializable {
 	
 	@Autowired
 	private ReporteResumenFacade reporteResumenFacade;
+	
+	@Autowired
+    private EmpresaService empresaService;
+	
+	@Autowired
+    private UbigeoService ubigeoService;
+
+    @Autowired
+    private AgenciaService agenciaService;
 	
 	@PostConstruct
 	public void init() {
@@ -121,7 +138,14 @@ public class CambiarEstadoTarjetaController implements Serializable {
 									.motivosBloqueoPorIdMotivo(cambiarEstadoTarjetaModel
 											.getDatosTarjetaCliente()
 											.getTarjeta().getEstado())));
-
+					
+					/*MGL - el valor de estado de cuenta viene en null
+					 * se le indico a pract-miguel que revise el valor de la tarjeta
+					 * por ahora le mando n*/
+					cambiarEstadoTarjetaModel
+					.getDatosTarjetaCliente()
+					.getTarjeta().setEstadoCuenta("N");
+					
 					cambiarEstadoTarjetaModel
 							.setMotivosBloqueoCuenta(Arrays.asList(MotivosBloqueoCuenta
 									.motivosBloqueoPorIdMotivo(cambiarEstadoTarjetaModel
@@ -179,11 +203,50 @@ public class CambiarEstadoTarjetaController implements Serializable {
 									"No existe TarjetaHabiente con ese tipo y número de documento.");
 					UsefulWebApplication.actualizarComponente("msgs");
 				} else {
-					UsefulWebApplication.ejecutar("wvSeleccionarTajeta.show()");
+					
+					
+//					UsefulWebApplication.ejecutar("wvSeleccionarTajeta.show()");
+//					UsefulWebApplication
+//							.actualizarComponente("formSeleccionarTarjeta");
+//					UsefulWebApplication
+//							.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+//					
+					
+
+					cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
+					
+//					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setTarjeta(							
+//							cambiarEstadoTarjetaModel.getTarjetaSeleccionada());
+					
+					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setTarjeta(
+							cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas().get(0));
+					
+//					System.out.println("Motivo:"
+//							+ cambiarEstadoTarjetaModel.getTarjetaSeleccionada()
+//									.getMotivoBloqueo());
+				
+					cambiarEstadoTarjetaModel.setMotivosBloqueoTarjetas(Arrays
+							.asList(MotivosBloqueoTarjeta
+									.motivosBloqueoPorIdMotivo(cambiarEstadoTarjetaModel
+											.getDatosTarjetaCliente()
+											.getTarjeta().getEstado())));
+					
+					/*MGL - el valor de estado de cuenta viene en null
+					 * se le indico a pract-miguel que revise el valor de la tarjeta
+					 * por ahora le mando n*/
+					
+					cambiarEstadoTarjetaModel
+					.getDatosTarjetaCliente()
+					.getTarjeta().setEstadoCuenta("N");
+					
+					cambiarEstadoTarjetaModel.setMotivosBloqueoCuenta(Arrays
+							.asList(MotivosBloqueoCuenta
+									.motivosBloqueoPorIdMotivo(cambiarEstadoTarjetaModel
+											.getDatosTarjetaCliente().getTarjeta()
+											.getEstadoCuenta())));
+				
 					UsefulWebApplication
-							.actualizarComponente("formSeleccionarTarjeta");
-					UsefulWebApplication
-							.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+					.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
 				}
 
 			}
@@ -261,8 +324,18 @@ public class CambiarEstadoTarjetaController implements Serializable {
 				
 				
 				System.out.println(cambiarEstadoTarjetaModel.getEstadoTarjeta().toString());
-				if (cambiarEstadoTarjetaModel.getEstadoTarjeta().getMotivo().equals(MotivosBloqueoTarjeta.ROBO.getId())) {
-					UsefulWebApplication.ejecutar("dgSolicitarTarjeta.show()");
+				//if (cambiarEstadoTarjetaModel.getEstadoTarjeta().getMotivo().equals(MotivosBloqueoTarjeta.ROBO.getId())) {
+				if (codMotivo.equals(MotivosBloqueoTarjeta.ROBO.getId())) {
+					cambiarEstadoTarjetaModel.inicializarFormularioEntrega();
+					 try {
+						 cambiarEstadoTarjetaModel.setDepartamentos(ubigeoService.buscarDepartamentos());
+				        } catch (InternalServiceException ise) {
+				            logger.error(ise.getMessage());
+				        } catch (ServiceException se) {
+				            logger.error(se.getMessage());
+				        }
+					 this.mostrarOpcionPorTipoUbicacion();
+						UsefulWebApplication.ejecutar("dgSolicitarTarjeta.show()");
 				} else {
 					tarjetaService.actualizarEstadoTarjeta(cambiarEstadoTarjetaModel.getEstadoTarjeta());
 
@@ -372,17 +445,9 @@ public class CambiarEstadoTarjetaController implements Serializable {
 		try {
 			List<Asignacion> asignaciones = null;
 			if (cambiarEstadoTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
-				
-				cambiarEstadoTarjetaModel.setDatosTarjetaCliente(tarjetaService
-						.buscarDatosTarjetasCliente(
-								cambiarEstadoTarjetaModel.getTipoBusqueda(),
-								cambiarEstadoTarjetaModel.getNumDocumento(),
-								"C"));
-				
+												
 				String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(cambiarEstadoTarjetaModel.getNumDocumento(), 19);
-				
-			
-				
+							
 				asignaciones = reporteResumenFacade.obtenerAsignacionesPorTarjetaSimple(tarjeta19);	
 				
 				if(asignaciones.isEmpty() && asignaciones.size()==0){
@@ -393,7 +458,12 @@ public class CambiarEstadoTarjetaController implements Serializable {
 					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA,
 					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA);
 					
-				}else{				
+					UsefulWebApplication.actualizarComponente("msgs");
+					UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta");
+					
+					
+				}else{		
+					
 					cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
 					cambiarEstadoTarjetaModel.setAsignacionesTotal(asignaciones);
 					// MOSTRAR MODAL COMPONENTE
@@ -413,8 +483,10 @@ public class CambiarEstadoTarjetaController implements Serializable {
 								"C"));
 				
 				
+				
 				asignaciones = reporteResumenFacade.obtenerAsignacionesPorDocumentoSimple(
 						cambiarEstadoTarjetaModel.getTipoBusqueda(), cambiarEstadoTarjetaModel.getNumDocumento());
+				
 								
 				if(asignaciones.isEmpty() && asignaciones.size()==0){
 					cambiarEstadoTarjetaModel.inicializarFormulario();
@@ -424,7 +496,10 @@ public class CambiarEstadoTarjetaController implements Serializable {
 					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO);
 					
 					
-				}else{		
+				}else{	
+					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setEstado("5");
+					//cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setTarjeta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas().get(0));
+					
 					cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
 					cambiarEstadoTarjetaModel.setAsignacionesTotal(asignaciones);
 					// MOSTRAR MODAL COMPONENTE
@@ -460,5 +535,219 @@ public class CambiarEstadoTarjetaController implements Serializable {
 	  }
 	
 	
+	
+	
+	
+	
+	
+	
+	/**
+     * Muestra opciones según el tipo de ubicación de entrega seleccionada.
+     */
+    public void mostrarOpcionPorTipoUbicacion() {
+        try {
+            if (cambiarEstadoTarjetaModel.getTarjeta().getEntregaUbicacion()
+                    .equals(ConstantesGenerales.ENTREGA_AGENCIA_BN)) {
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDireccion(null);
+                cambiarEstadoTarjetaModel.setEsEntregaBN(true);
+                cambiarEstadoTarjetaModel.setEsEntregaUE(false);
+                cambiarEstadoTarjetaModel.setEsEntregaReferencia(true);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDepartamento(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaProvincia(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDistrito(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaReferencia(null);
+            } else if (cambiarEstadoTarjetaModel.getTarjeta().getEntregaUbicacion()
+                    .equals(ConstantesGenerales.ENTREGA_UNIDAD_EJECUTORA)) {
+
+                Empresa empresa = empresaService
+                    .buscarEmpresaPorRUC(SecurityContextFacade
+                        .getAuthenticatedUser().getRuc());
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDireccion(
+                    empresa.getDireccion());
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaUbigeo(
+                    empresa.getUbigeo());
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaAgenciaBN("0000");
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaReferencia(
+                    empresa.getReferencia());
+                cambiarEstadoTarjetaModel.setAgenciasBN(null);
+
+                cambiarEstadoTarjetaModel.setEsEntregaBN(false);
+                cambiarEstadoTarjetaModel.setEsEntregaUE(true);
+                cambiarEstadoTarjetaModel.setEsEntregaReferencia(true);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDepartamento(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaProvincia(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDistrito(null);
+                cambiarEstadoTarjetaModel.setAgenciaSeleccionada(null);
+            } else {
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDireccion(null);
+                cambiarEstadoTarjetaModel.setAgenciasBN(null);
+
+                cambiarEstadoTarjetaModel.setEsEntregaBN(false);
+                cambiarEstadoTarjetaModel.setEsEntregaUE(false);
+                cambiarEstadoTarjetaModel.setEsEntregaReferencia(false);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDepartamento(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaProvincia(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDistrito(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaReferencia(null);
+                cambiarEstadoTarjetaModel.setAgenciaSeleccionada(null);
+            }
+        } catch (ExternalServiceBnTablasException se) {
+            logger.error(se.getMessage());
+            UsefulWebApplication.mostrarMensajeJSF(
+                ConstantesGenerales.SEVERITY_ERROR,
+                ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS,
+                ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS);
+        }
+    }
+    
+    
+    
+   
+
+    /**
+     * Busca agencias según el ubigeo seleccionado.
+     */
+    public void buscarAgenciasPorUbigeo() {
+        logger.info("[SolicitarTarjetaController] Inicio metodo buscarAgenciasPorUbigeo");
+        String provincia = cambiarEstadoTarjetaModel.getTarjeta().getEntregaProvincia();
+        String departamento = cambiarEstadoTarjetaModel.getTarjeta().getEntregaDepartamento();
+        String distrito = cambiarEstadoTarjetaModel.getTarjeta().getEntregaDistrito();
+        logger.info("[SolicitarTarjetaController] valor departamento: " + departamento);
+        logger.info("[SolicitarTarjetaController] valor Provincia: " + provincia);
+        logger.info("[SolicitarTarjetaController] valor distrito: " + distrito);
+
+        if (distrito == null) {
+            cambiarEstadoTarjetaModel.getTarjeta().setEntregaAgenciaBN(null);
+            cambiarEstadoTarjetaModel.getTarjeta().setEntregaReferencia(null);
+        } else {
+            try {
+                cambiarEstadoTarjetaModel.setAgenciasBN(agenciaService
+                    .buscarAgenciasPorUbigeo(departamento, provincia, distrito));
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaAgenciaBN(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaReferencia(null);
+            } catch (ExternalServiceBnTablasException este) {
+                UsefulWebApplication.mostrarMensajeJSF(
+                    ConstantesGenerales.SEVERITY_ERROR,
+                    ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS,
+                    ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS);
+                logger.error(este.getMessage());
+            } catch (ServiceException es) {
+                UsefulWebApplication.mostrarMensajeJSF(
+                    ConstantesGenerales.SEVERITY_ERROR,
+                    ConstantesGenerales.ERROR_PERSISTENCE_GENERAL,
+                    ConstantesGenerales.ERROR_PERSISTENCE_GENERAL);
+                logger.error(es.getMessage());
+            }
+        }
+        logger.info("[SolicitarTarjetaController] Fin metodo buscarAgenciasPorUbigeo");
+    }
+
+    /**
+     * Busca los datos de una agencia según el código de agencia seleccionado.
+     */
+    public void buscarDatosAgencia() {
+        try {
+            logger.info("[SolicitarTarjetaController] Inicio metodo buscarDatosAgencia");
+            Agencia agencia = agenciaService
+                .buscarAgenciaPorCodAgencia(cambiarEstadoTarjetaModel
+                    .getAgenciaSeleccionada().getCodAgencia());
+            cambiarEstadoTarjetaModel.getTarjeta().setEntregaDireccion(
+                agencia == null ? "No hay dirección registrada" : agencia
+                    .getDireccion());
+            logger.info("[SolicitarTarjetaController] fin metodo buscarDatosAgencia");
+        } catch (ExternalServiceBnTablasException este) {
+            UsefulWebApplication.mostrarMensajeJSF(
+                ConstantesGenerales.SEVERITY_ERROR,
+                ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS,
+                ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS);
+            logger.error(este.getMessage());
+        } catch (ServiceException es) {
+            UsefulWebApplication.mostrarMensajeJSF(
+                ConstantesGenerales.SEVERITY_ERROR,
+                ConstantesGenerales.ERROR_PERSISTENCE_GENERAL,
+                ConstantesGenerales.ERROR_PERSISTENCE_GENERAL);
+            logger.error(es.getMessage());
+        }
+    }
+
+    /**
+     * Busca las provincias según el departamento seleccionado.
+     */
+    public void buscarProvincias() {
+        logger.info("[SolicitarTarjetaController] Inicio metodo buscarProvincias");
+        String departamento = cambiarEstadoTarjetaModel.getTarjeta().getEntregaDepartamento();
+        logger.info("[SolicitarTarjetaController] valor departamento: " + departamento);
+
+        if (departamento == null) {
+            cambiarEstadoTarjetaModel.setProvincias(null);
+            cambiarEstadoTarjetaModel.setDistritos(null);
+            cambiarEstadoTarjetaModel.getTarjeta().setEntregaProvincia(null);
+            cambiarEstadoTarjetaModel.getTarjeta().setEntregaDistrito(null);
+            cambiarEstadoTarjetaModel.setAgenciaSeleccionada(null);
+            cambiarEstadoTarjetaModel.getTarjeta().setEntregaReferencia(null);
+        } else {
+            try {
+                cambiarEstadoTarjetaModel.setProvincias(ubigeoService
+                    .buscarProvinciasPorDepartamento(departamento));
+                cambiarEstadoTarjetaModel.setDistritos(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaProvincia(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDistrito(null);
+                cambiarEstadoTarjetaModel.setAgenciaSeleccionada(null);
+            } catch (ExternalServiceBnTablasException este) {
+                UsefulWebApplication.mostrarMensajeJSF(
+                    ConstantesGenerales.SEVERITY_ERROR,
+                    ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS,
+                    ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS);
+                logger.error(este.getMessage());
+            } catch (ServiceException es) {
+                UsefulWebApplication.mostrarMensajeJSF(
+                    ConstantesGenerales.SEVERITY_ERROR,
+                    ConstantesGenerales.ERROR_PERSISTENCE_GENERAL,
+                    ConstantesGenerales.ERROR_PERSISTENCE_GENERAL);
+                logger.error(es.getMessage());
+            }
+        }
+        logger.info("[SolicitarTarjetaController] Fin metodo buscarProvincias");
+    }
+
+    /**
+     * Busca los distritos según la provincia seleccionada.
+     */
+    public void buscarDistritos() {
+        logger.info("[SolicitarTarjetaController] Inicio metodo buscarDistritos");
+        String provincia = cambiarEstadoTarjetaModel.getTarjeta().getEntregaProvincia();
+        String departamento = cambiarEstadoTarjetaModel.getTarjeta().getEntregaDepartamento();
+        logger.info("[SolicitarTarjetaController] valor Provincia: " + provincia);
+        logger.info("[SolicitarTarjetaController] valor departamento: " + departamento);
+
+        if (provincia == null) {
+            logger.info("[SolicitarTarjetaController] Provincia nulo");
+            cambiarEstadoTarjetaModel.setDistritos(null);
+            cambiarEstadoTarjetaModel.getTarjeta().setEntregaDistrito(null);
+            cambiarEstadoTarjetaModel.setAgenciaSeleccionada(null);
+            cambiarEstadoTarjetaModel.getTarjeta().setEntregaReferencia(null);
+        } else {
+            try {
+                cambiarEstadoTarjetaModel.setDistritos(ubigeoService
+                    .buscarDistritosPorProvincia(departamento, provincia));
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaDistrito(null);
+                cambiarEstadoTarjetaModel.setAgenciaSeleccionada(null);
+                cambiarEstadoTarjetaModel.getTarjeta().setEntregaReferencia(null);
+            } catch (ExternalServiceBnTablasException este) {
+                UsefulWebApplication.mostrarMensajeJSF(
+                    ConstantesGenerales.SEVERITY_ERROR,
+                    ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS,
+                    ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS);
+                logger.error(este.getMessage());
+            } catch (ServiceException es) {
+                UsefulWebApplication.mostrarMensajeJSF(
+                    ConstantesGenerales.SEVERITY_ERROR,
+                    ConstantesGenerales.ERROR_PERSISTENCE_GENERAL,
+                    ConstantesGenerales.ERROR_PERSISTENCE_GENERAL);
+                logger.error(es.getMessage());
+            }
+        }
+        logger.info("[SolicitarTarjetaController] Fin metodo buscarDistritos");
+    }
 
 }

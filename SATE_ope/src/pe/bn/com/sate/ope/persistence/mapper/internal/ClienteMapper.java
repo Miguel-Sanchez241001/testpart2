@@ -52,4 +52,33 @@ public interface ClienteMapper {
 	@Select("SELECT BN06.* FROM BN_SATE.BNSATE06_CLIENTE BN06 INNER JOIN BN_SATE.BNSATE05_TARJETA BN05 ON BN06.B06_ID_CLI = BN05.B06_ID_CLI WHERE BN05.B05_NUM_TARJETA =#{numTarjeta}")
 	@ResultMap("mapCliente")
 	public Cliente buscarClientePorNumTajeta(@Param("numTarjeta") String numTarjeta);
+	
+	
+	@Update("UPDATE BN_SATE.BNSATE06_CLIENTE " +
+            "SET B06_TELEF_CASA = #{telefonoCasa} " +
+            "WHERE B06_TIPO_DOCUMENTO = #{tipoDocumento} " +
+            "AND B06_NUM_DOCUMENTO = #{numeroDocumento}")
+	public void actualizarTelefonoCliente(
+        @Param("tipoDocumento") String tipoDocumento,
+        @Param("numeroDocumento") String numeroDocumento,
+        @Param("telefonoCasa") String telefonoCasa
+    );
+ 
+    @Update("UPDATE BN_SATE.BNSATE05_TARJETA " +
+            "SET B05_EMAIL = #{email} " +
+            "WHERE B06_ID_CLI = (SELECT B06_ID_CLI FROM BN_SATE.BNSATE06_CLIENTE " +
+            "WHERE B06_TIPO_DOCUMENTO = #{tipoDocumento} " +
+            "AND B06_NUM_DOCUMENTO = #{numeroDocumento})")
+    public void actualizarEmailTarjeta(
+        @Param("tipoDocumento") String tipoDocumento,
+        @Param("numeroDocumento") String numeroDocumento,
+        @Param("email") String email
+    );
+	
+	
+	
+	
+	
+	
+	
 }

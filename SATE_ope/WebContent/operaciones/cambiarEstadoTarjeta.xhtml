@@ -64,13 +64,18 @@
 								<f:validateLength
 									minimum="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.obtenerBusquedaLength()}" />
 							</p:inputText>
-							<p:commandButton value="Buscar" onclick="statusDialog.show();"
-								oncomplete="statusDialog.hide();"
+							<p:commandButton value="Buscar" 
+								
 								process="@this somTipoBusqueda,numDocumento"
 								actionListener="#{cambiarEstadoTarjetaController.buscarAsignaciones()}"
-								update=":formCambiarEstadoTarjeta msgs" />
+								onstart="PF('statusDialog').show()"
+								oncomplete="statusDialog.hide();"
+								
+								
+								 />
 
 						</p:panelGrid>
+						<!-- onclick="statusDialog.show();" update=":formCambiarEstadoTarjeta msgs" -->
 						<div class="dashed"></div>
 					</h:panelGrid>
 
@@ -265,18 +270,18 @@
 				<p:panelGrid columns="1">
 					<center>
 						<p:fieldset legend="Datos de entrega"
-							style="width:520px;height:250px;">
+							style="width:520px;height:350px;">
 
 							<h:panelGrid id="pgEntregaUbicacion">
 								<h:outputText value="Entregar tarjeta en *" />
 								<p:selectOneMenu id="somEntregaUbicacion" required="true"
-									style="width:162px;"
+									style="width:162px;" 
 									requiredMessage="seleccione ubicación de entrega"
-									value="#{solicitarTarjertaController.solicitarTarjetaModel.tarjeta.entregaUbicacion}">
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaUbicacion}">
 									<p:ajax
 										update=":formSolicitarTarjeta:pgOpcionTipoUbicacion :formSolicitarTarjeta:pgReferencia :formSolicitarTarjeta:pgUbigeoEntrega"
-										listener="#{solicitarTarjertaController.mostrarOpcionPorTipoUbicacion()}" />
-									<f:selectItem itemLabel="Seleccione" itemValue="null" />
+										listener="#{cambiarEstadoTarjetaController.mostrarOpcionPorTipoUbicacion()}" />
+									
 									<f:selectItem itemLabel="Agencia" itemValue="4" />
 									<f:selectItem itemLabel="Unidad Ejecutora" itemValue="3" />
 								</p:selectOneMenu>
@@ -284,52 +289,52 @@
 							<br />
 							<h:panelGrid id="pgUbigeoEntrega" columns="3">
 								<h:outputText value="Departamento *"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaBN}" />
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}" />
 								<h:outputText value="Provincia *"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaBN}"
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}"
 									style="margin-left:5px;" />
 								<h:outputText value="Distrito *"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaBN}"
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}"
 									style="margin-left:5px;" />
 
 								<p:selectOneMenu id="somDepartamento" style="width:162px;"
 									required="true" requiredMessage="Seleccione un departamento"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaBN}"
-									value="#{solicitarTarjertaController.solicitarTarjetaModel.tarjeta.entregaDepartamento}">
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}"
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaDepartamento}">
 									<f:selectItem itemLabel="Seleccione" itemValue=" " />
 									<p:ajax
 										update=":formSolicitarTarjeta:somProvincia :formSolicitarTarjeta:somDistrito :formSolicitarTarjeta:pgOpcionTipoUbicacion :formSolicitarTarjeta:pgReferencia"
-										listener="#{solicitarTarjertaController.buscarProvincias()}" />
+										listener="#{cambiarEstadoTarjetaController.buscarProvincias()}" />
 									<f:selectItems
-										value="#{solicitarTarjertaController.solicitarTarjetaModel.departamentos}"
+										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.departamentos}"
 										var="item" itemLabel="#{item.descripcion}"
 										itemValue="#{item.codDepartamento}" />
 								</p:selectOneMenu>
 								<p:selectOneMenu id="somProvincia"
 									style="width:162px;margin-left:5px;"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaBN}"
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}"
 									required="true" requiredMessage="Seleccione una provincia"
-									value="#{solicitarTarjertaController.solicitarTarjetaModel.tarjeta.entregaProvincia}">
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaProvincia}">
 									<f:selectItem itemLabel="Seleccione" itemValue=" " />
 									<p:ajax
 										update=":formSolicitarTarjeta:somDistrito :formSolicitarTarjeta:pgReferencia"
-										listener="#{solicitarTarjertaController.buscarDistritos()}" />
+										listener="#{cambiarEstadoTarjetaController.buscarDistritos()}" />
 									<f:selectItems
-										value="#{solicitarTarjertaController.solicitarTarjetaModel.provincias}"
+										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.provincias}"
 										var="item" itemLabel="#{item.descripcion}"
 										itemValue="#{item.codProvincia}" />
 								</p:selectOneMenu>
 								<p:selectOneMenu id="somDistrito"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaBN}"
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}"
 									style="width:162px;margin-left:5px;" required="true"
 									requiredMessage="Seleccione un distrito"
-									value="#{solicitarTarjertaController.solicitarTarjetaModel.tarjeta.entregaDistrito}">
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaDistrito}">
 									<f:selectItem itemLabel="Seleccione" itemValue=" " />
 									<p:ajax
-										listener="#{solicitarTarjertaController.buscarAgenciasPorUbigeo()}"
+										listener="#{cambiarEstadoTarjetaController.buscarAgenciasPorUbigeo()}"
 										update=":formSolicitarTarjeta:pgOpcionTipoUbicacion :formSolicitarTarjeta:pgReferencia" />
 									<f:selectItems
-										value="#{solicitarTarjertaController.solicitarTarjetaModel.distritos}"
+										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.distritos}"
 										var="item" itemLabel="#{item.descripcion}"
 										itemValue="#{item.codDistrito}" />
 								</p:selectOneMenu>
@@ -338,24 +343,24 @@
 							<br></br>
 							<h:panelGrid id="pgOpcionTipoUbicacion">
 								<h:outputText value="Dirección *"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaUE}" />
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaUE}" />
 								<h:outputText value="Agencia BN *"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaBN}" />
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}" />
 								<p:inputText id="entregaUE" style="width:340px;" required="true"
 									requiredMessage="Ingrese la dirección" readonly="true"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaUE}"
-									value="#{solicitarTarjertaController.solicitarTarjetaModel.tarjeta.entregaDireccion}" />
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaUE}"
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaDireccion}" />
 								<p:selectOneMenu id="somAgenciaBN" style="width:340px;"
 									required="true" requiredMessage="Seleccione agencia BN"
 									converter="omnifaces.SelectItemsConverter"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaBN}"
-									value="#{solicitarTarjertaController.solicitarTarjetaModel.agenciaSeleccionada}">
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}"
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.agenciaSeleccionada}">
 									<p:ajax
-										listener="#{solicitarTarjertaController.buscarDatosAgencia()}"
+										listener="#{cambiarEstadoTarjetaController.buscarDatosAgencia()}"
 										update=":formSolicitarTarjeta:pgReferencia" />
 									<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 									<f:selectItems
-										value="#{solicitarTarjertaController.solicitarTarjetaModel.agenciasBN}"
+										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.agenciasBN}"
 										var="item"
 										itemLabel="#{item.codAgencia} - #{item.descripcion}"
 										itemValue="#{item}" />
@@ -364,12 +369,12 @@
 							<br />
 							<h:panelGrid id="pgReferencia" style="margin-bottom:10px;">
 								<h:outputText value="Referencia *"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaReferencia}" />
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaReferencia}" />
 								<p:inputText id="referencia" style="width:340px;"
 									readonly="true" required="true"
 									requiredMessage="Ingrese una referencia"
-									rendered="#{solicitarTarjertaController.solicitarTarjetaModel.esEntregaReferencia}"
-									value="#{solicitarTarjertaController.solicitarTarjetaModel.tarjeta.entregaReferencia}" />
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaReferencia}"
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaReferencia}" />
 							</h:panelGrid>
 
 						</p:fieldset>
@@ -393,14 +398,14 @@
 				<h:outputText value="Lista de Asignación" />
  
 					<p:dataTable id="tablaAsignacions"
-						selection="#{consultarMovimientosController.consultarMovimientosModel.asignacionSeleccionada}"
-						value="#{consultarMovimientosController.consultarMovimientosModel.asignacionesTotal}"
+						selection="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.asignacionSeleccionada}"
+						value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.asignacionesTotal}"
 						selectionMode="single" var="asignacion"
 						rowKey="#{asignacion.idAsi}" emptyMessage="No hay Asignación"
 						style="width:100%;table-layout: fixed;" rowIndexVar="index">
  
 						<p:ajax event="rowSelect"
-							listener="#{consultarMovimientosController.seleccionarAsignacion}"
+							listener="#{cambiarEstadoTarjetaController.buscarTarjeta}"
 							update=":formCambiarEstadoTarjeta"
 							oncomplete="PF('wvSeleccionarAsignacion').hide()" />
  

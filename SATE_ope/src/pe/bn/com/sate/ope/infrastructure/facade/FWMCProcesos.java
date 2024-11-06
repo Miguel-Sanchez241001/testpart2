@@ -37,7 +37,8 @@ import javax.xml.ws.soap.SOAPFaultException;
 import com.ibm.wsspi.webservices.Constants; // Importa las constantes relevantes
 
 import org.apache.log4j.Logger;
- import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.openjpa.lib.log.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -500,7 +501,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		logger.info("Request generado: " + soapRequest);
+		//logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -1155,7 +1156,7 @@ public class FWMCProcesos {
 		inputRequest.put(ConstantesWS.NRO_DOCUMENTO, numDoc);		
 		
 //		inputRequest.put(ConstantesWS.NUM_DEPENDIENTE, "3");
-		inputRequest.put(ConstantesWS.TITULAR_PROFESION, "");
+//		inputRequest.put(ConstantesWS.TITULAR_PROFESION, "16779");
 		inputRequest.put(ConstantesWS.FECHA_TXN_TERMINAL, fechaTerminal);
 		inputRequest.put(ConstantesWS.HORA_TXN_TERMINAL, horaTerminal);
 		inputRequest.put(ConstantesWS.WS_USUARIO, usuario);
@@ -1168,7 +1169,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-	logger.info("Request generado: " + soapRequest);
+		//logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;

@@ -450,6 +450,20 @@ public class TarjetaServiceImpl implements TarjetaService {
 	    return false;
 	}
 
+	@Override
+	public Tarjeta buscarPrimeraTarjetaCliente(String tipoDocumento,
+			String numeroDocumento) {
+		// TODO Auto-generated method stub		
+		try {
+			return tarjetaMapper.buscarPrimeraTarjetaCliente(tipoDocumento,	numeroDocumento);
+		} catch (Exception ex) {
+			throw new InternalServiceException(ex.getMessage(), ex);
+		}
+		
+		
+		
+	}
+
 
 
 

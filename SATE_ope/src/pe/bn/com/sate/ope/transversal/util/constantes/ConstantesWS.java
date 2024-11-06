@@ -438,7 +438,7 @@ public class ConstantesWS {
 	    modificacionClienteMap.put("[TITULAR_TELEFONO_TRABAJO]", "");
 	    modificacionClienteMap.put("[TITULAR_ANEXO_TRABAJO]", "");
 	    modificacionClienteMap.put("[COD_UNICO_EMISOR]", "");
-	    modificacionClienteMap.put(TITULAR_PROFESION, "16779");
+	    modificacionClienteMap.put(TITULAR_PROFESION, "");
 	    modificacionClienteMap.put("[MEMO1]", "");
 	    modificacionClienteMap.put("[MEMO2]", "");
 	    modificacionClienteMap.put("[CONYUGE_NOMBRE]", "");

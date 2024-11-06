@@ -6,15 +6,22 @@ import java.util.Date;
 import java.util.List;
 
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
+import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
+import pe.bn.com.sate.ope.transversal.dto.tablas.Agencia;
+import pe.bn.com.sate.ope.transversal.dto.tablas.Ubigeo;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
+import pe.bn.com.sate.ope.transversal.util.enums.EstadoCivil;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoCuenta;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoTarjeta;
+import pe.bn.com.sate.ope.transversal.util.enums.OperadorMovil;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoMoneda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
 
 public class CambiarEstadoTarjetaModel {
@@ -46,6 +53,19 @@ public class CambiarEstadoTarjetaModel {
 	private List<String> listaTipoBusquedaPor;
 	private String tipoBusquedaPor;
 	private List<Asignacion> asignacionesTotal;
+	private Asignacion asignacionSeleccionada;
+	
+	
+	/**/
+	private List<Ubigeo> departamentos;
+	private List<Ubigeo> provincias;
+	private List<Ubigeo> distritos;
+	private List<Agencia> agenciasBN;
+	private Agencia agenciaSeleccionada;
+	private boolean esEntregaBN;
+	private Tarjeta tarjeta;
+	private boolean esEntregaUE;
+	private boolean esEntregaReferencia;
 	
 	public CambiarEstadoTarjetaModel() {
 		//listaTipoBusqueda = Arrays.asList(TipoBusqueda.values());
@@ -290,8 +310,103 @@ public class CambiarEstadoTarjetaModel {
 	public void setAsignacionesTotal(List<Asignacion> asignacionesTotal) {
 		this.asignacionesTotal = asignacionesTotal;
 	}
+
+	public Asignacion getAsignacionSeleccionada() {
+		return asignacionSeleccionada;
+	}
+
+	public void setAsignacionSeleccionada(Asignacion asignacionSeleccionada) {
+		this.asignacionSeleccionada = asignacionSeleccionada;
+	}
+
+	public List<Ubigeo> getDepartamentos() {
+		return departamentos;
+	}
+
+	public void setDepartamentos(List<Ubigeo> departamentos) {
+		this.departamentos = departamentos;
+	}
+
+	public List<Ubigeo> getProvincias() {
+		return provincias;
+	}
+
+	public void setProvincias(List<Ubigeo> provincias) {
+		this.provincias = provincias;
+	}
+
+	public List<Ubigeo> getDistritos() {
+		return distritos;
+	}
+
+	public void setDistritos(List<Ubigeo> distritos) {
+		this.distritos = distritos;
+	}
+
+	public List<Agencia> getAgenciasBN() {
+		return agenciasBN;
+	}
+
+	public void setAgenciasBN(List<Agencia> agenciasBN) {
+		this.agenciasBN = agenciasBN;
+	}
+
+	public Agencia getAgenciaSeleccionada() {
+		return agenciaSeleccionada;
+	}
+
+	public void setAgenciaSeleccionada(Agencia agenciaSeleccionada) {
+		this.agenciaSeleccionada = agenciaSeleccionada;
+	}
+
+	public boolean isEsEntregaBN() {
+		return esEntregaBN;
+	}
+
+	public void setEsEntregaBN(boolean esEntregaBN) {
+		this.esEntregaBN = esEntregaBN;
+	}
+
+	public Tarjeta getTarjeta() {
+		return tarjeta;
+	}
+
+	public void setTarjeta(Tarjeta tarjeta) {
+		this.tarjeta = tarjeta;
+	}
+
+	public boolean isEsEntregaUE() {
+		return esEntregaUE;
+	}
+
+	public void setEsEntregaUE(boolean esEntregaUE) {
+		this.esEntregaUE = esEntregaUE;
+	}
+
+	public boolean isEsEntregaReferencia() {
+		return esEntregaReferencia;
+	}
+
+	public void setEsEntregaReferencia(boolean esEntregaReferencia) {
+		this.esEntregaReferencia = esEntregaReferencia;
+	}
 	
+	public void inicializarFormularioEntrega() {
+		tarjeta = new Tarjeta();
+		tarjeta.setTipoMoneda(TipoMoneda.MONEDA_SOLES.getId());
+		tarjeta.setEntregaUbicacion("4");
+		
 	
+
+		esEntregaBN = true;
+		esEntregaUE = false;
+		esEntregaReferencia = false;
+		provincias = null;
+		distritos = null;
+		agenciasBN = null;
+		agenciaSeleccionada = null;
+		
+	}
 	
 	
 }

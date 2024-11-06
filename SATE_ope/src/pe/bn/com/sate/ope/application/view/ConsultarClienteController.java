@@ -25,8 +25,10 @@ import pe.bn.com.sate.ope.infrastructure.service.external.domain.mc.Modificacion
 import pe.bn.com.sate.ope.infrastructure.service.internal.ClienteService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
+import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
+import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.tablas.Ubigeo;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosCliente;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
@@ -108,7 +110,8 @@ public class ConsultarClienteController implements Serializable {
 				consultarClienteModel.getDatosTarjetaCliente().getCliente().setNombres(datosCliente.getNomCliente());
 				consultarClienteModel.getDatosTarjetaCliente().getCliente().setApCompleto(datosCliente.getApeCliente());
 				consultarClienteModel.getDatosTarjetaCliente().getTarjeta().setEmail(datosCliente.getCorreoCliente().trim());
-				consultarClienteModel.getDatosTarjetaCliente().getCliente().setTelefonoCasa(datosCliente.getTelCliente().trim());
+							
+				consultarClienteModel.getDatosTarjetaCliente().getCliente().setTelefonoCasa(StringsUtils.quitarCeroIzquierdaString(datosCliente.getTelCliente().trim()));
 			}else{
 				System.out.println("else");
 				System.out.println("descrip:"+datosCliente.getDescRespuesta().replace(".", ","));
@@ -147,7 +150,11 @@ public class ConsultarClienteController implements Serializable {
 	
 	public void actualizarDatosCliente() throws ExternalServiceMCProcesosException {
 		
+		
 		System.out.println("LLEGO A actualizarDatosCliente");
+		
+//		consultarClienteModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
+//				consultarClienteModel.getTipoBusqueda(), consultarClienteModel.getNumDocumento(), "B"));
 				
 		String tipoDoc = consultarClienteModel.getDatosTarjetaCliente().getCliente().getTipoDocumento();
 		String numDoc = consultarClienteModel.getDatosTarjetaCliente().getCliente().getNroDocumento();		
@@ -155,7 +162,13 @@ public class ConsultarClienteController implements Serializable {
 		String apellidos = consultarClienteModel.getDatosTarjetaCliente().getCliente().getApCompleto();
 		String email = consultarClienteModel.getDatosTarjetaCliente().getTarjeta().getEmail();
 		String telefono = consultarClienteModel.getDatosTarjetaCliente().getCliente().getTelefonoCasa();
-		String celular = "991843322";
+		
+		
+		Tarjeta datos = new Tarjeta();
+		
+		tarjetaService.buscarPrimeraTarjetaCliente(tipoDoc, numDoc);
+		
+		String celular = datos.getNumeroCelular();		
 		
 		DTOModificacionClientes response = new DTOModificacionClientes();
 		
@@ -169,7 +182,9 @@ public class ConsultarClienteController implements Serializable {
 			
 			if (codRespuesta.equals("0000")) { 
 				
+				//aqui va tu codigo miguel
 				
+				clienteService.actualizarClienteBD(tipoDoc, numDoc, telefono, email);
 				
 				consultarClienteModel.setBusquedaRealizada(true);
 				UsefulWebApplication

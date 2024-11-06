@@ -201,5 +201,17 @@ public interface TarjetaMapper {
             "B05_FLAG_ACT_EST_CUENTA = #{flagActualizarEstadoCuenta} " +
             "WHERE B05_ID_TAR = #{id}")
     public void actualizarestadoCuenta(Tarjeta tarjeta);
+    
+    @Select("SELECT BN05.* FROM BN_SATE.BNSATE05_TARJETA BN05 " +
+            "JOIN BN_SATE.BNSATE06_CLIENTE BN06 ON BN05.B06_ID_CLI = BN06.B06_ID_CLI " +
+            "WHERE BN06.B06_TIPO_DOCUMENTO = #{tipoDocumento} " +
+            "AND BN06.B06_NUM_DOCUMENTO = #{numeroDocumento} " +
+            "ORDER BY BN05.B05_FEC_CREACION ASC " +
+            "FETCH FIRST 1 ROWS ONLY")
+    @ResultMap("mapTarjeta")
+    public Tarjeta buscarPrimeraTarjetaCliente(
+        @Param("tipoDocumento") String tipoDocumento,
+        @Param("numeroDocumento") String numeroDocumento
+    );
 
 }
