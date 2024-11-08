@@ -166,7 +166,7 @@ public class ConsultarClienteController implements Serializable {
 		
 		Tarjeta datos = new Tarjeta();
 		
-		tarjetaService.buscarPrimeraTarjetaCliente(tipoDoc, numDoc);
+		datos = tarjetaService.buscarPrimeraTarjetaCliente(tipoDoc, numDoc);
 		
 		String celular = datos.getNumeroCelular();		
 		

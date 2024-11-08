@@ -63,7 +63,27 @@ public class UsefulWebApplication {
 	 */
 	public static void ejecutar(String sentencia) {
 		RequestContext.getCurrentInstance().execute(sentencia);
+		
+		
 	}
+	
+	/**
+     * Muestra un diálogo PrimeFaces mediante su widgetVar.
+     * 
+     * @param dialogoWidgetVar Nombre del widgetVar del diálogo.
+     */
+    public static void mostrarDialogo(String dialogoWidgetVar) {
+        RequestContext.getCurrentInstance().execute("PF('" + dialogoWidgetVar + "').show();");
+    }
+ 
+    /**
+     * Oculta un diálogo PrimeFaces mediante su widgetVar.
+     * 
+     * @param dialogoWidgetVar Nombre del widgetVar del diálogo.
+     */
+    public static void ocultarDialogo(String dialogoWidgetVar) {
+        RequestContext.getCurrentInstance().execute("PF('" + dialogoWidgetVar + "').hide();");
+    }
 
 	/**
 	 * Este metodo permite generar un dialogo

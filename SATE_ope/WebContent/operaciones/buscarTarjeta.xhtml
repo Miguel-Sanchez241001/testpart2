@@ -381,6 +381,7 @@
 						<p:ajax event="rowSelect"
 							listener="#{buscarTarjetaController.seleccionarAsignacion}"
 							update=":formBuscarTarjeta"
+							onstart="PF('statusDialog').show()"
 							oncomplete="PF('wvSeleccionarAsignacion').hide()" />
  
 						<!-- Nro. -->

@@ -27,7 +27,7 @@
 								style="width:162px;vertical-align:middle;margin-left:20px;"
 								value="#{consultarMovimientosController.consultarMovimientosModel.tipoBusquedaPor}"
 								required="true" requiredMessage="Seleccione tipo de busqueda">
-								<p:ajax  update="formMovimientoTarjeta:somTipoBusqueda"
+								<p:ajax event="change" update="formMovimientoTarjeta:somTipoBusqueda, formMovimientoTarjeta:numDocumento"
 									listener="#{consultarMovimientosController.buscarTipoBusqueda()}" />
 								<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 								<f:selectItems
@@ -125,7 +125,7 @@
 											<h:outputText value="Fecha de la Transacción" />
 										</f:facet>
 										<h:outputText value="#{movimiento.fechaTxn}">
-											<f:convertDateTime type="date" pattern="dd/MM/yyyy hh:mm:ss a" />
+											<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
 										</h:outputText>
 									</p:column>	
 									
@@ -227,7 +227,10 @@
 						<p:ajax event="rowSelect"
 							listener="#{consultarMovimientosController.seleccionarAsignacion}"
 							update=":formMovimientoTarjeta"
-							oncomplete="PF('wvSeleccionarAsignacion').hide()" />
+							onstart="PF('statusDialog').show()"							
+							oncomplete="PF('wvSeleccionarAsignacion').hide()" 
+							onsuccess="PF('statusDialog').hide()"
+							/>
  
 						<!-- Nro. -->
 						<p:column headerText="Nro."
@@ -314,29 +317,6 @@
 						console.log("tipoDocumento:" + tipDoc);
 					}
 					
-					 function validarDocumento(event) {
-			            const tipoDocumento = document.getElementById("formMovimientoTarjeta:somTipoBusqueda").value;
-			            const inputNumeroDocumento = document.getElementById("formMovimientoTarjeta:numDocumento");
-			            const numeroDocumento = event.target.value;
-			            const key = event.key;
-
-		            // Validar según el tipo de documento
-		            if (tipoDocumento === "1") {
-		                // Permitir solo números
-		                if (!/^\d+$/.test(key)) {
-		                    event.preventDefault(); // Evitar la entrada si no es número
-		                }
-		                // Máximo 8 caracteres
-		                inputNumeroDocumento.maxLength = 8;
-		            } else if (tipoDocumento === "4") {
-		                // Permitir letras y números
-		                if (!/^[a-zA-Z0-9]+$/.test(key)) {
-		                    event.preventDefault(); // Evitar la entrada si no es letra o número
-		                }
-		                // Máximo 9 caracteres
-		                inputNumeroDocumento.maxLength = 9;
-		            }
-        }
 					
 					
 				</script>

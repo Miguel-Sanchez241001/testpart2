@@ -83,6 +83,7 @@ public class CambiarEstadoTarjetaController implements Serializable {
 
 	public void buscarTarjeta() {
 		//MGL
+		UsefulWebApplication.mostrarDialogo("statusDialog");
 		try {
 			if (cambiarEstadoTarjetaModel.getTipoBusqueda().equals(
 					TipoBusqueda.NUM_TARJETA.getId())) {
@@ -139,12 +140,12 @@ public class CambiarEstadoTarjetaController implements Serializable {
 											.getDatosTarjetaCliente()
 											.getTarjeta().getEstado())));
 					
-					/*MGL - el valor de estado de cuenta viene en null
-					 * se le indico a pract-miguel que revise el valor de la tarjeta
-					 * por ahora le mando n*/
-					cambiarEstadoTarjetaModel
-					.getDatosTarjetaCliente()
-					.getTarjeta().setEstadoCuenta("N");
+//					/*MGL - el valor de estado de cuenta viene en null
+//					 * se le indico a pract-miguel que revise el valor de la tarjeta
+//					 * por ahora le mando n*/
+//					cambiarEstadoTarjetaModel
+//					.getDatosTarjetaCliente()
+//					.getTarjeta().setEstadoCuenta("N");
 					
 					cambiarEstadoTarjetaModel
 							.setMotivosBloqueoCuenta(Arrays.asList(MotivosBloqueoCuenta
@@ -160,6 +161,7 @@ public class CambiarEstadoTarjetaController implements Serializable {
 									.equals(TipoEstadoTarjeta.TARJETA_BLOQUEADA
 											.getCod()));
 
+					UsefulWebApplication.ocultarDialogo("statusDialog");
 					UsefulWebApplication
 							.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
 					// } else {
@@ -171,6 +173,7 @@ public class CambiarEstadoTarjetaController implements Serializable {
 					// UsefulWebApplication.actualizarComponente("msgs");
 					// }
 				} else {
+					UsefulWebApplication.ocultarDialogo("statusDialog");
 					UsefulWebApplication.mostrarMensajeJSF(3, "",
 							"El número de tarjeta no existe");
 
@@ -231,26 +234,27 @@ public class CambiarEstadoTarjetaController implements Serializable {
 											.getDatosTarjetaCliente()
 											.getTarjeta().getEstado())));
 					
-					/*MGL - el valor de estado de cuenta viene en null
-					 * se le indico a pract-miguel que revise el valor de la tarjeta
-					 * por ahora le mando n*/
-					
-					cambiarEstadoTarjetaModel
-					.getDatosTarjetaCliente()
-					.getTarjeta().setEstadoCuenta("N");
+//					/*MGL - el valor de estado de cuenta viene en null
+//					 * se le indico a pract-miguel que revise el valor de la tarjeta
+//					 * por ahora le mando n*/
+//					
+//					cambiarEstadoTarjetaModel
+//					.getDatosTarjetaCliente()
+//					.getTarjeta().setEstadoCuenta("N");
 					
 					cambiarEstadoTarjetaModel.setMotivosBloqueoCuenta(Arrays
 							.asList(MotivosBloqueoCuenta
 									.motivosBloqueoPorIdMotivo(cambiarEstadoTarjetaModel
 											.getDatosTarjetaCliente().getTarjeta()
 											.getEstadoCuenta())));
-				
+					UsefulWebApplication.ocultarDialogo("statusDialog");
 					UsefulWebApplication
 					.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
 				}
 
 			}
 		} catch (InternalServiceException ise) {
+			UsefulWebApplication.ocultarDialogo("statusDialog");
 			UsefulWebApplication.mostrarMensajeJSF(
 					ConstantesGenerales.SEVERITY_ERROR,
 					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
@@ -296,34 +300,21 @@ public class CambiarEstadoTarjetaController implements Serializable {
 			System.out.println("tipoMoneda:"+tipoMoneda);	
 			String numTarjeta = cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta().trim();
 			System.out.println("numTarjeta:"+numTarjeta);
-			
-			String motivo = cambiarEstadoTarjetaModel.getMotivoSeleccionado();
-			char guion = '-';
-		    int posicion = motivo.indexOf(guion);
-		       
-		    String codMotivo = motivo.substring(0,posicion).trim();
-		    String desMotivo = motivo.substring(posicion + 1).trim();
-		    
-		    System.out.println("codMotivo:"+codMotivo);
-		    System.out.println("desMotivo:"+desMotivo);
-		 	        
 	       
 			if (cambiarEstadoTarjetaModel.getTipoBloqueoSeleccionado().equals("T")) {
 				
-				
-				
-//				
-//				 try {
-//				 ModificacionTarjeta modificacionTarjeta = fwmcProcesos.modificarTarjeta(
-//						 	cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta(),
-//						 	cambiarEstadoTarjetaModel.getEstadoTarjeta().getMotivo(),
-//						 	cambiarEstadoTarjetaModel.getEstadoTarjeta().getMotivo());
-//				 
-//				 if (modificacionTarjeta.getCodRespuesta()
-//				 .equals("0000")) {
-				
+				String motivo = cambiarEstadoTarjetaModel.getMotivoSeleccionado();
+				char guion = '-';
+			    int posicion = motivo.indexOf(guion);
+			       
+			    String codMotivo = motivo.substring(0,posicion).trim();
+			    String desMotivo = motivo.substring(posicion + 1).trim();
+			    
+			    System.out.println("codMotivo:"+codMotivo);
+			    System.out.println("desMotivo:"+desMotivo);				
 				
 				System.out.println(cambiarEstadoTarjetaModel.getEstadoTarjeta().toString());
+				
 				//if (cambiarEstadoTarjetaModel.getEstadoTarjeta().getMotivo().equals(MotivosBloqueoTarjeta.ROBO.getId())) {
 				if (codMotivo.equals(MotivosBloqueoTarjeta.ROBO.getId())) {
 					cambiarEstadoTarjetaModel.inicializarFormularioEntrega();
@@ -335,29 +326,98 @@ public class CambiarEstadoTarjetaController implements Serializable {
 				            logger.error(se.getMessage());
 				        }
 					 this.mostrarOpcionPorTipoUbicacion();
+					 
+					 	
 						UsefulWebApplication.ejecutar("dgSolicitarTarjeta.show()");
+						UsefulWebApplication.actualizarComponente("formSolicitarTarjeta");
 				} else {
-					tarjetaService.actualizarEstadoTarjeta(cambiarEstadoTarjetaModel.getEstadoTarjeta());
-
-					cambiarEstadoTarjetaModel.inicializarFormulario();
-					UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_INFO, "","Se cambio de estado exitosamente");
-					UsefulWebApplication.actualizarComponente("msgs");
-					UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+					
+					 try {
+				        	//modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda,numTarjeta,codMotivo,desMotivo);
+						 	modificacionTarjeta.setCodRespuesta("0000");
+				        	 System.out.println("codRespuesta:"+modificacionTarjeta.getCodRespuesta());
+							 //System.out.println("desRespuesta:"+modificacionTarjeta.getDescRespuesta());
+				        	
+				        	if (modificacionTarjeta.getCodRespuesta().equals("0000")) {        		
+				        		
+				        		tarjetaService.actualizarEstadoTarjeta(cambiarEstadoTarjetaModel.getEstadoTarjeta());
+				        		
+				        		cambiarEstadoTarjetaModel.inicializarFormulario();
+				        		
+				        		UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_INFO, "","Se cambio de estado exitosamente");
+				        		UsefulWebApplication.actualizarComponente("msgs");
+				        		UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+				        			        		
+				        	}else{
+				        		UsefulWebApplication
+								.mostrarMensajeJSF(
+										ConstantesGenerales.SEVERITY_ERROR,
+										modificacionTarjeta.getDescRespuesta(),
+										ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+				        		UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+						
+				        	}
+				       } catch (ExternalServiceMCProcesosException este) {				
+							UsefulWebApplication
+							.mostrarMensajeJSF(
+									ConstantesGenerales.SEVERITY_ERROR,
+									ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
+									ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+							logger.error(este.getMessage());
+							UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+//						} catch (InternalExcepcion e) {						
+//							// TODO Auto-generated catch block
+//							UsefulWebApplication.mostrarMensajeJSF(
+//									ConstantesGenerales.SEVERITY_ERROR,
+//									ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
+//									ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
+//							logger.error(e.getMessage());
+//							UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+						}
+					
+					
+//					tarjetaService.actualizarEstadoTarjeta(cambiarEstadoTarjetaModel.getEstadoTarjeta());
+//
+//					cambiarEstadoTarjetaModel.inicializarFormulario();
+//					UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_INFO, "","Se cambio de estado exitosamente");
+//					UsefulWebApplication.actualizarComponente("msgs");
+//					UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
 				}
 			} else {
 				
 				/*ini MGL*/
 				
 				 try {
-			        	modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda,numTarjeta,codMotivo,desMotivo);
-			        	
+					 
+					 
+					 String motivo = cambiarEstadoTarjetaModel.getEstadoCuentaSeleccionado();
+						char guion = '-';
+					    int posicion = motivo.indexOf(guion);
+					       
+					    String codMotivo = motivo.substring(0,posicion).trim();
+					    String desMotivo = motivo.substring(posicion + 1).trim();
+					    
+					    System.out.println("codMotivo:"+codMotivo);
+					    System.out.println("desMotivo:"+desMotivo);				
+					 
+					   // modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda,numTarjeta,codMotivo,desMotivo);
+					    modificacionTarjeta.setCodRespuesta("0000");
+					    System.out.println("codRespuesta:"+modificacionTarjeta.getCodRespuesta());
+					    System.out.println("desRespuesta:"+modificacionTarjeta.getDescRespuesta());
+					    
 			        	if (modificacionTarjeta.getCodRespuesta().equals("0000")) {        		
+			        		
+							cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setEstadoCuenta(cambiarEstadoTarjetaModel.getEstadoCuentaSeleccionado());
+			        		
+			        		tarjetaService.actualizarEstadoCuenta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta());
 			        		
 			        		cambiarEstadoTarjetaModel.inicializarFormulario();
 			        		
 			        		UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_INFO, "","Se cambio de estado exitosamente");
 			        		UsefulWebApplication.actualizarComponente("msgs");
 			        		UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+			        		
+			        		
 			        			        		
 			        	}else{
 			        		UsefulWebApplication
@@ -365,69 +425,127 @@ public class CambiarEstadoTarjetaController implements Serializable {
 									ConstantesGenerales.SEVERITY_ERROR,
 									modificacionTarjeta.getDescRespuesta(),
 									ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+			        		UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
 					
 			        	}
-			        } catch (InternalExcepcion e) {
-						// TODO Auto-generated catch block			
-						UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
-						logger.error(e.getMessage());
-			        }
+			       } catch (ExternalServiceMCProcesosException este) {				
+						UsefulWebApplication
+						.mostrarMensajeJSF(
+								ConstantesGenerales.SEVERITY_ERROR,
+								ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
+								ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+						logger.error(este.getMessage());
+						UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+//					} catch (InternalExcepcion e) {						
+//						// TODO Auto-generated catch block
+//						UsefulWebApplication.mostrarMensajeJSF(
+//								ConstantesGenerales.SEVERITY_ERROR,
+//								ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
+//								ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
+//						logger.error(e.getMessage());
+//						UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+					}
 				
 				/*FIN MGL*/
 				
-				cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setEstadoCuenta(cambiarEstadoTarjetaModel.getEstadoCuentaSeleccionado());
 
-				tarjetaService.actualizarEstadoCuenta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta());
-				cambiarEstadoTarjetaModel.inicializarFormulario();
-				UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_INFO, "","Se cambio de estado exitosamente");
-				UsefulWebApplication.actualizarComponente("msgs");
+//				cambiarEstadoTarjetaModel.inicializarFormulario();
+//				UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_INFO, "","Se cambio de estado exitosamente");
+//				UsefulWebApplication.actualizarComponente("msgs");
+//				UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+			}
+		 } catch (ExternalServiceMCProcesosException este) {				
+				UsefulWebApplication
+				.mostrarMensajeJSF(
+						ConstantesGenerales.SEVERITY_ERROR,
+						ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
+						ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+				logger.error(este.getMessage());
 				UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
 			}
-		} catch (InternalServiceException ise) {
-			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
-			logger.error(ise.getMessage());
-		}
-		// }else{
-		// UsefulWebApplication.mostrarMensajeJSF(3,
-		// "",modificacionTarjeta.getCodRespuesta()+"-"+modificacionTarjeta.getDescRespuesta());
-		// UsefulWebApplication.actualizarComponente("msgs");
-		// UsefulWebApplication
-		// .actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
-		// }
-
-		// } catch (JAXBException e) {
-		// 
-		// e.printStackTrace();
-		// }
+		
+		
+		
+		
 	}
 
 	public void bloquearTarjetaRobo() {
-		try {
+		
+			String tipoMoneda = cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getTipoMoneda().trim();
+			System.out.println("tipoMoneda:"+tipoMoneda);	
+			String numTarjeta = cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta().trim();
+			System.out.println("numTarjeta:"+numTarjeta);
+		
+			DTOModificacionTarjeta modificacionTarjeta = new DTOModificacionTarjeta();
+			
 			System.out.println("idtarjeta:"
 					+ cambiarEstadoTarjetaModel.getDatosTarjetaCliente()
 							.getTarjeta().getId());
 			System.out.println("idtarjeta:"
 					+ cambiarEstadoTarjetaModel.getDatosTarjetaCliente()
 							.getCliente().getId());
-			tarjetaService.bloquearTarjetaPorRobo(
-					cambiarEstadoTarjetaModel.getEstadoTarjeta(),
-					cambiarEstadoTarjetaModel.getDatosTarjetaCliente()
-							.getTarjeta().getId(), cambiarEstadoTarjetaModel
-							.getDatosTarjetaCliente().getCliente().getId());
-			cambiarEstadoTarjetaModel.inicializarFormulario();
-			UsefulWebApplication.mostrarMensajeJSF(1, "",
-					"Se cambio de estado exitosamente");
-			UsefulWebApplication.actualizarComponente("msgs");
-			UsefulWebApplication.ejecutar("dgSolicitarTarjeta.hide()");
-			UsefulWebApplication
-					.actualizarComponente("formCambiarEstadoTarjeta");
-		} catch (InternalServiceException ise) {
-			UsefulWebApplication.mostrarMensajeJSF(
-					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
-					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
-			logger.error(ise.getMessage());
-		}
+			
+			String motivo = cambiarEstadoTarjetaModel.getMotivoSeleccionado();
+			char guion = '-';
+		    int posicion = motivo.indexOf(guion);
+		       
+		    String codMotivo = motivo.substring(0,posicion).trim();
+		    String desMotivo = motivo.substring(posicion + 1).trim();
+		    
+		    System.out.println("codMotivo:"+codMotivo);
+		    System.out.println("desMotivo:"+desMotivo);				
+			
+			
+		    try {
+		    	
+	        	//modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda,numTarjeta,codMotivo,desMotivo);
+		    	 modificacionTarjeta.setCodRespuesta("0000");
+	        	System.out.println("codRespuesta:"+modificacionTarjeta.getCodRespuesta());
+	        	//System.out.println("desRespuesta:"+modificacionTarjeta.getDescRespuesta());
+	        	
+	        	if (modificacionTarjeta.getCodRespuesta().equals("0000")) { 
+	        		
+	        		System.out.println();
+	        		
+	        		tarjetaService.bloquearTarjetaPorRobo(
+	    					cambiarEstadoTarjetaModel.getEstadoTarjeta(),
+	    					cambiarEstadoTarjetaModel.getDatosTarjetaCliente()
+	    							.getTarjeta().getId(), cambiarEstadoTarjetaModel
+	    							.getDatosTarjetaCliente().getCliente().getId());
+	        		
+	        		cambiarEstadoTarjetaModel.inicializarFormulario();
+	        		
+	        		UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_INFO, "","Se cambio de estado exitosamente");
+	        		UsefulWebApplication.actualizarComponente("msgs");
+	        		UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+	        			        		
+	        	}else{
+	        		UsefulWebApplication
+					.mostrarMensajeJSF(
+							ConstantesGenerales.SEVERITY_ERROR,
+							modificacionTarjeta.getDescRespuesta(),
+							ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+	        		UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+			
+	        	}
+	       } catch (ExternalServiceMCProcesosException este) {				
+				UsefulWebApplication
+				.mostrarMensajeJSF(
+						ConstantesGenerales.SEVERITY_ERROR,
+						ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
+						ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+				logger.error(este.getMessage());
+				UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+//			} catch (InternalExcepcion e) {						
+//				// TODO Auto-generated catch block
+//				UsefulWebApplication.mostrarMensajeJSF(
+//						ConstantesGenerales.SEVERITY_ERROR,
+//						ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
+//						ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
+//				logger.error(e.getMessage());
+//				UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
+			}	
+			
 	}
 
 	public CambiarEstadoTarjetaModel getCambiarEstadoTarjetaModel() {
@@ -447,6 +565,21 @@ public class CambiarEstadoTarjetaController implements Serializable {
 			if (cambiarEstadoTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
 												
 				String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(cambiarEstadoTarjetaModel.getNumDocumento(), 19);
+				
+				
+				if(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas() == null ||
+						cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas().isEmpty()
+						){
+					System.out.println("entro if");
+					
+					UsefulWebApplication.mostrarMensajeJSF(
+							ConstantesGenerales.SEVERITY_ERROR,
+							ConstantesGenerales.ERROR_MENSAJE_TARJETAS_BLOQUEADAS ,
+							ConstantesGenerales.ERROR_MENSAJE_TARJETAS_BLOQUEADAS);
+					
+				}else{
+					System.out.println("entro else");
+				
 							
 				asignaciones = reporteResumenFacade.obtenerAsignacionesPorTarjetaSimple(tarjeta19);	
 				
@@ -471,6 +604,7 @@ public class CambiarEstadoTarjetaController implements Serializable {
 					// formulario del componente
 					UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
 				}
+			}
 
 			} else if (cambiarEstadoTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.DNI.getId())
 					|| cambiarEstadoTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
@@ -482,31 +616,47 @@ public class CambiarEstadoTarjetaController implements Serializable {
 								cambiarEstadoTarjetaModel.getNumDocumento(),
 								"C"));
 				
+				System.out.println(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas().size());
 				
-				
-				asignaciones = reporteResumenFacade.obtenerAsignacionesPorDocumentoSimple(
-						cambiarEstadoTarjetaModel.getTipoBusqueda(), cambiarEstadoTarjetaModel.getNumDocumento());
-				
-								
-				if(asignaciones.isEmpty() && asignaciones.size()==0){
-					cambiarEstadoTarjetaModel.inicializarFormulario();
+				if(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas() == null ||
+						cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas().isEmpty()
+						){
+					System.out.println("entro if");
+					
 					UsefulWebApplication.mostrarMensajeJSF(
-					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO);
+							ConstantesGenerales.SEVERITY_ERROR,
+							ConstantesGenerales.ERROR_MENSAJE_TARJETAS_BLOQUEADAS ,
+							ConstantesGenerales.ERROR_MENSAJE_TARJETAS_BLOQUEADAS);
 					
+				}else{
+					System.out.println("entro else");
 					
-				}else{	
-					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setEstado("5");
-					//cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setTarjeta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas().get(0));
+					asignaciones = reporteResumenFacade.obtenerAsignacionesPorDocumentoSimple(
+							cambiarEstadoTarjetaModel.getTipoBusqueda(), cambiarEstadoTarjetaModel.getNumDocumento());
 					
-					cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
-					cambiarEstadoTarjetaModel.setAsignacionesTotal(asignaciones);
-					// MOSTRAR MODAL COMPONENTE
-					UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
-					// formulario del componente
-					UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+									
+					if(asignaciones.isEmpty() && asignaciones.size()==0){
+						cambiarEstadoTarjetaModel.inicializarFormulario();
+						UsefulWebApplication.mostrarMensajeJSF(
+						ConstantesGenerales.SEVERITY_ERROR,
+						ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO,
+						ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO);
+						
+						
+					}else{	
+						
+						//cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setTarjeta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas().get(0));
+						
+						cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
+						cambiarEstadoTarjetaModel.setAsignacionesTotal(asignaciones);
+						// MOSTRAR MODAL COMPONENTE
+						UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
+						// formulario del componente
+						UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+					}
 				}
+								
+				
 			}
 			
 		} catch (InternalExcepcion se) {

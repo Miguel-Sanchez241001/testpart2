@@ -41,6 +41,10 @@ public class ConstantesWS {
 	
 	public static final String TIPO_DOCUMENTO="[TIPO_DOCUMENTO]";
 	public static final String NUM_DOCUMENTO="[NUM_DOCUMENTO]";
+	
+	public static final String TITULAR_TIPO_DOCUMENTO="[TITULAR_TIPO_DOCUMENTO]";
+	public static final String TITULAR_NUM_DOCUMENTO="[TITULAR_NUM_DOCUMENTO]";
+
 
 
 	

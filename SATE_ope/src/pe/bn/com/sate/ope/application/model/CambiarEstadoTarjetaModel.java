@@ -191,7 +191,7 @@ public class CambiarEstadoTarjetaModel {
 			estadoTarjeta.setFechaRegistro(new Date());
 			estadoTarjeta
 					.setEstado(TipoEstadoTarjeta.TARJETA_ACTIVADA.getCod());
-			estadoTarjeta.setMotivo(motivoSeleccionado);
+			estadoTarjeta.setMotivo(""); //motivoSeleccionado
 			estadoTarjeta.setUsuarioRegistro(UsefulWebApplication
 					.obtenerUsuario().getUsername());
 			estadoTarjeta
@@ -200,7 +200,7 @@ public class CambiarEstadoTarjetaModel {
 			estadoTarjeta.setFechaRegistro(new Date());
 			estadoTarjeta.setEstado(TipoEstadoTarjeta.TARJETA_BLOQUEADA
 					.getCod());
-			estadoTarjeta.setMotivo(motivoSeleccionado);
+			estadoTarjeta.setMotivo(""); //motivoSeleccionado
 			estadoTarjeta.setUsuarioRegistro(UsefulWebApplication
 					.obtenerUsuario().getUsername());
 			estadoTarjeta
@@ -264,17 +264,17 @@ public class CambiarEstadoTarjetaModel {
 	}
 
 	public String valorBoton() {
-//MGL
-		if (tipoBloqueoSeleccionado.equals("T"))
-			if (datosTarjetaCliente.getTarjeta().getEstado()
-					.equals(TipoEstadoTarjeta.TARJETA_BLOQUEADA.getCod()))
-				return "Activar";
-			else
-				return "Bloquear";
-		else if (datosTarjetaCliente.getTarjeta().getEstadoCuenta()
-				.equals(MotivosBloqueoCuenta.TEMPORAL.getId()))
-			return "Activar";
-		else
+
+//		if (tipoBloqueoSeleccionado.equals("T"))
+//			if (datosTarjetaCliente.getTarjeta().getEstado()
+//					.equals(TipoEstadoTarjeta.TARJETA_BLOQUEADA.getCod()))
+//				return "Activar";
+//			else
+//				return "Bloquear";
+//		else if (datosTarjetaCliente.getTarjeta().getEstadoCuenta()
+//				.equals(MotivosBloqueoCuenta.TEMPORAL.getId()))
+//			return "Activar";
+//		else
 			return "Bloquear";
 
 	}

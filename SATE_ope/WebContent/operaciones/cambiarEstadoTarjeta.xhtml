@@ -64,17 +64,24 @@
 								<f:validateLength
 									minimum="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.obtenerBusquedaLength()}" />
 							</p:inputText>
-							<p:commandButton value="Buscar" 
-								
+							<p:commandButton id="buscarE" value="Buscar" 
+								styleClass="btnGrande"
 								process="@this somTipoBusqueda,numDocumento"
 								actionListener="#{cambiarEstadoTarjetaController.buscarAsignaciones()}"
 								onstart="PF('statusDialog').show()"
-								oncomplete="statusDialog.hide();"
+								oncomplete="PF('statusDialog').hide()"
 								
 								
 								 />
 
 						</p:panelGrid>
+						
+						<div>
+						<p:messages id="msgs" showDetail="true" showSummary="false"
+							closable="true" />
+						</div>
+						
+						
 						<!-- onclick="statusDialog.show();" update=":formCambiarEstadoTarjeta msgs" -->
 						<div class="dashed"></div>
 					</h:panelGrid>
@@ -197,20 +204,22 @@
 							style="margin-top:30px;width:90%;margin:auto;"
 							rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.busquedaRealizada}">
 							<div class="dashed"></div>
-							<p:commandButton id="cambiarEstadoTarjeta" styleClass="btnGrande"
-								value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.valorBoton()}"
-								actionListener="#{cambiarEstadoTarjetaController.cambiarEstadoTarjeta()}"
-								update="formCambiarEstadoTarjeta" />
+							<p:commandButton id="cambiarEstadoTarjeta" 
+								styleClass="btnGrande"
+								process="pgResultado"
+								value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.valorBoton()}"								
+								onstart="cambiarEstadoWv.show()"								
+								/>
+								
+								
+								
 								
 						</p:panelGrid>
 
 
 					</h:panelGrid>
 
-					<div>
-						<p:messages id="msgs" showDetail="true" showSummary="false"
-							closable="true" />
-					</div>
+					
 
 				</p:panel>
 			</center>
@@ -367,14 +376,16 @@
 								</p:selectOneMenu>
 							</h:panelGrid>
 							<br />
+							
+							
 							<h:panelGrid id="pgReferencia" style="margin-bottom:10px;">
-								<h:outputText value="Referencia *"
-									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaReferencia}" />
+								<h:outputText value="Direccion *"
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}" />
 								<p:inputText id="referencia" style="width:340px;"
 									readonly="true" required="true"
 									requiredMessage="Ingrese una referencia"
-									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaReferencia}"
-									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaReferencia}" />
+									rendered="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.esEntregaBN}"
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaDireccion}" />
 							</h:panelGrid>
 
 						</p:fieldset>
@@ -386,6 +397,36 @@
 				</p:panelGrid>
 			</h:form>
 		</p:dialog>
+		
+		<p:dialog id="cambiarEstado" widgetVar="cambiarEstadoWv" modal="true"
+		draggable="false" resizable="false" header="Confirmar">
+
+		<h:form id="formCambiar" style="width: 400px; font-size: 11px;"
+			prependId="false">
+			<center>
+				<div style="margin: 15px 0 5px 0;">
+					<h:outputText value="¿Está seguro de cambiar de estado a la tarjeta empresarial?" />
+				</div>
+				<div class="smallBtn">
+					<p:commandButton style="margin:5px;" id="Aceptar" value="Si"
+					
+						actionListener="#{cambiarEstadoTarjetaController.cambiarEstadoTarjeta()}"
+								onstart="PF('statusDialog').show()"
+								oncomplete="PF('cambiarEstadoWv').hide()"
+								onsuccess="PF('statusDialog').hide()"
+								update=":formCambiarEstadoTarjeta" 
+								
+											
+						
+						styleClass="smallBtn" />
+					<p:commandButton style="margin:5px;" process="@this" id="cancelar"
+						value="No" oncomplete="cambiarEstadoWv.hide()"
+						styleClass="smallBtn" update=":formCambiarEstadoTarjeta" />
+				</div>
+			</center>
+		</h:form>
+
+	</p:dialog>
 		
 		<p:dialog id="dgSeleccionarAsignacion" modal="true" closable="true"
 			appendTo="@(body)" resizable="false" closeOnEscape="false"
@@ -407,7 +448,11 @@
 						<p:ajax event="rowSelect"
 							listener="#{cambiarEstadoTarjetaController.buscarTarjeta}"
 							update=":formCambiarEstadoTarjeta"
-							oncomplete="PF('wvSeleccionarAsignacion').hide()" />
+							oncomplete="PF('wvSeleccionarAsignacion').hide()" 				
+							
+							/>
+							
+							
  
 						<!-- Nro. -->
 						<p:column headerText="Nro."

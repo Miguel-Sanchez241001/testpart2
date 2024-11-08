@@ -5,7 +5,7 @@ public enum MotivosBloqueoTarjeta {
 
 	NORMAL("N","Activar"),
 	PERDIDA("E", "Perdida"),
-	FRAUDE("F", "Perdida"),
+	FRAUDE("F", "Fraude"),
 	MAL_REALCE("Q","Mal realce"),
 	ALERTA("T","Alerta"),
 	ROBO("X","Robo");

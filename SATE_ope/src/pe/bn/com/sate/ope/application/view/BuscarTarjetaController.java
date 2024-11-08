@@ -159,6 +159,7 @@ public class BuscarTarjetaController implements Serializable {
 
 	public void buscarTarjeta() {
 		//MGL //aqui 1
+		UsefulWebApplication.mostrarDialogo("statusDialog");
 		try {
 				
 			if (buscarTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
@@ -310,7 +311,8 @@ public class BuscarTarjetaController implements Serializable {
 
 						buscarTarjetaModel.getDatosTarjetaCliente()
 								.setEstadoTarjeta(estadoTarjeta);
-
+						UsefulWebApplication.ocultarDialogo("statusDialog");
+						
 						UsefulWebApplication
 								.actualizarComponente("formEmpresa:pgResultado");
 					} else {
@@ -319,11 +321,15 @@ public class BuscarTarjetaController implements Serializable {
 										+ buscarTarjetaModel
 												.getDatosTarjetaCliente()
 												.getTarjeta().getEstado());
+						UsefulWebApplication.ocultarDialogo("statusDialog");
+						
 						UsefulWebApplication.actualizarComponente("msgs");
 					}
 				} else {
 					UsefulWebApplication.mostrarMensajeJSF(3, "",
 							"El número de tarjeta no existe");
+					UsefulWebApplication.ocultarDialogo("statusDialog");
+					
 
 					UsefulWebApplication.actualizarComponente("msgs");
 
@@ -345,6 +351,8 @@ public class BuscarTarjetaController implements Serializable {
 				buscarTarjetaModel.setBusquedaRealizada(false);
 
 				if (buscarTarjetaModel.getDatosTarjetaCliente().getCliente() == null) {
+					UsefulWebApplication.ocultarDialogo("statusDialog");
+					
 					UsefulWebApplication
 							.mostrarMensajeJSF(3, "",
 									"No existe TarjetaHabiente con ese tipo y número de documento.");
@@ -469,7 +477,8 @@ public class BuscarTarjetaController implements Serializable {
 
 							buscarTarjetaModel.getDatosTarjetaCliente()
 									.setEstadoTarjeta(estadoTarjeta);
-
+							UsefulWebApplication.ocultarDialogo("statusDialog");
+							
 							UsefulWebApplication
 									.actualizarComponente("formEmpresa:pgResultado");
 						} else {
@@ -478,12 +487,16 @@ public class BuscarTarjetaController implements Serializable {
 											+ buscarTarjetaModel
 													.getDatosTarjetaCliente()
 													.getTarjeta().getEstado());
+							UsefulWebApplication.ocultarDialogo("statusDialog");
+							
 							UsefulWebApplication.actualizarComponente("msgs");
 						}
 					} else {
 						UsefulWebApplication.mostrarMensajeJSF(3, "",
 								"El número de tarjeta no existe");
 
+						UsefulWebApplication.ocultarDialogo("statusDialog");
+						
 						UsefulWebApplication.actualizarComponente("msgs");
 
 						buscarTarjetaModel.setBusquedaRealizada(false);
@@ -495,18 +508,24 @@ public class BuscarTarjetaController implements Serializable {
 			}
 			
 		} catch (InternalServiceException ise) {
+			UsefulWebApplication.ocultarDialogo("statusDialog");
+			
 			UsefulWebApplication.mostrarMensajeJSF(
 					ConstantesGenerales.SEVERITY_ERROR,
 					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
 					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
 			logger.error(ise.getMessage());
 		} catch (ExternalServiceBnTablasException este) {
+			UsefulWebApplication.ocultarDialogo("statusDialog");
+			
 			UsefulWebApplication.mostrarMensajeJSF(
 					ConstantesGenerales.SEVERITY_ERROR,
 					ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS,
 					ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_BN_TABLAS);
 			logger.error(este.getMessage());
 		} catch (ExternalServiceMCProcesosException este) {
+			UsefulWebApplication.ocultarDialogo("statusDialog");
+			
 			UsefulWebApplication
 					.mostrarMensajeJSF(
 							ConstantesGenerales.SEVERITY_ERROR,
@@ -514,6 +533,8 @@ public class BuscarTarjetaController implements Serializable {
 							ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
 			logger.error(este.getMessage());
 		} catch (ServiceException es) {
+			UsefulWebApplication.ocultarDialogo("statusDialog");
+			
 			UsefulWebApplication.mostrarMensajeJSF(
 					ConstantesGenerales.SEVERITY_ERROR,
 					ConstantesGenerales.ERROR_PERSISTENCE_GENERAL,
@@ -647,9 +668,11 @@ public class BuscarTarjetaController implements Serializable {
 	}
 	
 	public void seleccionarAsignacion() {
-		
+		UsefulWebApplication.mostrarDialogo("statusDialog");
 		System.out.println("LLEGO A seleccionarAsignacion");
 		buscarTarjeta();
+		System.out.println("SALIO A seleccionarAsignacion");
+		UsefulWebApplication.ocultarDialogo("statusDialog");
 		
 		
 	}	

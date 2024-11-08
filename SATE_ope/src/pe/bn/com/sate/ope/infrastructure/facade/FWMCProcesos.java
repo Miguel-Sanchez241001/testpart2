@@ -1152,8 +1152,8 @@ public class FWMCProcesos {
 		inputRequest.put(ConstantesWS.TITULAR_TELEFONO_DOMICILIO, telefono);
 		inputRequest.put(ConstantesWS.TITULAR_EMAIL	, email);	
 		
-		inputRequest.put(ConstantesWS.TIPO_DOCUMENTO, tipoDoc);
-		inputRequest.put(ConstantesWS.NRO_DOCUMENTO, numDoc);		
+		inputRequest.put(ConstantesWS.TITULAR_TIPO_DOCUMENTO, tipoDoc);
+		inputRequest.put(ConstantesWS.TITULAR_NUM_DOCUMENTO, numDoc);		
 		
 //		inputRequest.put(ConstantesWS.NUM_DEPENDIENTE, "3");
 //		inputRequest.put(ConstantesWS.TITULAR_PROFESION, "16779");
