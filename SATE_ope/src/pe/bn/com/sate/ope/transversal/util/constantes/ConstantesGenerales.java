@@ -121,9 +121,10 @@ public class ConstantesGenerales {
 	public final static String PARAM_RESPUESTATIEMPO = "RESPUESTATIEMPO";
 
 	// TODO MODIFICAR =========> RUTA CLAVE SEGURA SATE OPE
-	public static final String RUTA_CLAVE_SEGURA = "C://opt//software//key//sate//clavesegurades.key";
-	 //public static final String RUTA_CLAVE_SEGURA = "//opt//software//key//sate//clavesegurades.key";
-
+	//public static final String RUTA_CLAVE_SEGURA = "C://opt//software//key//sate//clavesegurades.key";
+	 public static final String RUTA_CLAVE_SEGURA = "//opt//software//key//sate//clavesegurades.key";
+//public static final String certificadoIzipay = "D:/certificado/certificadoIzipay.crt";
+	 public static final String certificadoIzipay = "//opt//software//certificado//certificadoIzipay.crt";
 
 	// HOST TIPO OPERACION
 	public static String GENERAR_CLAVE = "01";
@@ -182,7 +183,6 @@ public class ConstantesGenerales {
 
 	
 	/*MGL*/
-	public static final String certificadoIzipay = "D:/certificado/certificadoIzipay.crt";
 	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO = "No existe tarjeta empresarial asociada a tipo y número de documento.";
 	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA = "No existe tarjeta empresarial asociada a número de tarjeta.";
 	

@@ -49,4 +49,9 @@ public interface TarjetaService {
 	
 	
 	public Tarjeta 	buscarPrimeraTarjetaCliente(String tipoDocumento, String numeroDocumento);
+	
+	public Tarjeta 	buscarTarjetaId(Long idtar);
+	
+	
+	
 }

@@ -24,6 +24,8 @@ public class Asignacion {
 	private String numTar;
 	private String tarFechaVencimineto;
 	
+	private Long idEmpresa;
+	private Long idCliente;
 
 	public Long getIdAsi() {
 		return idAsi;
@@ -114,6 +116,23 @@ public class Asignacion {
 
 	public void setTarFechaVencimineto(String tarFechaVencimineto) {
 		this.tarFechaVencimineto = tarFechaVencimineto;
+	}
+
+	
+	public Long getIdEmpresa() {
+		return idEmpresa;
+	}
+
+	public void setIdEmpresa(Long idEmpresa) {
+		this.idEmpresa = idEmpresa;
+	}
+
+	public Long getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
 	}
 
 	@Override

@@ -567,5 +567,8 @@ public class ConstantesWS {
 	    
 	    public static final String TIPO_MONEDA = "1";
 	
+	    public static final String ESTADO_TARJETA_SELECCIONADA = "6";
+	    public static final String MOTIVO_BLOQUEO_ROBO = "X";
+	    public static final String MOTIVO_BLOQUEO_PERDIDA = "E";
 	    
 }

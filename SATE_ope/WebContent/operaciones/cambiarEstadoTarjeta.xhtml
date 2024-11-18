@@ -75,15 +75,15 @@
 								 />
 
 						</p:panelGrid>
+																		
+						<p:panelGrid columns="1" id="pgBus"
+							style="margin:20px auto 20px auto;" layout="grid">
+							<p:messages id="msgs" autoUpdate="true" showDetail="true"
+							showSummary="false" closable="true" />
+						</p:panelGrid>
 						
-						<div>
-						<p:messages id="msgs" showDetail="true" showSummary="false"
-							closable="true" />
-						</div>
-						
-						
-						<!-- onclick="statusDialog.show();" update=":formCambiarEstadoTarjeta msgs" -->
 						<div class="dashed"></div>
+						
 					</h:panelGrid>
 
 					<h:panelGrid id="pgResultado" style="width:90%;text-align:center;"
@@ -108,7 +108,7 @@
 									<p:inputText readonly="true"
 										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.datosTarjetaCliente.cliente.nombres}"></p:inputText>
 									<p:inputText readonly="true"
-										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.datosTarjetaCliente.cliente.apPaterno}"></p:inputText>
+										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.datosTarjetaCliente.cliente.apCompleto}"></p:inputText>
 								</p:panelGrid>
 							</p:panel>
 
@@ -125,7 +125,8 @@
 									<h:outputText value="Estado" />
 									<h:outputText value="Estado autorización" />
 									<p:inputText readonly="true"
-										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.descripcionEstadoTarjeta(cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.datosTarjetaCliente.tarjeta.estado)}" />
+										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.descripcionMotivoBloqueoWS(cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.estadoBloqueoWS)}" />
+									
 									<p:inputText readonly="true" value="- -" />
 								</p:panelGrid>
 
@@ -274,7 +275,7 @@
 		<p:dialog id="SolicitarTarjeta" modal="true" closable="true"
 			appendTo="@(body)" resizable="false" closeOnEscape="false"
 			draggable="false" position="center" showEffect="clip"
-			header="Solicitar Tarjeta" widgetVar="dgSolicitarTarjeta">
+			header="Actualización de Solicitar Tarjeta" widgetVar="dgSolicitarTarjeta">
 			<h:form id="formSolicitarTarjeta">
 				<p:panelGrid columns="1">
 					<center>
@@ -286,7 +287,8 @@
 								<p:selectOneMenu id="somEntregaUbicacion" required="true"
 									style="width:162px;" 
 									requiredMessage="seleccione ubicación de entrega"
-									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaUbicacion}">
+									value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.tarjeta.entregaUbicacion}"
+									disabled="true">
 									<p:ajax
 										update=":formSolicitarTarjeta:pgOpcionTipoUbicacion :formSolicitarTarjeta:pgReferencia :formSolicitarTarjeta:pgUbigeoEntrega"
 										listener="#{cambiarEstadoTarjetaController.mostrarOpcionPorTipoUbicacion()}" />
@@ -389,10 +391,21 @@
 							</h:panelGrid>
 
 						</p:fieldset>
+						
+						<p:messages id="messages" showDetail="false"
+						closable="true" />
+					
 						<p:panelGrid columns="1" style="margin-left:300px">
 							<p:commandButton id="cambiarEstadoTarjetaBloqueo" value="Aceptar"
-								actionListener="#{cambiarEstadoTarjetaController.bloquearTarjetaRobo()}" />
+								actionListener="#{cambiarEstadoTarjetaController.bloquearTarjetaRobo()}" 																
+								update="formSolicitarTarjeta" 
+								
+								
+								/>
 						</p:panelGrid>
+						
+					
+						
 					</center>
 				</p:panelGrid>
 			</h:form>

@@ -17,6 +17,8 @@ import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.EstadoCivil;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoCuenta;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoTarjeta;
+import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoWS;
+
 import pe.bn.com.sate.ope.transversal.util.enums.OperadorMovil;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
@@ -66,6 +68,8 @@ public class CambiarEstadoTarjetaModel {
 	private Tarjeta tarjeta;
 	private boolean esEntregaUE;
 	private boolean esEntregaReferencia;
+	
+	private String estadoBloqueoWS;
 	
 	public CambiarEstadoTarjetaModel() {
 		//listaTipoBusqueda = Arrays.asList(TipoBusqueda.values());
@@ -176,6 +180,14 @@ public class CambiarEstadoTarjetaModel {
 	public String descripcionEstadoTarjeta(String codigo) {
 		return TipoEstadoTarjeta.descripcionTipoEstadoTarjeta(codigo);
 	}
+	
+	
+	
+	public String descripcionMotivoBloqueoWS(String codigo) {
+		return MotivosBloqueoWS.descripcionMotivoBloqueoWS(codigo);
+	}
+	
+	
 
 	public String descripcionMotivoBloqueotarjeta(String codigo) {
 		return MotivosBloqueoTarjeta.descripcionMotivoBloqueoTarjeta(codigo);
@@ -219,6 +231,20 @@ public class CambiarEstadoTarjetaModel {
 		estadoCuentaSeleccionado = null;
 		tipoBusqueda = "N";
 		tipoBloqueoSeleccionado = "T";
+		
+	
+		
+		tipoBusqueda = TipoBusqueda.NUM_TARJETA.getId();	
+		
+		listaTipoBusquedaPor = new ArrayList<>();
+        listaTipoBusquedaPor.add("Por Documento");
+        listaTipoBusquedaPor.add("Por Tarjeta");
+		
+//		tipoBusqueda = "N";
+		tipoBloqueoSeleccionado = "T";
+		asignacionesTotal = new ArrayList<>();
+		
+		
 
 	}
 
@@ -407,6 +433,16 @@ public class CambiarEstadoTarjetaModel {
 		agenciaSeleccionada = null;
 		
 	}
+
+	public String getEstadoBloqueoWS() {
+		return estadoBloqueoWS;
+	}
+
+	public void setEstadoBloqueoWS(String estadoBloqueoWS) {
+		this.estadoBloqueoWS = estadoBloqueoWS;
+	}
+	
+	
 	
 	
 }

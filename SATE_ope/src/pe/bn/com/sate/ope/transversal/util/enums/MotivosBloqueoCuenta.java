@@ -51,4 +51,14 @@ public enum MotivosBloqueoCuenta {
 
 		return motivos;
 	}
+	
+	public static MotivosBloqueoCuenta[] motivosBloqueoPorIdMotivoWS(String id) {
+		MotivosBloqueoCuenta motivos[] = null;
+	
+		motivos = new MotivosBloqueoCuenta[1];
+		motivos[0] = MotivosBloqueoCuenta.TEMPORAL;
+		
+
+		return motivos;
+	}
 }

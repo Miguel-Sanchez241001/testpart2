@@ -115,13 +115,7 @@ public class LoginController implements PhaseListener, Serializable {
 
     
     
-    public void validarConexionTest() {
-    	try {
-			fwmcProcesos.conexionTest();
-		} catch (ExternalServiceMCProcesosException | InternalExcepcion e) {
-			e.printStackTrace();
-		}
-    }
+   
     
  
 

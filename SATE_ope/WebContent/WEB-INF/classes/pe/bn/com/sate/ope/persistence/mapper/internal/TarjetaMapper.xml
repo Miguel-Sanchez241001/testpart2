@@ -50,6 +50,8 @@
 		<result property="estadoCuenta" column="B05_EST_CUENTA" />
 		<result property="fechaAperturaCuenta" column="B05_FEC_APERTURA_CUENTA" />
 		<result property="flagActualizarEstadoCuenta" column="B05_FLAG_ACT_EST_CUENTA" />
+		<result property="entregaAgenciaBNombre" column="B05_NOM_AGENCIA" />
+		<result property="fechaVencimientoTar" column="B05_FEC_VENCIMIENTO" />
 	</resultMap>
 
 

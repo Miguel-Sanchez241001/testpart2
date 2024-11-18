@@ -12,7 +12,27 @@ public class Tarjeta {
 	private String numTarjeta; //
 	private String disposicionEfectivo;
 	private String porcentajeDisposicionEfectivo;
-		private String entregaAgenciaBNombre;
+	
+	private String entregaAgenciaBNombre;
+	
+	private Date fechaVencimientoTar;
+	
+	private String usoDispocionEfectivo;
+	private String usoExtranjero;
+	private String usoComprasWeb;
+	
+	
+	
+	
+	
+	public Date getFechaVencimientoTar() {
+		return fechaVencimientoTar;
+	}
+ 
+	public void setFechaVencimientoTar(Date fechaVencimientoTar) {
+		this.fechaVencimientoTar = fechaVencimientoTar;
+	}
+		
 	public String getEntregaAgenciaBNombre() {
 		return entregaAgenciaBNombre;
 	}
@@ -20,10 +40,7 @@ public class Tarjeta {
 	public void setEntregaAgenciaBNombre(String entregaAgenciaBNombre) {
 		this.entregaAgenciaBNombre = entregaAgenciaBNombre;
 	}
-
-	private String usoDispocionEfectivo;
-	private String usoExtranjero;
-	private String usoComprasWeb;
+	
 	public String getUsoComprasWeb() {
 		return usoComprasWeb;
 	}

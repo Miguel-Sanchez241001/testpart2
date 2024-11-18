@@ -74,6 +74,11 @@ public interface ClienteMapper {
         @Param("numeroDocumento") String numeroDocumento,
         @Param("email") String email
     );
+    
+    @Select("SELECT * FROM BN_SATE.BNSATE06_CLIENTE WHERE " +
+			"B06_ID_CLI = #{idCliente}  ")
+	@ResultMap("mapCliente")
+	public Cliente buscarClientePorId(@Param("idCliente")Long  idCliente);
 	
 	
 	

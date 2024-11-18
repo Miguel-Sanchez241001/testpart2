@@ -18,6 +18,17 @@ public class DTOConsultaDatosTarjeta {
     private String idTransaccion;
     private String codRespuesta;
     private String descRespuesta;
+    
+    private String codBloqueo;
+    
+    @XmlElement(name = "CodigoBloqueo")
+    public String getCodBloqueo() {
+		return codBloqueo;
+	}
+ 
+	public void setCodBloqueo(String codBloqueo) {
+		this.codBloqueo = codBloqueo;
+	}
 
     @XmlElement(name = "CodEmisor")
     public String getCodEmisor() {

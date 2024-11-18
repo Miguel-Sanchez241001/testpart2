@@ -45,4 +45,14 @@ public class ClienteServiceImpl implements ClienteService {
 		}
 	}
 
+	
+	@Override
+	public Cliente buscarClientePorId(Long idCliente) {
+		try {
+			return clienteMapper.buscarClientePorId(idCliente) ;
+		} catch (Exception ex) {
+			throw new InternalServiceException(ex.getMessage(), ex);
+		}
+	}
+	
 }

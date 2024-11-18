@@ -167,7 +167,7 @@ public class ConsultarMovimientosController {
 													
 					consultarMovimientosModel.setMovimientosTarjetaExp(listDato);
 					
-					consultarMovimientosModel.setNumeroTarjeta("");
+					
 					
 					UsefulWebApplication.actualizarComponente("msgs");
 					UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");

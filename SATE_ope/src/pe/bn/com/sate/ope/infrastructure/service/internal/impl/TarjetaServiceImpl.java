@@ -335,7 +335,10 @@ public class TarjetaServiceImpl implements TarjetaService {
 			nuevaTarjeta.setIdUsu(SecurityContextFacade.getAuthenticatedUser()
 					.getId());
 			nuevaTarjeta.setFechaCreacion(new Date());
-			tarjetaMapper.registrarTarjeta(nuevaTarjeta);
+			tarjetaMapper.registrarTarjeta(nuevaTarjeta);						
+			
+			nuevaTarjeta = tarjetaMapper.buscarTarjeta(nuevaTarjeta.getIdEmpresa(), nuevaTarjeta.getIdUsu(),nuevaTarjeta.getIdCli());	
+			
 			EstadoTarjeta estadoTarjetaCreacion = new EstadoTarjeta();
 			estadoTarjetaCreacion.setIdTarjeta(nuevaTarjeta.getId());
 			estadoTarjetaCreacion
@@ -464,8 +467,16 @@ public class TarjetaServiceImpl implements TarjetaService {
 		
 	}
 
+	
 
-
+	@Override
+	public Tarjeta buscarTarjetaId(Long idtar) {
+		try {
+			return tarjetaMapper.buscarTarjetaPorIdValidosParaBloqueo(idtar);
+		} catch (Exception ex) {
+			throw new InternalServiceException(ex.getMessage(), ex);
+		}
+	}
 
  
 
