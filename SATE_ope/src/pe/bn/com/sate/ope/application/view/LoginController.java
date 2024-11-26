@@ -77,9 +77,9 @@ public class LoginController implements PhaseListener, Serializable {
         logger.info("[loginController] - Iniciando método iniciarSesion");
 
      // TODO VALIDAR CATCHAP 
-       //MGL
-         if (true) {
-        //if (captchaService.validarCaptcha(loginModel.getCaptcha(), loginModel.getCaptchaTexto())) {
+       //MGL - captcha
+        // if (true) {
+        if (captchaService.validarCaptcha(loginModel.getCaptcha(), loginModel.getCaptchaTexto())) {
         
         
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();

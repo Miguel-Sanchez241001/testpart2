@@ -8,8 +8,12 @@ public enum TipoBusqueda {
 			"4", "CARNET DE EXTRANJERÍA", 12), CARNET_POLICIA_NACIONAL("2",
 			"CARNET DE POLICÍA NACIONAL", 9), PASAPORTTE("5", "PASAPORTE", 12);*/
 	// TODO ENUM tipo busquedas
-	NUM_TARJETA("N", "NÚMERO DE TARJETA", 16), DNI("1", "DNI", 8), CARNET_EXTRANJERIA(
-			"4", "CARNET DE EXTRANJERÍA", 12)   ;
+//	NUM_TARJETA("N", "NÚMERO DE TARJETA", 16), DNI("1", "DNI", 8), CARNET_EXTRANJERIA(
+//			"4", "CARNET DE EXTRANJERÍA", 12)   ;
+	
+	NUM_TARJETA("N", "Número de Tarjeta", 16), DNI("1", "DNI", 8), CARNET_EXTRANJERIA(
+			"4", "Carnet de Extranjería", 12)   ;
+	
 	private String id;
 	private String descripcion;
 	private int length;

@@ -52,6 +52,10 @@ public interface TarjetaService {
 	
 	public Tarjeta 	buscarTarjetaId(Long idtar);
 	
+	public long consultarExisteTarjetaRUC(String numTarjeta,String ruc);
+	public long consultarExisteTipNumDocRUC(String tipoDocumento,String numDocumento,String ruc);
+	
+	
 	
 	
 }

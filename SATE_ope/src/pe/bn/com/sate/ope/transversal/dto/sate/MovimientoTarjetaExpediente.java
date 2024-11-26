@@ -9,14 +9,10 @@ public class MovimientoTarjetaExpediente {
 	private String descripcionTxn;
 	private String monOriginalTxn;
 	private String montoTxn;
-	
 	private String sigMontoTxn;
-	
 	private String operacionTxn; 
 	private String codAutTxn;
-	
 	private String numTarjetaTxn;
-	
 	private String tipoTarjeta;
 
 	public MovimientoTarjetaExpediente() {

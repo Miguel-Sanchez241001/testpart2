@@ -120,11 +120,6 @@ public class ConstantesGenerales {
 	public final static String PARAM_CONEXIONTIEMPO = "CONEXIONTIEMPO";
 	public final static String PARAM_RESPUESTATIEMPO = "RESPUESTATIEMPO";
 
-	// TODO MODIFICAR =========> RUTA CLAVE SEGURA SATE OPE
-	//public static final String RUTA_CLAVE_SEGURA = "C://opt//software//key//sate//clavesegurades.key";
-	 public static final String RUTA_CLAVE_SEGURA = "//opt//software//key//sate//clavesegurades.key";
-//public static final String certificadoIzipay = "D:/certificado/certificadoIzipay.crt";
-	 public static final String certificadoIzipay = "//opt//software//certificado//certificadoIzipay.crt";
 
 	// HOST TIPO OPERACION
 	public static String GENERAR_CLAVE = "01";
@@ -181,12 +176,29 @@ public class ConstantesGenerales {
 	
 	
 
-	
+
+	// TODO MODIFICAR =========> RUTA CLAVE SEGURA SATE OPE
+	public static final String RUTA_CLAVE_SEGURA = "C://opt//software//key//sate//clavesegurades.key";
+	//public static final String RUTA_CLAVE_SEGURA = "//opt//software//key//sate//clavesegurades.key";
+
 	/*MGL*/
-	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO = "No existe tarjeta empresarial asociada a tipo y número de documento.";
-	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA = "No existe tarjeta empresarial asociada a número de tarjeta.";
+	public static final String certificadoIzipay = "D:/certificado/certificadoIzipay.crt";
+	//public static final String certificadoIzipay = "//opt//software//certificado//certificadoIzipay.crt";
 	
-	public static String ERROR_MENSAJE_TARJETAS_BLOQUEADAS = "La tarjeta se encuetra bloqueada .";
+	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO = "No se encontro la tarjeta con los datos ingresados.";
+	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA = "No se encontro la tarjeta con los datos ingresados.";
+	
+	public static String ERROR_MENSAJE_NO_EXISTE_MOVIMIENTO_TIPO_TARJETA ="No hay movimientos realizados con la tarjeta empresarial.";
+	
+	
+	public static String ERROR_MENSAJE_TARJETAS_BLOQUEADAS = "La tarjeta se encuetra bloqueada.";
+	
+	
+	
+	public static String ERROR_MENSAJE_NO_EXISTE_TAREMP_NUM_DOCUMENTO = "No existe tarjeta empresarial asociada a tipo y número de documento.";
+	public static String ERROR_MENSAJE_NO_EXISTE_TAREMP_TIP_TARJETA = "No existe tarjeta empresarial asociada a número de tarjeta.";
+	
+	
 	
 	public static final String COD_TARJETA = "2";
 	public static final String COD_TIPODOC = "1";

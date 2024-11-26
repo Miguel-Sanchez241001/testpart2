@@ -233,5 +233,35 @@ public interface TarjetaMapper {
     @ResultMap("mapTarjeta")
     public Tarjeta buscarTarjetaPorIdValidosParaBloqueo(
             @Param("idTar") Long idTar );
+    
+    
+    @Select("SELECT COUNT(*) " +
+    		"FROM BN_SATE.BNSATE05_TARJETA TAR " +
+    		"JOIN BN_SATE.BNSATE00_EMPRESA B00E " +
+    		"on TAR.B00_ID_EMP = B00E.B00_ID_EMP " +
+    		"WHERE TAR.B05_NUM_TARJETA = #{numTarjeta} " +
+    		"AND B00E.B00_NUM_RUC = #{ruc} ")	
+    public long consultarExisteTarjetaRUC(
+    		@Param("numTarjeta")String numTarjeta,
+    		@Param("ruc")String ruc
+    		);
+    
+    @Select("SELECT COUNT(*) " +
+			"FROM BN_SATE.BNSATE05_TARJETA TAR " +
+			"JOIN BN_SATE.BNSATE00_EMPRESA B00E " +
+			"on TAR.B00_ID_EMP = B00E.B00_ID_EMP " +
+			"JOIN BN_SATE.BNSATE06_CLIENTE B06C " +
+			"on TAR.B06_ID_CLI = B06C.B06_ID_CLI " +
+			"WHERE B06C.B06_TIPO_DOCUMENTO= #{tipoDocumento} " +
+			" AND B06C.B06_NUM_DOCUMENTO= #{numDocumento} " +
+			" AND B00E.B00_NUM_RUC = #{ruc} " +
+			" AND TAR.B05_NUM_TARJETA IS NOT NULL ")	
+    public long consultarExisteTipNumDocRUC(
+    		@Param("tipoDocumento")String tipoDocumento,
+    		@Param("numDocumento")String numDocumento,
+    		@Param("ruc")String ruc
+    		);
+    
+    
 
 }

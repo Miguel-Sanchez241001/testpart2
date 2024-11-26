@@ -478,6 +478,23 @@ public class TarjetaServiceImpl implements TarjetaService {
 		}
 	}
 
+	@Override
+	public long consultarExisteTarjetaRUC(String numTarjeta, String ruc) {
+		// TODO Auto-generated method stub
+		long num = tarjetaMapper.consultarExisteTarjetaRUC(numTarjeta, ruc);
+		
+		return num;
+	}
+
+	@Override
+	public long consultarExisteTipNumDocRUC(String tipoDocumento,
+			String numDocumento, String ruc) {
+		// TODO Auto-generated method stub
+		long num = tarjetaMapper.consultarExisteTipNumDocRUC(tipoDocumento, numDocumento, ruc);
+		
+		return num;
+	}
+
  
 
 }

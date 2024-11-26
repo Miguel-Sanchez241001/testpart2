@@ -248,6 +248,20 @@
 	background: linear-gradient(#970305, #C4141B) !important;
 }
 
+/* Botón de descarga con fondo verde oscuro */
+.btnDescargaExcel.ui-button {
+ 
+}
+
+/* Hover del botón de descarga */
+.btnDescargaExcel.ui-button:hover {
+ }
+.ui-icon-arrowthick-1-s {
+    fill: #fff !important; /* Para íconos SVG */
+    background-color: #fff !important; /* Para íconos con fondo */
+}
+s
+
 .ui-fieldset {
 	
 }

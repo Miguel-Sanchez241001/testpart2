@@ -17,6 +17,7 @@ import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.ReqList
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.RequestMessage;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.ServiceMessageProxy;
 import pe.bn.com.sate.ope.infrastructure.service.internal.NotificacionService;
+import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Usuario;
 import pe.bn.com.sate.ope.transversal.util.ServicioWebUtil;
 import pe.bn.com.sate.ope.transversal.util.componentes.Parametros;
@@ -90,6 +91,21 @@ public class NotificacionServiceImpl implements NotificacionService {
             throw new InternalServiceException(ex.getMessage(), ex);
         } finally {
             logger.info("Fin del método enviarMailUsuarioClave");
+        }
+    }
+    
+    
+    @Override
+    public void enviarMailBloqueoTarjeta(String nombreCompleto, Tarjeta tarjeta,String fecha,String hora,String codBloqueo) {
+        logger.info("Inicio del método enviarMailCambioClave");
+        
+        try {
+
+        } catch (Exception ex) {
+            logger.error("Error en enviarMailCambioClave: " + ex.getMessage(), ex);
+            throw new InternalServiceException(ex.getMessage(), ex);
+        } finally {
+            logger.info("Fin del método enviarMailCambioClave");
         }
     }
 }

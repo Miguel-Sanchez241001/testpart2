@@ -46,7 +46,7 @@
 			xmi:id="PortQnameBinding_1541201607896"
 			portQnameNamespaceLink="http://service.open.ws.simm.bn.www"
 			portQnameLocalNameLink="ServiceMessage"
-			overriddenEndpointURI="http://10.7.12.73:9080/WsSimm/services/ServiceMessage" />
+			overriddenEndpointURI="http://10.7.106.31:9080/WsSimm/services/ServiceMessage" />
 	</serviceRefs>
 	<serviceRefs xmi:id="ServiceRef_1724249698600"
 		serviceRefLink="service/Service1">

@@ -25,6 +25,7 @@ import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMoneda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjeta;
 
 public class CambiarEstadoTarjetaModel {
 
@@ -172,9 +173,14 @@ public class CambiarEstadoTarjetaModel {
 	public String descripcionTipoDocumento(String codigo) {
 		return CodDocumentoWebservice.descripcionCodDocumentoWebservice(codigo);
 	}
-
+	
 	public String descripcionTipoTarjeta(String codigo, String diseno) {
 		return TipoTarjetaNegocio.descripcionTipotarjeta(codigo, diseno);
+	}
+	
+
+	public String descripcionTipoTarjetaWS(String codigo) {
+		return TipoTarjeta.descripcionTipotarjeta(codigo);
 	}
 
 	public String descripcionEstadoTarjeta(String codigo) {
@@ -314,6 +320,7 @@ public class CambiarEstadoTarjetaModel {
 	}
 
 	public List<String> getListaTipoBusquedaPor() {
+		
 		return listaTipoBusquedaPor;
 	}
 

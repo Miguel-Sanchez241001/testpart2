@@ -1,11 +1,11 @@
 package pe.bn.com.sate.ope.application.view;
 
-import java.text.ParseException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,9 +14,9 @@ import pe.bn.com.sate.ope.application.model.ConsultarMovimientosModel;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.facade.FWMCProcesos;
 import pe.bn.com.sate.ope.infrastructure.facade.ReporteResumenFacade;
+import pe.bn.com.sate.ope.infrastructure.facade.WSMCMovimientoAntiguos;
+import pe.bn.com.sate.ope.infrastructure.service.internal.ClienteService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
-import pe.bn.com.sate.ope.persistence.mapper.internal.AsignacionMapper;
-import pe.bn.com.sate.ope.persistence.mapper.internal.CargoMapper;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
@@ -24,35 +24,26 @@ import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
-import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
-
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.excepciones.InternalExcepcion;
-
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.*;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
-import java.util.List;
-
-
 
 @Controller("consultarMovimientosController")
 @Scope("view")
 public class ConsultarMovimientosController {
 
 	private final static Logger logger = Logger.getLogger(ConsultarMovimientosController.class);
-
+	
+	private final static String PASADO = "PASADO";
 	private ConsultarMovimientosModel consultarMovimientosModel;
 
 	private @Autowired FWMCProcesos fwmcProcesos;
+	private @Autowired WSMCMovimientoAntiguos wsMCMovimientoAntiguos;
 
 	private @Autowired TarjetaService tarjetaService;
 	@Autowired
 	private ReporteResumenFacade reporteResumenFacade;
+
+	private @Autowired ClienteService clienteService;
 
 	@PostConstruct
 	public void init() {
@@ -66,7 +57,7 @@ public class ConsultarMovimientosController {
 					consultarMovimientosModel.getTipoBusqueda(), consultarMovimientosModel.getNumeroTarjeta(), "B"));
 
 			try {
-				
+
 				if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
 					fwmcProcesos.consultaMovimientoPorExpediente(
 							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getNumeroCuenta(),
@@ -74,18 +65,18 @@ public class ConsultarMovimientosController {
 							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getFechaTerminoLinea()
 
 					);
-					
 
 				} else if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.DNI.getId())
-						|| consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
-					
+						|| consultarMovimientosModel.getTipoBusqueda()
+								.equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
+
 					fwmcProcesos.consultaMovimientoPorExpediente(
 							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getNumeroCuenta(),
 							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getTipoMoneda(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getFechaTerminoLinea()
-					);					
+							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0)
+									.getFechaTerminoLinea());
 				}
-				
+
 			} catch (InternalExcepcion e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -101,108 +92,47 @@ public class ConsultarMovimientosController {
 
 	public void seleccionarAsignacion() {
 		consultarMovimientosModel.limpiarMovimientosTarjeta();
-		try {
+		if(consultarMovimientosModel.getAsignacionSeleccionada().getEstado().equals(PASADO)) {
 			
-			
+			consultarMovimientosModel.getDatosTarjetaCliente().setCliente(clienteService.buscarClientePorId(consultarMovimientosModel.getAsignacionSeleccionada().getIdCliente()));
+			consultarMovimientosModel.getDatosTarjetaCliente().setTarjeta(tarjetaService.buscarTarjetaId(consultarMovimientosModel.getAsignacionSeleccionada().getIdTar()));
+		 
+			try {
+				List<MovimientoTarjetaExpediente> listDato = wsMCMovimientoAntiguos.consultaMovimientoPorExpediente(consultarMovimientosModel.getAsignacionSeleccionada());
+					String tipoTarjeta = TipoTarjeta.descripcionTipotarjeta(consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getTipoTarjeta());
 
-			// consultarMovimientosModel.setMovimientosTarjeta(fwmcProcesos
-			// .consultarMovimientosPorTarjeta(consultarMovimientosModel
-			// .getNumeroTarjeta()));
+					if (listDato.size() == 0) {
+						consultarMovimientosModel.inicializarGrilla();
+						UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_WARN,
+								ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_MOVIMIENTO_TIPO_TARJETA,
+								ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_MOVIMIENTO_TIPO_TARJETA);
+						UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
 
-			// aui debe llegar el valor del pop-up
-			DTOConsultaMovimientosExpediente dato = null;
-			List<MovimientoTarjetaExpediente> listDato;
-			
-			String diseno = "";
-			String tipTarj = "";
-			
-			try {				
-				if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
-					String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(consultarMovimientosModel.getNumeroTarjeta(), 19);
-										
-					consultarMovimientosModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
-							consultarMovimientosModel.getTipoBusqueda(), tarjeta19, "B"));
-					
-					System.out.println("consultarMovimientosModel.getTipoBusqueda():::"+consultarMovimientosModel.getTipoBusqueda());
-					dato=fwmcProcesos.consultaMovimientoPorExpediente(
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getNumeroCuenta(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getTipoMoneda(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getFechaTerminoLinea()
-					);
-					
-					diseno = consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getDiseno();
-					tipTarj = consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getTipoTarjeta();
-					
-				} else if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.DNI.getId())
-						|| consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {																
-					
-					consultarMovimientosModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
-							consultarMovimientosModel.getTipoBusqueda(),
-							consultarMovimientosModel.getNumeroTarjeta(), "B"));
-					
-					System.out.println("consultarMovimientosModel.getTipoBusqueda():::"+consultarMovimientosModel.getTipoBusqueda());
-					
-					
-					dato=fwmcProcesos.consultaMovimientoPorExpediente(
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getNumeroCuenta(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getTipoMoneda(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getFechaTerminoLinea()
-					);	
-					
-					diseno = consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getDiseno();
-					tipTarj = consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getTipoTarjeta();
-					
-					consultarMovimientosModel.getDatosTarjetaCliente().setTarjeta(consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0));
-				}	
+					} else {
+						listDato.stream().forEach(mov -> mov.setTipoTarjeta(tipoTarjeta));
+						
+						consultarMovimientosModel.setMovimientosTarjetaExp(listDato);
+						UsefulWebApplication.actualizarComponente("msgs");
+						UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+						UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:listaTarjetasPanel");
+						UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgBusqueda");
+					}
+
 				
-				System.out.println("diseno:"+diseno);
-				System.out.println("tipTarj:"+tipTarj);
-				
-				if (dato.getCodRespuesta().equals("0000")) { 
-					
-					String tipoTarjeta = TipoTarjeta.descripcionTipotarjeta(tipTarj);
-					System.out.println("tipoTarjeta:"+tipoTarjeta);
-					
-					listDato=fwmcProcesos.listaMovTarjExp(dato,tipoTarjeta);
-													
-					consultarMovimientosModel.setMovimientosTarjetaExp(listDato);
-					
-					
-					
-					UsefulWebApplication.actualizarComponente("msgs");
-					UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
-					UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:listaTarjetasPanel");
-					UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgBusqueda");
-					
-	        		        		
-	        	}else{
-	        		consultarMovimientosModel.setBusquedaRealizada(false);
-	        		consultarMovimientosModel.inicializarFormulario();
-	        		UsefulWebApplication
-					.mostrarMensajeJSF(
-							ConstantesGenerales.SEVERITY_ERROR,
-							dato.getDescRespuesta(),
-							ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);	        		
-	        		UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:listaTarjetasPanel");
-	        		UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
-			
-	        	}
-				
-				
-				
-				
-				
-			} catch (InternalExcepcion e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				consultarMovimientosModel.inicializarGrilla();
+				UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR, "", e.getMessage());
+				UsefulWebApplication.actualizarComponente("msgs");
+				UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
 			}
-
-		} catch (ServiceException se) {
-			logger.error(se.getMessage());
-			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR, "", se.getMessage());
-			UsefulWebApplication.actualizarComponente("msgs");
-			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+		
+			
+			
+		}else {
+			searchAsignacionActual();
 		}
+	
 	}
 
 	public ConsultarMovimientosModel getConsultarMovimientosModel() {
@@ -213,79 +143,216 @@ public class ConsultarMovimientosController {
 		this.consultarMovimientosModel = consultarMovimientosModel;
 	}
 
+	
 	public void buscarAsignaciones() {
 		try {
+
+			consultarMovimientosModel.inicializarGrilla();
+
 			List<Asignacion> asignaciones = null;
 			if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
-				
-				String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(consultarMovimientosModel.getNumeroTarjeta(), 19);
-				
-			
-				
-				asignaciones = reporteResumenFacade.obtenerAsignacionesPorTarjetaSimple(tarjeta19);	
-				
-				if(asignaciones.isEmpty() && asignaciones.size()==0){
-					consultarMovimientosModel.inicializarFormulario();
-					
-					UsefulWebApplication.mostrarMensajeJSF(
-					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA);
-					
-				}else{				
-					consultarMovimientosModel.setBusquedaRealizada(true);
-					consultarMovimientosModel.setAsignacionesTotal(asignaciones);
-					// MOSTRAR MODAL COMPONENTE
-					UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
-					// formulario del componente
-					UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+
+				String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(consultarMovimientosModel.getNumeroTarjeta(),
+						19);
+
+				String rucUsuario = UsefulWebApplication.obtenerUsuario().getRuc();
+
+				long valor = 0;
+
+				valor = tarjetaService.consultarExisteTarjetaRUC(tarjeta19, rucUsuario);
+
+				if (valor == 0) {
+
+					UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+							ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TAREMP_TIP_TARJETA,
+							ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TAREMP_TIP_TARJETA);
+				} else {
+					asignaciones = reporteResumenFacade.obtenerAsignacionesPorTarjetaSimple(tarjeta19, rucUsuario);
+
+					if (asignaciones.isEmpty() && asignaciones.size() == 0) {
+						consultarMovimientosModel.inicializarFormulario();
+
+						UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+								ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA,
+								ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA);
+
+					} else {
+						consultarMovimientosModel.setBusquedaRealizada(true);
+						consultarMovimientosModel.setAsignacionesTotal(asignaciones);
+						// MOSTRAR MODAL COMPONENTE
+						UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
+						// formulario del componente
+						UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+					}
 				}
 
 			} else if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.DNI.getId())
 					|| consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
-				
-							
-				asignaciones = reporteResumenFacade.obtenerAsignacionesPorDocumentoSimple(
-						consultarMovimientosModel.getTipoBusqueda(), consultarMovimientosModel.getNumeroTarjeta());
-								
-				if(asignaciones.isEmpty() && asignaciones.size()==0){
+
+				String rucUsuario = UsefulWebApplication.obtenerUsuario().getRuc();
+
+				long valor = 0;
+
+				valor = tarjetaService.consultarExisteTipNumDocRUC(consultarMovimientosModel.getTipoBusqueda(),
+						consultarMovimientosModel.getNumeroTarjeta(), rucUsuario);
+
+				if (valor == 0) {
+
 					consultarMovimientosModel.inicializarFormulario();
-					UsefulWebApplication.mostrarMensajeJSF(
-					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO);
-					
-					
-				}else{		
-					consultarMovimientosModel.setBusquedaRealizada(true);
-					consultarMovimientosModel.setAsignacionesTotal(asignaciones);
-					// MOSTRAR MODAL COMPONENTE
-					UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
-					// formulario del componente
-					UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+					UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+							ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TAREMP_NUM_DOCUMENTO,
+							ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TAREMP_NUM_DOCUMENTO);
+				} else {
+					asignaciones = reporteResumenFacade.obtenerAsignacionesPorDocumentoSimple(
+							consultarMovimientosModel.getTipoBusqueda(), consultarMovimientosModel.getNumeroTarjeta(),
+							rucUsuario);
+
+					if (asignaciones.isEmpty() && asignaciones.size() == 0) {
+						consultarMovimientosModel.inicializarFormulario();
+						UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+								ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO,
+								ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO);
+
+					} else {
+						consultarMovimientosModel.setBusquedaRealizada(true);
+						consultarMovimientosModel.setAsignacionesTotal(asignaciones);
+						// MOSTRAR MODAL COMPONENTE
+						UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
+						// formulario del componente
+						UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+					}
 				}
+
 			}
-			
+
 		} catch (InternalExcepcion se) {
-			UsefulWebApplication.mostrarMensajeJSF(
-					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
-					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
+			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL, ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
 			logger.error(se.getMessage());
 		}
 
 	}
-	
+
 	public void buscarTipoBusqueda() {
-	  	  if (consultarMovimientosModel.getTipoBusquedaPor().equals("Por Documento")) {
-	  		  consultarMovimientosModel.setListaTipoBusqueda(TipoBusqueda.obtenerTiposDocumento());
-	        } else if (consultarMovimientosModel.getTipoBusquedaPor().equals("Por Tarjeta")) {
-	      	  consultarMovimientosModel.setListaTipoBusqueda(TipoBusqueda.obtenerTiposNumeroTarjeta());
-	        } else {
-	      	  consultarMovimientosModel.setListaTipoBusqueda(null);
-	        }
-	  }
+		if (consultarMovimientosModel.getTipoBusquedaPor().equals("Por Documento")) {
+			consultarMovimientosModel.setListaTipoBusqueda(TipoBusqueda.obtenerTiposDocumento());
+			consultarMovimientosModel.setBusquedaRealizada(false);
+			consultarMovimientosModel.setNumeroTarjeta(null);
+			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:numDocumento");
+			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+
+		} else if (consultarMovimientosModel.getTipoBusquedaPor().equals("Por Tarjeta")) {
+			consultarMovimientosModel.setListaTipoBusqueda(TipoBusqueda.obtenerTiposNumeroTarjeta());
+			consultarMovimientosModel.setBusquedaRealizada(false);
+			consultarMovimientosModel.setNumeroTarjeta(null);
+			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:numDocumento");
+			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+
+		} else {
+			consultarMovimientosModel.setListaTipoBusqueda(null);
+			consultarMovimientosModel.setBusquedaRealizada(false);
+			consultarMovimientosModel.setNumeroTarjeta(null);
+			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:numDocumento");
+			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+		}
+	}
 	
+	public void searchAsignacionActual() {
+		try {
+			DTOConsultaMovimientosExpediente dato = null;
+			List<MovimientoTarjetaExpediente> listDato;
 
+			String tipTarj = "";
 
+			try {
+				if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
+
+					// consultarMovimientosModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
+					// consultarMovimientosModel.getTipoBusqueda(), tarjeta19, "B"));
+
+					consultarMovimientosModel.getDatosTarjetaCliente().setCliente(clienteService
+							.buscarClientePorId(consultarMovimientosModel.getAsignacionSeleccionada().getIdCliente()));
+					consultarMovimientosModel.getDatosTarjetaCliente().setTarjeta(tarjetaService
+							.buscarTarjetaId(consultarMovimientosModel.getAsignacionSeleccionada().getIdTar()));
+
+					System.out.println("consultarMovimientosModel.getTipoBusqueda():::"
+							+ consultarMovimientosModel.getTipoBusqueda());
+					dato = fwmcProcesos.consultaMovimientoPorExpediente(
+							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getNumeroCuenta(),
+							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getTipoMoneda(),
+							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getFechaTerminoLinea());
+
+					tipTarj = consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getTipoTarjeta();
+
+				} else if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.DNI.getId())
+						|| consultarMovimientosModel.getTipoBusqueda()
+								.equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
+
+					// consultarMovimientosModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
+					// consultarMovimientosModel.getTipoBusqueda(),
+					// consultarMovimientosModel.getNumeroTarjeta(), "B"));
+
+					consultarMovimientosModel.getDatosTarjetaCliente().setCliente(clienteService
+							.buscarClientePorId(consultarMovimientosModel.getAsignacionSeleccionada().getIdCliente()));
+					consultarMovimientosModel.getDatosTarjetaCliente().setTarjeta(tarjetaService
+							.buscarTarjetaId(consultarMovimientosModel.getAsignacionSeleccionada().getIdTar()));
+
+					System.out.println("consultarMovimientosModel.getTipoBusqueda():::"
+							+ consultarMovimientosModel.getTipoBusqueda());
+
+					dato = fwmcProcesos.consultaMovimientoPorExpediente(
+							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getNumeroCuenta(),
+							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getTipoMoneda(),
+							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getFechaTerminoLinea());
+
+					tipTarj = consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getTipoTarjeta();
+
+				}
+
+				if (dato.getCodRespuesta().equals("0000")) {
+
+					String tipoTarjeta = TipoTarjeta.descripcionTipotarjeta(tipTarj);
+					System.out.println("tipoTarjeta:" + tipoTarjeta);
+
+					listDato = fwmcProcesos.listaMovTarjExp(dato, tipoTarjeta);
+
+					if (listDato.size() == 0) {
+						consultarMovimientosModel.inicializarGrilla();
+
+						UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_WARN,
+								ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_MOVIMIENTO_TIPO_TARJETA,
+								ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_MOVIMIENTO_TIPO_TARJETA);
+						UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+
+					} else {
+						consultarMovimientosModel.setMovimientosTarjetaExp(listDato);
+
+						UsefulWebApplication.actualizarComponente("msgs");
+						UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+						UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:listaTarjetasPanel");
+						UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgBusqueda");
+					}
+
+				} else {
+					consultarMovimientosModel.setBusquedaRealizada(false);
+					consultarMovimientosModel.inicializarFormulario();
+					UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR, dato.getDescRespuesta(),
+							ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+					UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:listaTarjetasPanel");
+					UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+
+				}
+
+			} catch (InternalExcepcion e) {
+				e.printStackTrace();
+			}
+
+		} catch (ServiceException se) {
+			logger.error(se.getMessage());
+			consultarMovimientosModel.inicializarGrilla();
+			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR, "", se.getMessage());
+			UsefulWebApplication.actualizarComponente("msgs");
+			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
+		}
+	}
 }

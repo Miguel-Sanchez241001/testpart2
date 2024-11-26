@@ -28,7 +28,10 @@ public class Fecha {
 		DateFormat fechaFormato = new SimpleDateFormat("dd.MM.yy");
 		return fechaFormato.format(fecha);
 	}
-
+	public static String formatearFechaWS(Date fecha) {
+		DateFormat fechaFormato = new SimpleDateFormat("ddMMyyyy");
+		return fechaFormato.format(fecha);
+	}
 	/**
 	 * Metodo que sirve para obtener la fecha en el formato "dd/MM/yy".
 	 * 

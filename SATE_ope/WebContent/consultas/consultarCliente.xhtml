@@ -28,17 +28,16 @@
 								style="width:162px;vertical-align:middle;margin-left:20px;"
 								value="#{consultarClienteController.consultarClienteModel.tipoBusqueda}"
 								required="true" requiredMessage="Seleccione tipo de documento">
-								<p:ajax event="change" update="formConsultarCliente:numDocumento" />
+								<p:ajax event="change" update="formConsultarCliente:numDocu" />
 								<f:selectItems
 									value="#{consultarClienteController.consultarClienteModel.listaTipoBusqueda}"
 									var="item" itemLabel="#{item.descripcion}"
 									itemValue="#{item.id}" />
 							</p:selectOneMenu>
-							<p:inputText style="margin-left:20px;" id="numDocumento"
+							<p:inputText style="margin-left:20px;" id="numDocu"
 								required="true"
 								onkeypress="javascript:return jsValidarKey(event,/[0-9]/);"
-								value="#{consultarClienteController.consultarClienteModel.numDocumento}"
-								process="@this pgResultado"
+								value="#{consultarClienteController.consultarClienteModel.numDocumento}"								
 								maxlength="#{consultarClienteController.consultarClienteModel.obtenerBusquedaLength()}"
 								requiredMessage="#{consultarClienteController.consultarClienteModel.obtenerBusquedaRequiredMessage()}"
 								validatorMessage="#{consultarClienteController.consultarClienteModel.obtenerBusquedaValidatorMessage()}">
@@ -48,7 +47,8 @@
 							
 							<p:commandButton id="buscarCliente" value="Buscar"
 							styleClass="btnGrande"
-							process="@this somTipoBusqueda,numDocumento,pgResultado"
+							process="@this somTipoBusqueda,numDocu,pgResultado"
+						
 							actionListener="#{consultarClienteController.consultarCliente()}"
 							onstart="PF('statusDialog').show()"
 							oncomplete="PF('statusDialog').hide()"

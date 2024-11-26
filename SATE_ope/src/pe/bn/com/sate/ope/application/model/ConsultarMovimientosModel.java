@@ -149,6 +149,7 @@ public class ConsultarMovimientosModel {
 	}
 
 	public List<TipoBusqueda> getListaTipoBusqueda() {
+		//numeroTarjeta = null;
 		return listaTipoBusqueda;
 	}
 
@@ -202,6 +203,13 @@ public class ConsultarMovimientosModel {
 		busquedaRealizada = false;
 		numeroTarjeta = null;
 		tipoBusqueda = null;	
+		movimientosTarjetaExp = null;
+		
+	}
+	
+	public void inicializarGrilla() {
+		datosTarjetaCliente = new DatosTarjetaCliente();
+		busquedaRealizada = false;		
 		movimientosTarjetaExp = null;
 		
 	}

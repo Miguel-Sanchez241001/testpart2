@@ -1,5 +1,7 @@
 package pe.bn.com.sate.ope.infrastructure.service.internal;
 
+import org.apache.ibatis.annotations.Param;
+
 import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 
 
@@ -13,4 +15,8 @@ public interface ClienteService {
 
 	public Cliente buscarClientePorId( Long  idCliente);
 	
+	public long consultarExisteClienteRUC(String tipoDocumento,String numDocumento,String ruc);
+	
+	
+
 }

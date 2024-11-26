@@ -17,266 +17,247 @@
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 					<h:panelGrid style="width:80%;text-align:center;">
-						<p:panelGrid id="pgBusqueda" columns="4" style="margin:0 auto 10px;">
+						<p:panelGrid id="pgBusqueda" columns="4"
+							style="margin:0 auto 10px;">
 
-							
-							
-							
-							<h:outputText value="Consultar por"  style="margin-left:20px;" />
+
+
+
+							<h:outputText value="Consultar por" style="margin-left:20px;" />
 							<p:selectOneMenu id="somTipoBusquedaPor"
 								style="width:162px;vertical-align:middle;margin-left:20px;"
 								value="#{consultarMovimientosController.consultarMovimientosModel.tipoBusquedaPor}"
 								required="true" requiredMessage="Seleccione tipo de busqueda">
-								<p:ajax event="change" update="formMovimientoTarjeta:somTipoBusqueda, formMovimientoTarjeta:numDocumento"
+								<p:ajax event="change"
+									update="formMovimientoTarjeta:somTipoBusqueda, formMovimientoTarjeta:numDocumento, formMovimientoTarjeta:pgResultadoFin"
 									listener="#{consultarMovimientosController.buscarTipoBusqueda()}" />
 								<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 								<f:selectItems
 									value="#{consultarMovimientosController.consultarMovimientosModel.listaTipoBusquedaPor}"
-									var="item" itemLabel="#{item}"
-									itemValue="#{item}" />
-								</p:selectOneMenu>
-							
-							
-							
-							
-							
-							<h:outputText value="Seleccionar"  style="margin-left:20px;" />							
+									var="item" itemLabel="#{item}" itemValue="#{item}" />
+							</p:selectOneMenu>
+
+
+
+
+
+							<h:outputText value="Seleccionar" style="margin-left:20px;" />
 							<p:selectOneMenu id="somTipoBusqueda"
-								widgetVar="selectTipoBusqueda" 
+								widgetVar="selectTipoBusqueda"
 								style="width:162px;vertical-align:middle;margin-left:20px;"
 								value="#{consultarMovimientosController.consultarMovimientosModel.tipoBusqueda}"
 								required="true" requiredMessage="Seleccione tipo de documento">
-								 <p:ajax event="change" update="formMovimientoTarjeta:numDocumento" /> 
-								 <f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
+								<p:ajax event="change"
+									update="formMovimientoTarjeta:numDocumento" />
+								<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 								<f:selectItems
 									value="#{consultarMovimientosController.consultarMovimientosModel.listaTipoBusqueda}"
 									var="item" itemLabel="#{item.descripcion}"
 									itemValue="#{item.id}" />
-							</p:selectOneMenu>  
-							
-							
-							
-							
-							<h:outputText value="Número"  style="margin-left:20px;" />
-							
-							<p:inputText style="margin-left:20px;" id="numDocumento" required="true"
+							</p:selectOneMenu>
+
+
+
+
+							<h:outputText value="Número" style="margin-left:20px;" />
+
+							<p:inputText style="margin-left:20px;" id="numDocumento"
+								required="true"
 								value="#{consultarMovimientosController.consultarMovimientosModel.numeroTarjeta}"
 								maxlength="#{consultarMovimientosController.consultarMovimientosModel.obtenerBusquedaLength()}"
 								onkeypress="javascript:return jsValidarKey(event,/[0-9]/);"
 								requiredMessage="#{consultarMovimientosController.consultarMovimientosModel.obtenerBusquedaRequiredMessage()}"
 								validatorMessage="#{consultarMovimientosController.consultarMovimientosModel.obtenerBusquedaValidatorMessage()}">
-							
-							<f:validateLength
-									minimum="#{consultarMovimientosController.consultarMovimientosModel.obtenerBusquedaLength()}" />	
-								
+
+								<f:validateLength
+									minimum="#{consultarMovimientosController.consultarMovimientosModel.obtenerBusquedaLength()}" />
+
 							</p:inputText>
 						</p:panelGrid>
 
 						<p:commandButton id="buscarMovimientos" value="Buscar"
-							styleClass="btnGrande"
-							style="margin-left:20px;"
+							styleClass="btnGrande" style="margin-left:20px;"
 							actionListener="#{consultarMovimientosController.buscarAsignaciones()}"
-							process="@form"
-							onstart="PF('statusDialog').show()"
+							process="@form" onstart="PF('statusDialog').show()"
 							oncomplete="PF('statusDialog').hide()"
-							update="formMovimientoTarjeta:pgResultadoFin" />							
-						
+							update="formMovimientoTarjeta:pgResultadoFin" />
+
 						<p:messages id="msgs" autoUpdate="true" showDetail="true"
 							showSummary="false" closable="true" />
 
 						<div class="dashed"></div>
-						
-						<h:panelGrid id="pgResultadoFin" style="width:100%;text-align:center;"
-						columns="1">
-						
-						<p:panel id="listaTarjetasPanel"
-								rendered="#{consultarMovimientosController.consultarMovimientosModel.busquedaRealizada}"
-							
-								>
-								
-											
-							<p:panelGrid id="pgExporter" columns="2"
-	                        	style="float:right;margin-right:2px;">
-								<h:commandLink>
-									<img
-	                                src="#{request.contextPath}/resources/img/plantillaBN/iconos/xls.gif" />
-									<p:dataExporter type="xls" target="dtSolicitudes"
-	                                fileName="Movimientos por tarjeta" />
-								</h:commandLink>
-							</p:panelGrid>
-	
-							<h:panelGrid id="pgResultado" style="width:100%;">
-								<p:dataTable var="movimiento" id="dtSolicitudes"
-									
-									value="#{consultarMovimientosController.consultarMovimientosModel.movimientosTarjetaExp}"
-									rowKey="#{movimiento.id}"
-									style="table-layout: fixed;margin-top:10px;width:100%;"
-									rowIndexVar="index">
-																
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Nro." />
-										</f:facet>
-										<h:outputText value="#{movimiento.id}" />
-									</p:column>	
-																	
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Fecha de la Transacción" />
-										</f:facet>
-										<h:outputText value="#{movimiento.fechaTxn}">
-											<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
-										</h:outputText>
-									</p:column>	
-									
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Descripción de Transacción" />
-										</f:facet>
-										<h:outputText value="#{movimiento.descripcionTxn}" />
-									</p:column>
-															
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Moneda" />
-										</f:facet>
-										<h:outputText
-											value="#{consultarMovimientosController.consultarMovimientosModel.tipoMonedaLetras(movimiento.monOriginalTxn)}" />
-									</p:column>
-									
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Monto" />
-										</f:facet>
-										<h:outputText value="#{movimiento.montoTxn}" />
-									</p:column>
-									
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Tipo de Monto" />
-										</f:facet>
-										<h:outputText
-											value="#{consultarMovimientosController.consultarMovimientosModel.tipoMontoLetras(movimiento.sigMontoTxn)}" />
-									</p:column>
-																	
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Operación del Movimiento" />
-										</f:facet>
-										<h:outputText
-											value="#{consultarMovimientosController.consultarMovimientosModel.operacionMovLetras(movimiento.operacionTxn)}" />
-									</p:column>
-									
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Código Autorización" />
-										</f:facet>
-										<h:outputText value="#{movimiento.codAutTxn}" />
-									</p:column>
-									
-									
-									
-									
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="4 Últimos Números de la Tarjeta" />
-										</f:facet>
-										<h:outputText value="#{movimiento.numTarjetaTxn}" />
-									</p:column>
-									
-									<p:column>
-										<f:facet name="header">
-											<h:outputText value="Tipo de Tarjeta" />
-										</f:facet>
-										<h:outputText value="#{movimiento.tipoTarjeta}" />
-									</p:column>			
-									
-									
-									
-								</p:dataTable>
-							</h:panelGrid>
-						
-						
-						</p:panel>
+
+						<h:panelGrid id="pgResultadoFin"
+							style="width:100%;text-align:center;" columns="1">
+
+							<p:panel id="listaTarjetasPanel"
+								rendered="#{consultarMovimientosController.consultarMovimientosModel.busquedaRealizada}">
+
+
+								<p:panelGrid id="pgExporter" columns="1"
+									style="float:right; margin-right:2px;">
+									<p:commandButton value="Descargar"
+										icon="ui-icon-arrowthick-1-s"
+										ajax="false">
+										<p:dataExporter type="xls" target="dtSolicitudes"
+											fileName="Movimientos_por_tarjeta" />
+									</p:commandButton>
+								</p:panelGrid>
+
+
+								<h:panelGrid id="pgResultado" style="width:100%;">
+									<p:dataTable var="movimiento" id="dtSolicitudes"
+										value="#{consultarMovimientosController.consultarMovimientosModel.movimientosTarjetaExp}"
+										rowKey="#{movimiento.id}" rows="10" paginator="true"
+										paginatorPosition="bottom" rowsPerPageTemplate="5,10,15"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										style="table-layout: fixed;margin-top:10px;width:100%;"
+										rowIndexVar="index">
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Nro." />
+											</f:facet>
+											<h:outputText value="#{movimiento.id}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Fecha de la Transacción" />
+											</f:facet>
+											<h:outputText value="#{movimiento.fechaTxn}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Descripción de Transacción" />
+											</f:facet>
+											<h:outputText value="#{movimiento.descripcionTxn}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Moneda" />
+											</f:facet>
+											<h:outputText
+												value="#{consultarMovimientosController.consultarMovimientosModel.tipoMonedaLetras(movimiento.monOriginalTxn)}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Monto" />
+											</f:facet>
+											<h:outputText value="#{movimiento.montoTxn}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Tipo de Monto" />
+											</f:facet>
+											<h:outputText
+												value="#{consultarMovimientosController.consultarMovimientosModel.tipoMontoLetras(movimiento.sigMontoTxn)}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Operación del Movimiento" />
+											</f:facet>
+											<h:outputText
+												value="#{consultarMovimientosController.consultarMovimientosModel.operacionMovLetras(movimiento.operacionTxn)}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Código Autorización" />
+											</f:facet>
+											<h:outputText value="#{movimiento.codAutTxn}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="4 Últimos Números de la Tarjeta" />
+											</f:facet>
+											<h:outputText value="#{movimiento.numTarjetaTxn}" />
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Tipo de Tarjeta" />
+											</f:facet>
+											<h:outputText value="#{movimiento.tipoTarjeta}" />
+										</p:column>
+									</p:dataTable>
+								</h:panelGrid>
+							</p:panel>
 						</h:panelGrid>
-
 					</h:panelGrid>
-
 				</p:panel>
 			</center>
 		</h:form>
 
 
-	<p:dialog id="dgSeleccionarAsignacion" modal="true" closable="true"
+		<p:dialog id="dgSeleccionarAsignacion" modal="true" closable="true"
 			appendTo="@(body)" resizable="false" closeOnEscape="false"
 			draggable="false" position="center" showEffect="clip"
 			header="Seleccionar Asignación" widgetVar="wvSeleccionarAsignacion">
-		<h:form id="formSeleccionarAsignacion">
-			
-			<p:panelGrid id="panel-seleccionarAsignacion" columns="1"
+			<h:form id="formSeleccionarAsignacion">
+
+				<p:panelGrid id="panel-seleccionarAsignacion" columns="1"
 					style="widht:100%">
-				<h:outputText value="Lista de Asignación" />
- 
+					<h:outputText value="Lista de Asignación" />
+
 					<p:dataTable id="tablaAsignacions"
 						selection="#{consultarMovimientosController.consultarMovimientosModel.asignacionSeleccionada}"
 						value="#{consultarMovimientosController.consultarMovimientosModel.asignacionesTotal}"
 						selectionMode="single" var="asignacion"
 						rowKey="#{asignacion.idAsi}" emptyMessage="No hay Asignación"
 						style="width:100%;table-layout: fixed;" rowIndexVar="index">
- 
+
 						<p:ajax event="rowSelect"
 							listener="#{consultarMovimientosController.seleccionarAsignacion}"
 							update=":formMovimientoTarjeta"
-							onstart="PF('statusDialog').show()"							
-							oncomplete="PF('wvSeleccionarAsignacion').hide()" 
-							onsuccess="PF('statusDialog').hide()"
-							/>
- 
+							onstart="PF('statusDialog').show()"
+							oncomplete="PF('wvSeleccionarAsignacion').hide()"
+							onsuccess="PF('statusDialog').hide()" />
+
 						<!-- Nro. -->
 						<p:column headerText="Nro."
-													style="width:5%;text-align:center; vertical-align: middle;">
-						<h:outputText value="#{index + 1}" />
+							style="width:5%;text-align:center; vertical-align: middle;">
+							<h:outputText value="#{index + 1}" />
 						</p:column>
- 
+
 						<!-- Número de Asignación -->
 						<p:column headerText="Número de Asignación"
-													style="width:15%;text-align:left; vertical-align: middle;">
-						<h:outputText value="#{asignacion.codigoAsignacion}" />
+							style="width:15%;text-align:left; vertical-align: middle;">
+							<h:outputText value="#{asignacion.codigoAsignacion}" />
 						</p:column>
-						 
-												<!-- Fecha de Inicio -->
+
+						<!-- Fecha de Inicio -->
 						<p:column headerText="Fecha de Inicio Línea"
-													style="width:10%;text-align:left; vertical-align: middle;">
-						<h:outputText value="#{asignacion.fechaInicioLinea}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputText>
+							style="width:10%;text-align:left; vertical-align: middle;">
+							<h:outputText value="#{asignacion.fechaInicioLinea}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
 						</p:column>
- 
+
 						<!-- Fecha de Fin -->
 						<p:column headerText="Fecha de Fin Línea"
-													style="width:10%;text-align:left; vertical-align: middle;">
-						<h:outputText value="#{asignacion.fechaFinLinea}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputText>
+							style="width:10%;text-align:left; vertical-align: middle;">
+							<h:outputText value="#{asignacion.fechaFinLinea}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
 						</p:column>
-  
+
 						<!-- Estado -->
 						<p:column headerText="Estado"
-													style="width:10%;text-align:left; vertical-align: middle;">
-						<h:outputText value="#{asignacion.estado}" />
+							style="width:10%;text-align:left; vertical-align: middle;">
+							<h:outputText value="#{asignacion.estado}" />
 						</p:column>
- 
- 
+
+
 					</p:dataTable>
- 
+
 				</p:panelGrid>
-				
-				
+
+
 				<script type="text/javascript">
 					var tipDoc;
 
 					function validarNumDocumento(e) {
-					debugger;
+						debugger;
 						var tecla = e.keyCode;
 						if (tecla == 8 || tecla == 9 || tecla == 13) {
 							return true;
@@ -313,20 +294,15 @@
 					}
 
 					function onCall() {
-						tipDoc = PF("selectTipoBusqueda").getSelectedValue();						
+						tipDoc = PF("selectTipoBusqueda").getSelectedValue();
 						console.log("tipoDocumento:" + tipDoc);
 					}
-					
-					
-					
 				</script>
-				
-				
-				
+
+
+
 			</h:form>
 		</p:dialog>
- 
-
 
 
 

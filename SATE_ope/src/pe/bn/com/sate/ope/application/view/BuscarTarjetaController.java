@@ -17,6 +17,7 @@ import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceMCProcesosExce
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.facade.BuscarTarjetaFacade;
+import pe.bn.com.sate.ope.infrastructure.facade.FWMCProcesos;
 import pe.bn.com.sate.ope.infrastructure.facade.ReporteResumenFacade;
 import pe.bn.com.sate.ope.infrastructure.service.external.AgenciaService;
 import pe.bn.com.sate.ope.infrastructure.service.external.UbigeoService;
@@ -27,6 +28,7 @@ import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.tablas.Ubigeo;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
@@ -66,6 +68,9 @@ public class BuscarTarjetaController implements Serializable {
 	@Autowired
 	private ReporteResumenFacade reporteResumenFacade;
 
+	private @Autowired
+	FWMCProcesos fwmcProcesos;
+	
 	@PostConstruct
 	public void init() {
 		buscarTarjetaModel = new BuscarTarjetaModel();
@@ -168,23 +173,14 @@ public class BuscarTarjetaController implements Serializable {
 				
 				String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(buscarTarjetaModel.getNumDocumento(), 19);
 				
-				buscarTarjetaModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
-								buscarTarjetaModel.getTipoBusqueda(),
-								tarjeta19, "B"));
-				/*
-				try {
-					buscarTarjetaFacade.actualizarSaldoTarjeta(	
-					buscarTarjetaModel.getNumDocumento(),
-					buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getNumeroCuenta(),
-					buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getTipoMoneda(),
-					buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getFechaTerminoLinea()
-							);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}tipoTarjeta	"530927" (id=24990)	
-
-				*/
+//				buscarTarjetaModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
+//								buscarTarjetaModel.getTipoBusqueda(),
+//								tarjeta19, "B"));
+				
+				buscarTarjetaModel.getDatosTarjetaCliente().setCliente(clienteService.buscarClientePorId(buscarTarjetaModel.getAsignacionSeleccionada().getIdCliente()));
+				buscarTarjetaModel.getDatosTarjetaCliente().setTarjeta(tarjetaService.buscarTarjetaId(buscarTarjetaModel.getAsignacionSeleccionada().getIdTar()));
+				
+				
 				Tarjeta tarjetaMC = new Tarjeta();
 				try {
 					tarjetaMC = buscarTarjetaFacade.obtenerDatosCredito(
@@ -229,8 +225,37 @@ public class BuscarTarjetaController implements Serializable {
 								buscarTarjetaModel.getDatosTarjetaCliente().getCliente().getApMaterno()
 								);
 						
+						String motivoBlo ="";
+						DTOConsultaDatosTarjeta dato = new DTOConsultaDatosTarjeta();
 						
-						
+						try {
+							
+							dato = fwmcProcesos.informacionDeTarjeta(StringsUtils.quitarCeroIzquierdaString(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta()), 
+									buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getTipoMoneda(), 
+									buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getFechaVencimientoTar());
+							
+							motivoBlo=buscarTarjetaModel.descripcionMotivoBloqueoWS(dato.getCodBloqueo().trim());
+							buscarTarjetaModel.setEstadoBloqueoWS(dato.getCodBloqueo()+" - "+motivoBlo);
+
+							} catch (ExternalServiceMCProcesosException este) {		
+								UsefulWebApplication.ocultarDialogo("statusDialog");
+								UsefulWebApplication
+								.mostrarMensajeJSF(
+										ConstantesGenerales.SEVERITY_ERROR,
+										ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
+										ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+								logger.error(este.getMessage());
+								UsefulWebApplication.actualizarComponente("formBuscarTarjeta:pgResultado");
+							} catch (InternalExcepcion e) {						
+									// TODO Auto-generated catch block
+								UsefulWebApplication.ocultarDialogo("statusDialog");
+									UsefulWebApplication.mostrarMensajeJSF(
+											ConstantesGenerales.SEVERITY_ERROR,
+											ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
+											ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
+									logger.error(e.getMessage());
+									UsefulWebApplication.actualizarComponente("formBuscarTarjeta:pgResultado");
+							}
 						
 						buscarTarjetaModel.setTipoOperacionActualizar(
 								TipoEstadoTarjeta.esEstadoTarjetaParaActualizarDatosContacto(buscarTarjetaModel
@@ -314,7 +339,7 @@ public class BuscarTarjetaController implements Serializable {
 						UsefulWebApplication.ocultarDialogo("statusDialog");
 						
 						UsefulWebApplication
-								.actualizarComponente("formEmpresa:pgResultado");
+								.actualizarComponente("formBuscarTarjeta:pgResultado");
 					} else {
 						UsefulWebApplication.mostrarMensajeJSF(3, "",
 								"La tarjeta tiene el estado : "
@@ -336,17 +361,23 @@ public class BuscarTarjetaController implements Serializable {
 					buscarTarjetaModel.setBusquedaRealizada(false);
 
 					UsefulWebApplication
-							.actualizarComponente("formEmpresa:pgResultado");
+							.actualizarComponente("formBuscarTarjeta:pgResultado");
 				}
 
 			} else if (buscarTarjetaModel.getTipoBusqueda().equals(
 					TipoBusqueda.DNI.getId())
 					|| buscarTarjetaModel.getTipoBusqueda().equals(
 							TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
-				buscarTarjetaModel.setDatosTarjetaCliente(tarjetaService
-						.buscarDatosTarjetasCliente(
-								buscarTarjetaModel.getTipoBusqueda(),
-								buscarTarjetaModel.getNumDocumento(), "B"));
+				
+				
+//				buscarTarjetaModel.setDatosTarjetaCliente(tarjetaService
+//						.buscarDatosTarjetasCliente(
+//								buscarTarjetaModel.getTipoBusqueda(),
+//								buscarTarjetaModel.getNumDocumento(), "B"));
+				
+				buscarTarjetaModel.getDatosTarjetaCliente().setCliente(clienteService.buscarClientePorId(buscarTarjetaModel.getAsignacionSeleccionada().getIdCliente()));
+				buscarTarjetaModel.getDatosTarjetaCliente().setTarjeta(tarjetaService.buscarTarjetaId(buscarTarjetaModel.getAsignacionSeleccionada().getIdTar()));
+				
 
 				buscarTarjetaModel.setBusquedaRealizada(false);
 
@@ -360,7 +391,7 @@ public class BuscarTarjetaController implements Serializable {
 				} else {
 					
 					//seleccionarTarjeta();
-					buscarTarjetaModel.getDatosTarjetaCliente().setTarjeta(buscarTarjetaModel.getDatosTarjetaCliente().getTarjetas().get(0));
+					//buscarTarjetaModel.getDatosTarjetaCliente().setTarjeta(buscarTarjetaModel.getDatosTarjetaCliente().getTarjetas().get(0));
 					Tarjeta tarjetaMC = new Tarjeta();
 					try {
 						tarjetaMC = buscarTarjetaFacade.obtenerDatosCredito(						
@@ -399,6 +430,51 @@ public class BuscarTarjetaController implements Serializable {
 							buscarTarjetaModel.setTipoOperacionCancelar(TipoEstadoTarjeta
 											.esEstadoTarjetaCancelarTarjeta(buscarTarjetaModel
 													.getDatosTarjetaCliente().getTarjeta().getEstado()));
+							
+							
+							String motivoBlo ="";
+							
+//							if(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getMotivoBloqueo()!=null){
+//								motivoBlo=buscarTarjetaModel.descripcionMotivoBloqueoWS(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getMotivoBloqueo());
+//								buscarTarjetaModel.setEstadoBloqueoWS(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getMotivoBloqueo()+" - "+motivoBlo);
+//							}else if(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta() != null){
+//								motivoBlo=buscarTarjetaModel.descripcionMotivoBloqueoWS(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta());
+//								buscarTarjetaModel.setEstadoBloqueoWS(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta()+" - "+motivoBlo);
+//							}else{
+//								buscarTarjetaModel.setEstadoBloqueoWS("");
+//							}
+							
+							DTOConsultaDatosTarjeta dato = new DTOConsultaDatosTarjeta();
+							
+							try {
+								
+								dato = fwmcProcesos.informacionDeTarjeta(StringsUtils.quitarCeroIzquierdaString(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta()), 
+										buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getTipoMoneda(), 
+										buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getFechaVencimientoTar());
+								
+								motivoBlo=buscarTarjetaModel.descripcionMotivoBloqueoWS(dato.getCodBloqueo().trim());
+								buscarTarjetaModel.setEstadoBloqueoWS(dato.getCodBloqueo()+" - "+motivoBlo);
+
+								} catch (ExternalServiceMCProcesosException este) {		
+									UsefulWebApplication.ocultarDialogo("statusDialog");
+									UsefulWebApplication
+									.mostrarMensajeJSF(
+											ConstantesGenerales.SEVERITY_ERROR,
+											ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
+											ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+									logger.error(este.getMessage());
+									UsefulWebApplication.actualizarComponente("formBuscarTarjeta:pgResultado");
+								} catch (InternalExcepcion e) {						
+										// TODO Auto-generated catch block
+									UsefulWebApplication.ocultarDialogo("statusDialog");
+										UsefulWebApplication.mostrarMensajeJSF(
+												ConstantesGenerales.SEVERITY_ERROR,
+												ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
+												ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
+										logger.error(e.getMessage());
+										UsefulWebApplication.actualizarComponente("formBuscarTarjeta:pgResultado");
+								}
+							
 							
 							buscarTarjetaModel.getDatosTarjetaCliente().getCliente().setApCompleto(
 									buscarTarjetaModel.getDatosTarjetaCliente().getCliente().getApPaterno()+" "+
@@ -480,7 +556,7 @@ public class BuscarTarjetaController implements Serializable {
 							UsefulWebApplication.ocultarDialogo("statusDialog");
 							
 							UsefulWebApplication
-									.actualizarComponente("formEmpresa:pgResultado");
+									.actualizarComponente("formBuscarTarjeta:pgResultado");
 						} else {
 							UsefulWebApplication.mostrarMensajeJSF(3, "",
 									"La tarjeta tiene el estado : "
@@ -502,7 +578,7 @@ public class BuscarTarjetaController implements Serializable {
 						buscarTarjetaModel.setBusquedaRealizada(false);
 
 						UsefulWebApplication
-								.actualizarComponente("formEmpresa:pgResultado");
+								.actualizarComponente("formBuscarTarjeta:pgResultado");
 					}
 				}
 			}
@@ -554,7 +630,7 @@ public class BuscarTarjetaController implements Serializable {
 			buscarTarjetaModel.inicializarFormulario();
 			UsefulWebApplication.actualizarComponente("msgs");
 			UsefulWebApplication
-					.actualizarComponente("formEmpresa:pgResultado");
+					.actualizarComponente("formBuscarTarjeta:pgResultado");
 		} catch (InternalServiceException ise) {
 			UsefulWebApplication.mostrarMensajeJSF(
 					ConstantesGenerales.SEVERITY_ERROR,
@@ -575,7 +651,7 @@ public class BuscarTarjetaController implements Serializable {
 			buscarTarjetaModel.inicializarFormulario();
 			UsefulWebApplication.actualizarComponente("msgs");
 			UsefulWebApplication
-					.actualizarComponente("formEmpresa:pgResultado");
+					.actualizarComponente("formBuscarTarjeta:pgResultado");
 		} catch (InternalServiceException ise) {
 			UsefulWebApplication.mostrarMensajeJSF(
 					ConstantesGenerales.SEVERITY_ERROR,
@@ -600,7 +676,8 @@ public class BuscarTarjetaController implements Serializable {
 			if (buscarTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
 				
 				String diseño = buscarTarjetaModel.getTipoTarjetaNegocioSeleccionada().getDiseno();
-				String tipoTar = buscarTarjetaModel.getTipoTarjetaNegocioSeleccionada().getCodigo();				
+				String tipoTar = buscarTarjetaModel.getTipoTarjetaNegocioSeleccionada().getCodigo();
+				String rucUsuario = UsefulWebApplication.obtenerUsuario().getRuc();				
 				
 				System.out.println("diseño de asignacion::"+ diseño);	
 				System.out.println("tipoTar de asignacion::"+ tipoTar);
@@ -608,53 +685,94 @@ public class BuscarTarjetaController implements Serializable {
 				//asignaciones = reporteResumenFacade.obtenerAsignacionesPorTarjeta(buscarTarjetaModel.getNumDocumento());
 
 				String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(buscarTarjetaModel.getNumDocumento(), 19);
-							
-				asignaciones = reporteResumenFacade.obtenerAsignacionesPorTarjeta(tarjeta19, diseño,tipoTar);
+				
+				long valor=0;
+				
+				valor = tarjetaService.consultarExisteTarjetaRUC(tarjeta19, rucUsuario);
+				
+				if(valor==0){
+										
+					UsefulWebApplication
+					.mostrarMensajeJSF(
+							ConstantesGenerales.SEVERITY_ERROR,
+							ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TAREMP_TIP_TARJETA,
+							ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TAREMP_TIP_TARJETA);
+					buscarTarjetaModel.setBusquedaRealizada(false);
+					UsefulWebApplication.actualizarComponente("formBuscarTarjeta:pgResultado");
+					
+				}else{
+					asignaciones = reporteResumenFacade.obtenerAsignacionesPorTarjeta(tarjeta19, diseño,tipoTar,rucUsuario);
 
-				if(asignaciones.isEmpty() && asignaciones.size()==0){
-					
-					buscarTarjetaModel.inicializarFormulario();	
-					
-					UsefulWebApplication.mostrarMensajeJSF(
-					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA);
-				}else{				
-					buscarTarjetaModel.setAsignacionesTotal(asignaciones);
-					// MOSTRAR MODAL COMPONENTE
-					UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
-					// formulario del componente
-					UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+					if(asignaciones.isEmpty() && asignaciones.size()==0){
+						
+						//buscarTarjetaModel.inicializarFormulario();	
+						
+						UsefulWebApplication.mostrarMensajeJSF(
+						ConstantesGenerales.SEVERITY_ERROR,
+						ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA,
+						ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA);
+						buscarTarjetaModel.setBusquedaRealizada(false);
+						UsefulWebApplication.actualizarComponente("formBuscarTarjeta:pgResultado");
+						
+					}else{				
+						buscarTarjetaModel.setAsignacionesTotal(asignaciones);
+						// MOSTRAR MODAL COMPONENTE
+						UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
+						// formulario del componente
+						UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+					}
 				}
 				
 			} else if (buscarTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.DNI.getId())
 					|| buscarTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
 				
 				String diseño = buscarTarjetaModel.getTipoTarjetaNegocioSeleccionada().getDiseno();
-				String tipoTar = buscarTarjetaModel.getTipoTarjetaNegocioSeleccionada().getCodigo();				
+				String tipoTar = buscarTarjetaModel.getTipoTarjetaNegocioSeleccionada().getCodigo();
+				String rucUsuario = UsefulWebApplication.obtenerUsuario().getRuc();		
 				
 				System.out.println("diseño de asignacion::"+ diseño);	
 				System.out.println("tipoTar de asignacion::"+ tipoTar);
 				
-				asignaciones = reporteResumenFacade.obtenerAsignacionesPorDocumento(
-						buscarTarjetaModel.getTipoBusqueda(), buscarTarjetaModel.getNumDocumento(), diseño, tipoTar);
-			
-				if(asignaciones.isEmpty() && asignaciones.size()==0){
+				long valor=0;
+				
+				valor = tarjetaService.consultarExisteTipNumDocRUC(buscarTarjetaModel.getTipoBusqueda(),
+						buscarTarjetaModel.getNumDocumento(), rucUsuario);
+				
+				if(valor==0){
+											
+					UsefulWebApplication
+					.mostrarMensajeJSF(
+							ConstantesGenerales.SEVERITY_ERROR,
+							ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TAREMP_NUM_DOCUMENTO,
+							ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TAREMP_NUM_DOCUMENTO);	
 					
-					buscarTarjetaModel.inicializarFormulario();				
-										
+					buscarTarjetaModel.setBusquedaRealizada(false);
+					UsefulWebApplication.actualizarComponente("formBuscarTarjeta:pgResultado");
 					
-					UsefulWebApplication.mostrarMensajeJSF(
-					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO,
-					ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO);
-				}else{				
-					buscarTarjetaModel.setAsignacionesTotal(asignaciones);
-					// MOSTRAR MODAL COMPONENTE
-					UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
-					// formulario del componente
-					UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
-				}
+				}else{
+					asignaciones = reporteResumenFacade.obtenerAsignacionesPorDocumento(
+							buscarTarjetaModel.getTipoBusqueda(), buscarTarjetaModel.getNumDocumento(), diseño, tipoTar, rucUsuario);
+				
+					if(asignaciones.isEmpty() && asignaciones.size()==0){
+						
+						buscarTarjetaModel.inicializarFormulario();				
+											
+						
+						UsefulWebApplication.mostrarMensajeJSF(
+						ConstantesGenerales.SEVERITY_ERROR,
+						ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO,
+						ConstantesGenerales.ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO);
+						buscarTarjetaModel.setBusquedaRealizada(false);
+						UsefulWebApplication.actualizarComponente("formBuscarTarjeta:pgResultado");
+						
+					}else{				
+						buscarTarjetaModel.setAsignacionesTotal(asignaciones);
+						// MOSTRAR MODAL COMPONENTE
+						UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
+						// formulario del componente
+						UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
+					}
+				}				
 			}
 			
 		} catch (InternalExcepcion se) {
@@ -682,9 +800,11 @@ public class BuscarTarjetaController implements Serializable {
     	
   	  if (buscarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim().equals(ConstantesGenerales.BIM_BLACK)) {
             buscarTarjetaModel.setListaTipoTarjetaNegocio(TipoTarjetaNegocio.buscarTipoTarjetaBLACK());
+            
         } else if (buscarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim().equals(ConstantesGenerales.BIM_CORPORATE)) {
             buscarTarjetaModel.setListaTipoTarjetaNegocio(
             		TipoTarjetaNegocio.buscarTipoTarjetaCORP());
+            
         
         } else {
             buscarTarjetaModel.setListaTipoTarjetaNegocio(null);
@@ -694,10 +814,13 @@ public class BuscarTarjetaController implements Serializable {
 	public void buscarTipoBusqueda() {
   	  if (buscarTarjetaModel.getTipoBusquedaPor().equals("Por Documento")) {
   		  buscarTarjetaModel.setListaTipoBusqueda(TipoBusqueda.obtenerTiposDocumento());
+  		  buscarTarjetaModel.setNumDocumento(null);
         } else if (buscarTarjetaModel.getTipoBusquedaPor().equals("Por Tarjeta")) {
       	  buscarTarjetaModel.setListaTipoBusqueda(TipoBusqueda.obtenerTiposNumeroTarjeta());
+      	  buscarTarjetaModel.setNumDocumento(null);
         } else {
       	  buscarTarjetaModel.setListaTipoBusqueda(null);
+      	  buscarTarjetaModel.setNumDocumento(null);
         }
   }
 	

@@ -9,7 +9,7 @@ public enum MotivosBloqueoWS {
 	MAL_REALCE("Q","Mal realce"),
 	ALERTA("T","Alerta"),
 	ROBO("X","Robo"),
-	TEMPORAL("K", "Bloqueo Temporal de Cuenta");
+	TEMPORAL("L", "Fallecido");
 	
 //	
 

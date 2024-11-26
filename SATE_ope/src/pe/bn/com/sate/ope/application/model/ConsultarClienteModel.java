@@ -47,6 +47,7 @@ public class ConsultarClienteModel {
 	}
 
 	public List<TipoBusquedaPN> getListaTipoBusqueda() {
+		numDocumento = null;
 		return listaTipoBusqueda;
 	}
 

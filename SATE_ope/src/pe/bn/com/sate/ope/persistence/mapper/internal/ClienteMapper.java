@@ -81,9 +81,22 @@ public interface ClienteMapper {
 	public Cliente buscarClientePorId(@Param("idCliente")Long  idCliente);
 	
 	
+    @Select("select count(*) " +
+    		"from BN_SATE.BNSATE05_TARJETA tar " +
+    		"join BN_SATE.BNSATE00_EMPRESA empre on " +
+    		"tar.B00_ID_EMP = empre.B00_ID_EMP " +
+    		"join BN_SATE.BNSATE06_CLIENTE cliente " +
+    		"on cliente.B06_ID_CLI = tar.B06_ID_CLI " +
+    		"where empre.B00_NUM_RUC = #{ruc} " +
+    		"and cliente.B06_TIPO_DOCUMENTO = #{tipoDocumento} " +
+    		"and cliente.B06_NUM_DOCUMENTO = #{numDocumento} " +
+    		"and tar.B05_NUM_TARJETA is not null")	
+    public long consultarExisteClienteRUC(
+    		@Param("tipoDocumento")String tipoDocumento,
+    		@Param("numDocumento")String numDocumento,
+    		@Param("ruc")String ruc
+    		);
 	
-	
-	
-	
+    
 	
 }

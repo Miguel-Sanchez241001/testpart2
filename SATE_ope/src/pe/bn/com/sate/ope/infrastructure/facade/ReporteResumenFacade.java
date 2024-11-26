@@ -63,20 +63,20 @@ public class ReporteResumenFacade {
 	}
 
 	
-	public List<Asignacion> obtenerAsignacionesPorTarjeta(String numTarjeta, String diseno, String tipoTar )
+	public List<Asignacion> obtenerAsignacionesPorTarjeta(String numTarjeta, String diseno, String tipoTar , String rucUsuario)
 			throws InternalExcepcion {
 		try {
-			return asignacionMapper.obtenerAsignacionesPorTarjeta(numTarjeta, diseno, tipoTar);
+			return asignacionMapper.obtenerAsignacionesPorTarjeta(numTarjeta, diseno, tipoTar,  rucUsuario);
 		} catch (Exception ex) {
 			throw new InternalExcepcion(ex.getMessage(), ex);
 		}
 		
 	}
 
-	public List<Asignacion> obtenerAsignacionesPorDocumento(String tipoDocumento, String numDocumento, String diseno, String tipoTar)
+	public List<Asignacion> obtenerAsignacionesPorDocumento(String tipoDocumento, String numDocumento, String diseno, String tipoTar, String rucUsuario)
 			throws InternalExcepcion {
 		try {
-			return asignacionMapper.obtenerAsignacionesPorDocumento(tipoDocumento, numDocumento, diseno, tipoTar);
+			return asignacionMapper.obtenerAsignacionesPorDocumento(tipoDocumento, numDocumento, diseno, tipoTar,  rucUsuario);
 		} catch (Exception ex) {
 			throw new InternalExcepcion(ex.getMessage(), ex);
 		}
@@ -85,20 +85,20 @@ public class ReporteResumenFacade {
 	
 	/*************/
 	
-	public List<Asignacion> obtenerAsignacionesPorTarjetaSimple(String numTarjeta)
+	public List<Asignacion> obtenerAsignacionesPorTarjetaSimple(String numTarjeta, String rucUsuario)
 			throws InternalExcepcion {
 		try {
-			return asignacionMapper.obtenerAsignacionesPorTarjetaSimple(numTarjeta);
+			return asignacionMapper.obtenerAsignacionesPorTarjetaSimple(numTarjeta, rucUsuario);
 		} catch (Exception ex) {
 			throw new InternalExcepcion(ex.getMessage(), ex);
 		}
 		
 	}
 
-	public List<Asignacion> obtenerAsignacionesPorDocumentoSimple(String tipoDocumento, String numDocumento)
+	public List<Asignacion> obtenerAsignacionesPorDocumentoSimple(String tipoDocumento, String numDocumento, String rucUsuario)
 			throws InternalExcepcion {
 		try {
-			return asignacionMapper.obtenerAsignacionesPorDocumentoSimple(tipoDocumento, numDocumento);
+			return asignacionMapper.obtenerAsignacionesPorDocumentoSimple(tipoDocumento, numDocumento, rucUsuario);
 		} catch (Exception ex) {
 			throw new InternalExcepcion(ex.getMessage(), ex);
 		}

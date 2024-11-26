@@ -94,56 +94,76 @@ public class ConsultarClienteController implements Serializable {
 		
 		DTOConsultaDatosCliente datosCliente = new  DTOConsultaDatosCliente();
 		
-		try {
+		long valor=0;
+		String rucUsuario = UsefulWebApplication.obtenerUsuario().getRuc();
+		
+		valor=clienteService.consultarExisteClienteRUC(consultarClienteModel.getTipoBusqueda(), consultarClienteModel.getNumDocumento(), rucUsuario);
+		
+		if(valor==0){
 			
-			datosCliente = fwmcProcesos.consultaDatosCliente(consultarClienteModel.getTipoBusqueda(), consultarClienteModel.getNumDocumento());
-			if (datosCliente.getCodRespuesta().equals("0000")) { 
-				consultarClienteModel.setBusquedaRealizada(true);
-				consultarClienteModel.getDatosTarjetaCliente().getCliente().setTipoDocumento(datosCliente.getTipoDocumento().trim());
-				
-				if(datosCliente.getTipoDocumento().trim().equals(ConstantesGenerales.CODIGO_DNI)){
-					consultarClienteModel.getDatosTarjetaCliente().getCliente().setNroDocumento(StringsUtils.formateo_DNI(datosCliente.getNumDocumento()));
-				}else{
-					consultarClienteModel.getDatosTarjetaCliente().getCliente().setNroDocumento(datosCliente.getNumDocumento());
-				}							
-				
-				consultarClienteModel.getDatosTarjetaCliente().getCliente().setNombres(datosCliente.getNomCliente());
-				consultarClienteModel.getDatosTarjetaCliente().getCliente().setApCompleto(datosCliente.getApeCliente());
-				consultarClienteModel.getDatosTarjetaCliente().getTarjeta().setEmail(datosCliente.getCorreoCliente().trim());
-							
-				consultarClienteModel.getDatosTarjetaCliente().getCliente().setTelefonoCasa(StringsUtils.quitarCeroIzquierdaString(datosCliente.getTelCliente().trim()));
-			}else{
-				System.out.println("else");
-				System.out.println("descrip:"+datosCliente.getDescRespuesta().replace(".", ","));
-				consultarClienteModel.setBusquedaRealizada(false);
-				UsefulWebApplication
-				.mostrarMensajeJSF(
-						ConstantesGenerales.SEVERITY_ERROR,
-						datosCliente.getDescRespuesta(),
-						datosCliente.getDescRespuesta());
-				UsefulWebApplication
-				.actualizarComponente("formConsultarCliente:pgResultado");
-			
-			}
-			System.out.println("---------");
-			
-		} catch (ExternalServiceMCProcesosException este) {
-			System.out.println("ExternalServiceMCProcesosException");
 			consultarClienteModel.setBusquedaRealizada(false);
 			UsefulWebApplication
 			.mostrarMensajeJSF(
 					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
-					ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
-			logger.error(este.getMessage());
+					"El cliente no tiene ninguna tarjeta asociada a esta unidad ejecutora.",
+					"El cliente no tiene ninguna tarjeta asociada a esta unidad ejecutora.");
 			UsefulWebApplication
 			.actualizarComponente("formConsultarCliente:pgResultado");
-		} catch (InternalExcepcion e) {
-					// TODO Auto-generated catch block
-			System.out.println("InternalExcepcion");
-					e.printStackTrace();
+			
+		}else{
+			
+			try {
+				
+				datosCliente = fwmcProcesos.consultaDatosCliente(consultarClienteModel.getTipoBusqueda(), consultarClienteModel.getNumDocumento());
+				if (datosCliente.getCodRespuesta().equals("0000")) { 
+					consultarClienteModel.setBusquedaRealizada(true);
+					consultarClienteModel.getDatosTarjetaCliente().getCliente().setTipoDocumento(datosCliente.getTipoDocumento().trim());
+					
+					if(datosCliente.getTipoDocumento().trim().equals(ConstantesGenerales.CODIGO_DNI)){
+						consultarClienteModel.getDatosTarjetaCliente().getCliente().setNroDocumento(StringsUtils.formateo_DNI(datosCliente.getNumDocumento()));
+					}else{
+						consultarClienteModel.getDatosTarjetaCliente().getCliente().setNroDocumento(datosCliente.getNumDocumento());
+					}							
+					
+					consultarClienteModel.getDatosTarjetaCliente().getCliente().setNombres(datosCliente.getNomCliente());
+					consultarClienteModel.getDatosTarjetaCliente().getCliente().setApCompleto(datosCliente.getApeCliente());
+					consultarClienteModel.getDatosTarjetaCliente().getTarjeta().setEmail(datosCliente.getCorreoCliente().trim());
+								
+					consultarClienteModel.getDatosTarjetaCliente().getCliente().setTelefonoCasa(StringsUtils.quitarCeroIzquierdaString(datosCliente.getTelCliente().trim()));
+						
+					
+				}else{
+					System.out.println("else");
+					System.out.println("descrip:"+datosCliente.getDescRespuesta().replace(".", ","));
+					consultarClienteModel.setBusquedaRealizada(false);
+					UsefulWebApplication
+					.mostrarMensajeJSF(
+							ConstantesGenerales.SEVERITY_ERROR,
+							"No existe cliente.",
+							"No existe cliente.");
+					UsefulWebApplication
+					.actualizarComponente("formConsultarCliente:pgResultado");
+				
+				}
+				System.out.println("---------");
+				
+			} catch (ExternalServiceMCProcesosException este) {
+				System.out.println("ExternalServiceMCProcesosException");
+				consultarClienteModel.setBusquedaRealizada(false);
+				UsefulWebApplication
+				.mostrarMensajeJSF(
+						ConstantesGenerales.SEVERITY_ERROR,
+						ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
+						ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+				logger.error(este.getMessage());
+				UsefulWebApplication
+				.actualizarComponente("formConsultarCliente:pgResultado");
+			} catch (InternalExcepcion e) {
+						// TODO Auto-generated catch block
+				System.out.println("InternalExcepcion");
+						e.printStackTrace();
+			}
 		}
-		
 		
 		
 	}

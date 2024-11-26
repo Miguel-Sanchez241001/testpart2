@@ -16,6 +16,7 @@ import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 import pe.bn.com.sate.ope.transversal.util.enums.BuscarTarjetaTD;
 import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.DisposicionEfectivo;
+import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoWS;
 import pe.bn.com.sate.ope.transversal.util.enums.OperadorMovil;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusquedaTD;
@@ -44,6 +45,8 @@ public class BuscarTarjetaModel {
 	private boolean tipoOperacionActualizar;
 
 	private EstadoTarjeta estadoTarjeta;
+	
+	private String estadoBloqueoWS;
 	
 	private Asignacion asignacionSeleccionada;
 	
@@ -262,8 +265,16 @@ public class BuscarTarjetaModel {
 	}
 
 	public String obtenerBusquedaRequiredMessage() {
-		return "Ingrese un número de "
-				+ TipoBusqueda.tipoBusquedaLetras(tipoBusqueda);
+		String mensaje = "";
+		if(tipoBusqueda.equals("N")){
+			mensaje = "Ingrese "
+					+ TipoBusqueda.tipoBusquedaLetras(tipoBusqueda);			
+		}else{
+			mensaje = "Ingrese un número de "
+					+ TipoBusqueda.tipoBusquedaLetras(tipoBusqueda);
+		}
+		
+		return mensaje;
 	}
 	
 	public List<Asignacion> getAsignacionesTotal() {
@@ -323,7 +334,21 @@ public class BuscarTarjetaModel {
 		this.tipoBusquedaPor = tipoBusquedaPor;
 	}
 
-	
+
+
+	public String getEstadoBloqueoWS() {
+		return estadoBloqueoWS;
+	}
+
+
+
+	public void setEstadoBloqueoWS(String estadoBloqueoWS) {
+		this.estadoBloqueoWS = estadoBloqueoWS;
+	}
+
+	public String descripcionMotivoBloqueoWS(String codigo) {
+		return MotivosBloqueoWS.descripcionMotivoBloqueoWS(codigo);
+	}
 
 	
 

@@ -927,7 +927,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -1012,6 +1012,10 @@ public class FWMCProcesos {
 		Map<String, String> inputRequest = ConstantesWS
 				.getConsultaDatosClienteMap();	
 		
+		if(tipDoc.equals("4")){
+			tipDoc="3";
+		}
+		
 		inputRequest.put(ConstantesWS.COD_EMISOR, codEmisor);
 		inputRequest.put(ConstantesWS.COD_USUARIO, codUsuario);
 		inputRequest.put(ConstantesWS.NUM_TERMINAL, numTerminal);
@@ -1032,7 +1036,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;

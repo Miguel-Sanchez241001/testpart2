@@ -54,5 +54,14 @@ public class ClienteServiceImpl implements ClienteService {
 			throw new InternalServiceException(ex.getMessage(), ex);
 		}
 	}
+
+	@Override
+	public long consultarExisteClienteRUC(String tipoDocumento,
+			String numDocumento, String ruc) {
+		// TODO Auto-generated method stub
+		long num = clienteMapper.consultarExisteClienteRUC(tipoDocumento, numDocumento, ruc);
+		
+		return num;
+	}
 	
 }
