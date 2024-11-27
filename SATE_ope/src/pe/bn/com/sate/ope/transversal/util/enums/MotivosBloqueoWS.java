@@ -9,8 +9,8 @@ public enum MotivosBloqueoWS {
 	MAL_REALCE("Q","Mal realce"),
 	ALERTA("T","Alerta"),
 	ROBO("X","Robo"),
-	TEMPORAL("L", "Fallecido");
-	
+	TEMPORAL("L", "Fallecido"),
+	INVALIDEZ("V", "Invalides");
 //	
 
 	private String id;

@@ -8,8 +8,8 @@ public enum MotivosBloqueoTarjeta {
 	FRAUDE("F", "Fraude"),
 	MAL_REALCE("Q","Mal realce"),
 	ALERTA("T","Alerta"),
-	ROBO("X","Robo");
-	
+	ROBO("X","Robo"),
+	INVALIDEZ("V", "Invalides");
 //	NORMAL("N","Activar"),
 //	NO_RECLAMADA("R", "No reclamada"),
 //	PERDIDA("E", "Perdida"),
@@ -72,13 +72,12 @@ public enum MotivosBloqueoTarjeta {
 	public static MotivosBloqueoTarjeta[] motivosBloqueoPorIdMotivoWS(String id){
 		MotivosBloqueoTarjeta motivos[] = null;
 		
-		motivos =new MotivosBloqueoTarjeta[5];
+		motivos =new MotivosBloqueoTarjeta[6];
 		motivos[0] = MotivosBloqueoTarjeta.FRAUDE;
 		motivos[1] = MotivosBloqueoTarjeta.PERDIDA;
 		motivos[2] = MotivosBloqueoTarjeta.MAL_REALCE;
 		motivos[3] = MotivosBloqueoTarjeta.ALERTA;
-		motivos[4] = MotivosBloqueoTarjeta.ROBO;		
-			
+		motivos[4] = MotivosBloqueoTarjeta.ROBO;			
 		
 		return motivos;
 	}

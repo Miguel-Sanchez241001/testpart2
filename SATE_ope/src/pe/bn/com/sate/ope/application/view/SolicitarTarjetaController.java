@@ -172,26 +172,15 @@ public class SolicitarTarjetaController implements Serializable {
     public void buscarTipoTarjetaNegocio() {
     	
     	  if (solicitarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim().equals(ConstantesGenerales.BIM_BLACK)) {
-              solicitarTarjetaModel.setListaTipoTarjetaNegocio(
-              		TipoTarjetaNegocio.buscarTipoTarjetaBLACK());
+              solicitarTarjetaModel.setListaTipoTarjetaNegocio( tarjetaService.consultaTipoTarjetaNegocio(ConstantesGenerales.BIM_BLACK));
           } else if (solicitarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim().equals(ConstantesGenerales.BIM_CORPORATE)) {
-              solicitarTarjetaModel.setListaTipoTarjetaNegocio(
-              		TipoTarjetaNegocio.buscarTipoTarjetaCORP());
+              solicitarTarjetaModel.setListaTipoTarjetaNegocio( tarjetaService.consultaTipoTarjetaNegocio(ConstantesGenerales.BIM_CORPORATE));
           
           } else {
               solicitarTarjetaModel.setListaTipoTarjetaNegocio(null);
           }
     	  
-    /*    if (solicitarTarjetaModel.getTarjeta().getUsoExtranjero().equals(ConstantesGenerales.USO_EXTRANJERO)) {
-            solicitarTarjetaModel.setListaTipoTarjetaNegocio(
-            		TipoTarjetaNegocio.buscarTipoTarjetaUsoNacional());
-        } else if (solicitarTarjetaModel.getTarjeta().getUsoExtranjero().equals(ConstantesGenerales.USO_NACIONAL)) {
-            solicitarTarjetaModel.setListaTipoTarjetaNegocio(
-            		TipoTarjetaNegocio.buscarTipoTarjetaUsoNacional());
-        
-        } else {
-            solicitarTarjetaModel.setListaTipoTarjetaNegocio(null);
-        }*/
+ 
     }
     /**
      * Fija el tipo de tarjeta y el diseño seleccionados en el modelo.
@@ -266,13 +255,13 @@ public class SolicitarTarjetaController implements Serializable {
      * Busca agencias según el ubigeo seleccionado.
      */
     public void buscarAgenciasPorUbigeo() {
-        logger.info("[SolicitarTarjetaController] Inicio metodo buscarAgenciasPorUbigeo");
+        logger.debug("[SolicitarTarjetaController] Inicio metodo buscarAgenciasPorUbigeo");
         String provincia = solicitarTarjetaModel.getTarjeta().getEntregaProvincia();
         String departamento = solicitarTarjetaModel.getTarjeta().getEntregaDepartamento();
         String distrito = solicitarTarjetaModel.getTarjeta().getEntregaDistrito();
-        logger.info("[SolicitarTarjetaController] valor departamento: " + departamento);
-        logger.info("[SolicitarTarjetaController] valor Provincia: " + provincia);
-        logger.info("[SolicitarTarjetaController] valor distrito: " + distrito);
+        logger.debug("[SolicitarTarjetaController] valor departamento: " + departamento);
+        logger.debug("[SolicitarTarjetaController] valor Provincia: " + provincia);
+        logger.debug("[SolicitarTarjetaController] valor distrito: " + distrito);
 
         if (distrito == null) {
             solicitarTarjetaModel.getTarjeta().setEntregaAgenciaBN(null);
@@ -297,7 +286,7 @@ public class SolicitarTarjetaController implements Serializable {
                 logger.error(es.getMessage());
             }
         }
-        logger.info("[SolicitarTarjetaController] Fin metodo buscarAgenciasPorUbigeo");
+        logger.debug("[SolicitarTarjetaController] Fin metodo buscarAgenciasPorUbigeo");
     }
 
     /**
@@ -305,14 +294,14 @@ public class SolicitarTarjetaController implements Serializable {
      */
     public void buscarDatosAgencia() {
         try {
-            logger.info("[SolicitarTarjetaController] Inicio metodo buscarDatosAgencia");
+            logger.debug("[SolicitarTarjetaController] Inicio metodo buscarDatosAgencia");
             Agencia agencia = agenciaService
                 .buscarAgenciaPorCodAgencia(solicitarTarjetaModel
                     .getAgenciaSeleccionada().getCodAgencia());
             solicitarTarjetaModel.getTarjeta().setEntregaDireccion(
                 agencia == null ? "No hay dirección registrada" : agencia
                     .getDireccion());
-            logger.info("[SolicitarTarjetaController] fin metodo buscarDatosAgencia");
+            logger.debug("[SolicitarTarjetaController] fin metodo buscarDatosAgencia");
         } catch (ExternalServiceBnTablasException este) {
             UsefulWebApplication.mostrarMensajeJSF(
                 ConstantesGenerales.SEVERITY_ERROR,
@@ -332,9 +321,9 @@ public class SolicitarTarjetaController implements Serializable {
      * Busca las provincias según el departamento seleccionado.
      */
     public void buscarProvincias() {
-        logger.info("[SolicitarTarjetaController] Inicio metodo buscarProvincias");
+        logger.debug("[SolicitarTarjetaController] Inicio metodo buscarProvincias");
         String departamento = solicitarTarjetaModel.getTarjeta().getEntregaDepartamento();
-        logger.info("[SolicitarTarjetaController] valor departamento: " + departamento);
+        logger.debug("[SolicitarTarjetaController] valor departamento: " + departamento);
 
         if (departamento == null) {
             solicitarTarjetaModel.setProvincias(null);
@@ -365,18 +354,18 @@ public class SolicitarTarjetaController implements Serializable {
                 logger.error(es.getMessage());
             }
         }
-        logger.info("[SolicitarTarjetaController] Fin metodo buscarProvincias");
+        logger.debug("[SolicitarTarjetaController] Fin metodo buscarProvincias");
     }
 
     /**
      * Busca los distritos según la provincia seleccionada.
      */
     public void buscarDistritos() {
-        logger.info("[SolicitarTarjetaController] Inicio metodo buscarDistritos");
+        logger.debug("[SolicitarTarjetaController] Inicio metodo buscarDistritos");
         String provincia = solicitarTarjetaModel.getTarjeta().getEntregaProvincia();
         String departamento = solicitarTarjetaModel.getTarjeta().getEntregaDepartamento();
-        logger.info("[SolicitarTarjetaController] valor Provincia: " + provincia);
-        logger.info("[SolicitarTarjetaController] valor departamento: " + departamento);
+        logger.debug("[SolicitarTarjetaController] valor Provincia: " + provincia);
+        logger.debug("[SolicitarTarjetaController] valor departamento: " + departamento);
 
         if (provincia == null) {
             logger.info("[SolicitarTarjetaController] Provincia nulo");
@@ -405,7 +394,7 @@ public class SolicitarTarjetaController implements Serializable {
                 logger.error(es.getMessage());
             }
         }
-        logger.info("[SolicitarTarjetaController] Fin metodo buscarDistritos");
+        logger.debug("[SolicitarTarjetaController] Fin metodo buscarDistritos");
     }
 
     /**

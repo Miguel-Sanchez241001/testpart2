@@ -189,7 +189,9 @@ public class BuscarTarjetaModel {
 	public String descripcionTipoTarjetaBC(String tipo) {
 		return TipoTarjeta.descripcionTipotarjeta(tipo);
 	}
-	
+	public String descripcionTipoTarjetaGasto(String tipo) {
+		return TipoTarjetaNegocio.descripcionTipotarjeta(tipo);
+	}
 	public String descripcionEstadoTarjeta(String codigo) {
 		return TipoEstadoTarjeta.descripcionTipoEstadoTarjeta(codigo);
 	}

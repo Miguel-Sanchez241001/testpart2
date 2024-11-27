@@ -64,16 +64,19 @@ public interface ClienteMapper {
         @Param("telefonoCasa") String telefonoCasa
     );
  
-    @Update("UPDATE BN_SATE.BNSATE05_TARJETA " +
-            "SET B05_EMAIL = #{email} " +
-            "WHERE B06_ID_CLI = (SELECT B06_ID_CLI FROM BN_SATE.BNSATE06_CLIENTE " +
-            "WHERE B06_TIPO_DOCUMENTO = #{tipoDocumento} " +
-            "AND B06_NUM_DOCUMENTO = #{numeroDocumento})")
-    public void actualizarEmailTarjeta(
-        @Param("tipoDocumento") String tipoDocumento,
-        @Param("numeroDocumento") String numeroDocumento,
-        @Param("email") String email
-    );
+	@Update("UPDATE BN_SATE.BNSATE05_TARJETA " +
+	        "SET B05_EMAIL = #{email}, " +
+	        "    B05_NUM_CELULAR = #{numcelular} " +
+	        "WHERE B06_ID_CLI = (SELECT B06_ID_CLI FROM BN_SATE.BNSATE06_CLIENTE " +
+	        "WHERE B06_TIPO_DOCUMENTO = #{tipoDocumento} " +
+	        "AND B06_NUM_DOCUMENTO = #{numeroDocumento})")
+	public void actualizarEmailYCelularTarjeta(
+	        @Param("tipoDocumento") String tipoDocumento,
+	        @Param("numeroDocumento") String numeroDocumento,
+	        @Param("email") String email,
+	        @Param("numcelular") String numcelular
+	);
+
     
     @Select("SELECT * FROM BN_SATE.BNSATE06_CLIENTE WHERE " +
 			"B06_ID_CLI = #{idCliente}  ")
@@ -96,6 +99,19 @@ public interface ClienteMapper {
     		@Param("numDocumento")String numDocumento,
     		@Param("ruc")String ruc
     		);
+
+    @Select("SELECT TAR.B05_NUM_CELULAR " +
+            "FROM bn_sate.BNSATE05_TARJETA TAR " +
+            "JOIN bn_sate.BNSATE06_CLIENTE CLIE " +
+            "ON TAR.B06_ID_CLI = CLIE.B06_ID_CLI " +
+            "WHERE CLIE.B06_TIPO_DOCUMENTO = #{tipoDocumento} " +
+            "AND CLIE.B06_NUM_DOCUMENTO = #{numDocumento} " +
+            "AND TAR.B05_NUM_TARJETA IS NOT NULL " +
+            "ORDER BY TAR.B05_FEC_CREACION DESC " +
+            "FETCH FIRST ROW ONLY")
+    public String buscarClienteNumCel(@Param("tipoDocumento") String tipoDocumento,
+                                      @Param("numDocumento") String numDocumento);
+
 	
     
 	

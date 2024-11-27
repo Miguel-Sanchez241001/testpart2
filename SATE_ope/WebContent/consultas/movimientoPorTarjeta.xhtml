@@ -96,11 +96,13 @@
 
 								<p:panelGrid id="pgExporter" columns="1"
 									style="float:right; margin-right:2px;">
-									<p:commandButton value="Descargar"
+									<p:commandButton value="Descargar Documento"
 										icon="ui-icon-arrowthick-1-s"
 										ajax="false">
 										<p:dataExporter type="xls" target="dtSolicitudes"
-											fileName="Movimientos_por_tarjeta" />
+											fileName="Movimientos_por_tarjeta" 
+											sheetName="Reporte_Movimientos"
+											 postProcessor="#{consultarMovimientosController.customizeXLS}" />
 									</p:commandButton>
 								</p:panelGrid>
 
@@ -113,7 +115,7 @@
 										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 										style="table-layout: fixed;margin-top:10px;width:100%;"
 										rowIndexVar="index">
-										<p:column>
+										<p:column exportable="false">
 											<f:facet name="header">
 												<h:outputText value="Nro." />
 											</f:facet>

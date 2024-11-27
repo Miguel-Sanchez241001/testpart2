@@ -20,6 +20,8 @@ import pe.bn.com.sate.ope.infrastructure.service.external.domain.comp.ParametroI
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.comp.SistemaParametro;
 import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.UsuarioService;
+import pe.bn.com.sate.ope.persistence.mapper.internal.EmpresaMapper;
+import pe.bn.com.sate.ope.persistence.mapper.internal.ParametroMapper;
 import pe.bn.com.sate.ope.transversal.dto.sate.Empresa;
 import pe.bn.com.sate.ope.transversal.dto.sate.Usuario;
 import pe.bn.com.sate.ope.transversal.util.componentes.Parametros;
@@ -36,7 +38,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 	private @Autowired
 	EmpresaService empresaService;
-
+	private @Autowired
+	ParametroMapper parametroMapper;
 	private @Autowired
 	UsuarioService usuarioService;
 
@@ -94,6 +97,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                     if (usuario.getEstado() != null && !usuario.getEstado().equals(TipoEstado.INACTIVO.getId())) {
                         if (usuarioService.existeUsuarioEmpresa(usuario, usernameAndDomain[0])) {
                             asignarParametros();
+                            ConstantesGenerales.PORCENTAJE_EFECTIVO = parametroMapper.buscarParametro("15", "PR.EFECTIVO").getValor();
                             return fwInterfaceGateway.buscarUsuarioInterfaceGateway(
                                     usernameAndDomain[0], empresa.getCic(), usernameAndDomain[1], usernameAndDomain[2], password);
                         } else {

@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.ibm.msg.client.commonservices.InternalException;
+
 import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.SolicitudTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.TarjetaResumen;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
 
 public interface TarjetaService {
 
@@ -55,7 +58,7 @@ public interface TarjetaService {
 	public long consultarExisteTarjetaRUC(String numTarjeta,String ruc);
 	public long consultarExisteTipNumDocRUC(String tipoDocumento,String numDocumento,String ruc);
 	
-	
+	public List<TipoTarjetaNegocio> consultaTipoTarjetaNegocio(String bim) throws InternalException;
 	
 	
 }

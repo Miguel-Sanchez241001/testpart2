@@ -106,7 +106,7 @@
 										
 										
 									<h:outputText value="Correo electrónico" />
-									<h:outputText value="Teléfono de casa"
+									<h:outputText value="Número de celular"
 										style="margin-left:20px;" />
 									<p:inputText id="email" maxlength="30" 									
 										value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.tarjeta.email}"
@@ -116,11 +116,17 @@
 											pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 									</p:inputText>
 									
-									<p:inputText id="telefonoCasa" style="margin-left:20px;" 
-										maxlength="7" onkeypress="return validarSoloNumeros(event)"
-										
-										value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.cliente.telefonoCasa}"
-										required="true" requiredMessage="Ingrese teléfono de casa">
+									<p:inputText 
+									id="numcelular" 
+									style="margin-left:20px;" 
+									 required="true"
+						            onkeypress="javascript:return jsValidarKey(event,/[0-9]/);"
+						            requiredMessage="#{valMsg['required.numCelular']}"
+						            maxlength="9"
+						            validatorMessage="#{valMsg['validator.numCelular']}"										
+									value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.cliente.numCelular}" >
+									 <p:ajax update="msgs" event="keyup" />
+						            <f:validateRegex pattern="^9[0-9]{8}$*" />
 									</p:inputText>	
 								</h:panelGrid>
 
@@ -136,7 +142,7 @@
 							
 							<p:commandButton id="actualizarDatos" value="Actualizar"
 								styleClass="btnGrande"	
-								process="@this email,telefonoCasa"							
+								process="@this email,numcelular"							
 								actionListener="#{consultarClienteController.actualizarDatosCliente()}"
 								onstart="PF('statusDialog').show()"
 							oncomplete="PF('statusDialog').hide()"

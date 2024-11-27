@@ -214,12 +214,13 @@
 										value="#{buscarTarjetaController.buscarTarjetaModel.estadoBloqueoWS}" />
 
 									<h:outputText value="Tipo de tarjeta" />
-									<h:outputText value="Tipo de moneda" style="margin-left:20px;" />
+									<h:outputText value="Tipo de gasto" style="margin-left:20px;" />
+									
 									<p:inputText id="itTipoTarjeta" readonly="true"
 										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionTipoTarjetaBC(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.tipoTarjeta)}" />
-									<p:inputText style="margin-left:20px;" readonly="true"
-										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionTipoMoneda(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.tipoMoneda)}" />
-
+									<p:inputText id="itTipoTarjetagasto"  style="margin-left:20px;" readonly="true"
+										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionTipoTarjetaGasto(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.diseno)}" />
+								
 
 									<h:outputText value="Disposición de efectivo" />
 									<h:outputText value="Uso en el extranjero"
@@ -228,19 +229,12 @@
 										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionDisposicionEfectivo(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.usoDispocionEfectivo)}" />
 									<p:inputText style="margin-left:20px;" readonly="true"
 										value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.usoExtranjero}" />
-
-
-									<h:outputText value="Número Autorización vigente" />
-									<h:outputText value="Fecha de autorización vigente"
-										style="margin-left:20px;" />
-
-									<p:inputText readonly="true"
-										value="#{buscarTarjetaController.buscarTarjetaModel.formatoNroAutorizacion(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.nroAutorizacion)}" />
-									<p:inputText readonly="true" style="margin-left:20px;"
-										value="#{buscarTarjetaController.buscarTarjetaModel.formatoFechaAutorizacion(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.fechaAutorizacion)}">
-										<f:convertDateTime pattern="dd/MM/yyyy" />
-									</p:inputText>
-
+									
+									<h:outputText value="Tipo de moneda" />
+									<h:outputText value="" style="margin-left:20px;" />
+ 									<p:inputText readonly="true"
+										value="#{buscarTarjetaController.buscarTarjetaModel.descripcionTipoMoneda(buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.tipoMoneda)}" />
+ 									<h:outputText value="" style="margin-left:20px;" />
 								</h:panelGrid>
 
 								<h:panelGrid>
@@ -260,6 +254,7 @@
 										<f:convertDateTime pattern="dd/MM/yyyy" />
 									</p:inputText>
 								</h:panelGrid>
+								
 								<br></br>
 								<h:panelGrid columns="2">
 									<h:outputText value="Observaciones" style="position:relative;" />
@@ -345,10 +340,7 @@
 										<p:inputText style="width:340px;" readonly="true"
 											value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.entregaDireccion}" />
 
-										<h:outputText value="Referencia" />
-										<p:inputText style="width:340px;" readonly="true"
-											value="#{buscarTarjetaController.buscarTarjetaModel.datosTarjetaCliente.tarjeta.entregaReferencia}" />
-									</h:panelGrid>
+									 </h:panelGrid>
 								</p:panel>
 
 							</h:panelGroup>

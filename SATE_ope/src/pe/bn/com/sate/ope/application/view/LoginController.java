@@ -182,7 +182,7 @@ public class LoginController implements PhaseListener, Serializable {
             baos.flush();
 
             byte[] encoded = Base64.encode(baos.toByteArray());
-            logger.info("Captcha generado: " + new String(encoded).substring(0, 10));
+            logger.debug("Captcha generado: " + new String(encoded).substring(0, 10));
 
             UsefulWebApplication.ejecutar("cargarCaptcha('" + new String(encoded) + "')");
         } catch (IOException e) {

@@ -29,16 +29,16 @@ public class RequestMensajeHost {
                                   String numDocumento, String password1, String password2,
                                   String tipoOperacion) {
 
-        logger.info("[RequestMensajeHost] - Inicio del método getSolicitud");
+        logger.debug("[RequestMensajeHost] - Inicio del método getSolicitud");
         // TODO COMENTAR DATOS DE AUTENTICACION 
-        logger.info("[RequestMensajeHost] - Parámetros de entrada: ");
-        logger.info("RUC: " + ruc);
-        logger.info("CIC: " + cic);
-        logger.info("Tipo de Documento: " + tipoDocumento);
-        logger.info("Numero de Documento: " + numDocumento);
-        logger.info("Contrase�a 1: " + password1);
-        logger.info("Contrase�a 2: " + (password2 != null ? password2 : "No proporcionada"));
-        logger.info("Tipo de Operación: " + tipoOperacion);
+        logger.debug("[RequestMensajeHost] - Parámetros de entrada: ");
+        logger.debug("RUC: " + ruc);
+        logger.debug("CIC: " + cic);
+        logger.debug("Tipo de Documento: " + tipoDocumento);
+        logger.debug("Numero de Documento: " + numDocumento);
+        logger.debug("Contrase�a 1: " + password1);
+        logger.debug("Contrase�a 2: " + (password2 != null ? password2 : "No proporcionada"));
+        logger.debug("Tipo de Operación: " + tipoOperacion);
 
         CicsSoapConnection cics = new CicsSoapConnection();
         Solicitud solicitud = null;
@@ -51,12 +51,12 @@ public class RequestMensajeHost {
                     password1, password2 == null ? password1 : password2,
                     "PJMO");
 
-            logger.info("[RequestMensajeHost] - Solicitud enviada: " + solicitudInput);
+            logger.debug("[RequestMensajeHost] - Solicitud enviada: " + solicitudInput);
 
             BodySolicitud bodyIn = new BodySolicitud();
             BodySolicitud solicitudOutPut = cics.enviarTrama(solicitudInput, bodyIn);
 
-            logger.info("[RequestMensajeHost] - Respuesta del host: " + solicitudOutPut);
+            logger.debug("[RequestMensajeHost] - Respuesta del host: " + solicitudOutPut);
 
             if ("9995".equals(solicitudOutPut.getByTag("msgnoHost").trim())) {
                 solicitud = new Solicitud();
@@ -82,7 +82,7 @@ public class RequestMensajeHost {
                     solicitud.setcError(solicitudOutPut.getByTag("DFH-CERROR").trim());
                     solicitud.setMsj(solicitudOutPut.getByTag("DFH-MSJ").trim());
 
-                    logger.info("[RequestMensajeHost] - Solicitud procesada correctamente: " + solicitud);
+                    logger.debug("[RequestMensajeHost] - Solicitud procesada correctamente: " + solicitud);
                 }
             } else {
                 logger.error("[RequestMensajeHost] - Código de respuesta inesperado: " + solicitudOutPut.getByTag("msgnoHost").trim());
@@ -93,7 +93,7 @@ public class RequestMensajeHost {
             throw new ExternalServiceIGWException(e.getMessage());
         }
 
-        logger.info("[RequestMensajeHost] - Fin del método getSolicitud");
+        logger.debug("[RequestMensajeHost] - Fin del método getSolicitud");
         return solicitud;
     }
 }

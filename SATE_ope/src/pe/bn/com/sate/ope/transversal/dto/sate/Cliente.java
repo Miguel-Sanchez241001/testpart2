@@ -21,9 +21,17 @@ public class Cliente {
 	private String sexo;
 	private String telefonoCasa;
 	private String direccion;//null
+	public String getNumCelular() {
+		return numCelular;
+	}
+
+	public void setNumCelular(String numCelular) {
+		this.numCelular = numCelular;
+	}
+
 	private String ubigeo;//null
 	private String referencia;//null
-	
+	private String numCelular;//null
 	private String apCompleto;
 
 	public Cliente() {

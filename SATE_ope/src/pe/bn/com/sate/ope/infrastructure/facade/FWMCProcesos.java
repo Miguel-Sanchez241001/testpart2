@@ -168,8 +168,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -185,9 +185,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						DTOConsultaDatosTarjeta.class);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -277,8 +277,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -296,9 +296,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -371,7 +371,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -390,8 +390,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -407,9 +407,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -813,7 +813,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -832,8 +832,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -849,9 +849,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -947,8 +947,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -967,9 +967,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -1055,8 +1055,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -1072,9 +1072,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -1120,7 +1120,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -1139,8 +1139,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -1156,9 +1156,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -1199,7 +1199,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -1218,8 +1218,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -1235,9 +1235,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -1279,7 +1279,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -1298,8 +1298,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -1315,9 +1315,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -1359,7 +1359,7 @@ public class FWMCProcesos {
 
 		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
 
-		//logger.info("Request generado: " + soapRequest);
+		logger.info("Request generado: " + soapRequest);
 
 		int maxRetries = 5;
 		int attempt = 0;
@@ -1379,8 +1379,8 @@ public class FWMCProcesos {
 
 			try {
 
-				logger.info("Respuesta del servidor:");
-				logger.info(dataWS);
+				logger.debug("Respuesta del servidor:");
+				logger.debug(dataWS);
 
 				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
 						.toString());
@@ -1396,9 +1396,9 @@ public class FWMCProcesos {
 						new StringReader(contenidoXML),
 						dtoClass);
 
-				logger.info("Objeto de respuesta: " + responseDTO);
+				logger.debug("Objeto de respuesta: " + responseDTO);
 				success = true;
-				logger.info("Conexión exitosa en el intento " + attempt);
+				logger.debug("Conexión exitosa en el intento " + attempt);
 			} catch (InternalExcepcion e) {
 				throw e;
 			}
@@ -1414,49 +1414,7 @@ public class FWMCProcesos {
 	
 	
 
-	private boolean tryBloqueoDeTarjeta() {
-	    try {
-	        DTOModificacionTarjeta responseDTO = bloqueoDeTarjeta(1, "Robo");
-	        logger.info("bloqueoDeTarjeta ejecutado con ï¿½xito: " + responseDTO);
-	        return true;
-	    } catch (Exception e) {
-	        logger.warn("Fallï¿½ el mï¿½todo bloqueoDeTarjeta: " + e.getMessage());
-	        return false;
-	    }
-	}
-
-	private boolean tryConsultaDeMovimientoPorExpediente() {
-	    try {
-	        DTOConsultaMovimientosExpediente responseDTO = consultaDeMovimientoPorExpediente(1);
-	        logger.info("consultaDeMovimientoPorExpediente ejecutado con ï¿½xito: " + responseDTO);
-	        return true;
-	    } catch (Exception e) {
-	        logger.warn("Fallï¿½ el mï¿½todo consultaDeMovimientoPorExpediente: " + e.getMessage());
-	        return false;
-	    }
-	}
-
-	private boolean tryConsultaDeDatosPorExpediente() {
-	    try {
-	        DTOConsultaDatosExpediente responseDTO = consultaDeDatosPorExpediente(1);
-	        logger.info("consultaDeDatosPorExpediente ejecutado con ï¿½xito: " + responseDTO);
-	        return true;
-	    } catch (Exception e) {
-	        logger.warn("Fallï¿½ el mï¿½todo consultaDeDatosPorExpediente: " + e.getMessage());
-	        return false;
-	    }
-	}
-
-	private boolean tryActualizacionDeDatos() {
-	    try {
-	        DTOModificacionClientes responseDTO = actualizacionDeDatos(1, "nuevosDatos");
-	        logger.info("actualizacionDeDatos ejecutado con ï¿½xito: " + responseDTO);
-	        return true;
-	    } catch (Exception e) {
-	        logger.warn("Fallï¿½ el mï¿½todo actualizacionDeDatos: " + e.getMessage());
-	        return false;
-	    }
-	}
+ 
 
 
 	

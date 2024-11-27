@@ -42,12 +42,14 @@ public enum TipoTarjetaNegocio {
 	public static List<TipoTarjetaNegocio> buscarTipoTarjetaBLACK() {
 		List<TipoTarjetaNegocio> listaTipoTarjeta = new ArrayList<TipoTarjetaNegocio>();
 		listaTipoTarjeta.add(TipoTarjetaNegocio.BLACK_VIATICO);
+		listaTipoTarjeta.add(TipoTarjetaNegocio.BLACK_CAJA);
  		return listaTipoTarjeta;
 	}
 	public static List<TipoTarjetaNegocio> buscarTipoTarjetaCORP() {
 		List<TipoTarjetaNegocio> listaTipoTarjeta = new ArrayList<TipoTarjetaNegocio>();
  		listaTipoTarjeta.add(TipoTarjetaNegocio.CORPORATE_ENCARGO);
 		listaTipoTarjeta.add(TipoTarjetaNegocio.CORPORATE_VIATICO);
+		listaTipoTarjeta.add(TipoTarjetaNegocio.CORPORATE_CAJA);
  		return listaTipoTarjeta;
 	}
 	
@@ -61,6 +63,15 @@ public enum TipoTarjetaNegocio {
 			for (TipoTarjetaNegocio tipoTarjeta : values()) {
 				if (codigo.equals(tipoTarjeta.getCodigo())
 						&& diseno.equals(tipoTarjeta.getDiseno())) {
+					return tipoTarjeta.getDescripcion();
+				}
+			}
+		return "Ninguno";
+	}
+	public static String descripcionTipotarjeta( String diseno) {
+		if ( diseno != null)
+			for (TipoTarjetaNegocio tipoTarjeta : values()) {
+				if (diseno.equals(tipoTarjeta.getDiseno())) {
 					return tipoTarjeta.getDescripcion();
 				}
 			}

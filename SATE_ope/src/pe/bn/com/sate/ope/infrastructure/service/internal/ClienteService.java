@@ -11,11 +11,13 @@ public interface ClienteService {
 	
 	public void actualizarCliente(Cliente cliente);
 	
-	public void actualizarClienteBD(String tipoDocumento, String numDocumento, String teleno, String email);
+	public void actualizarClienteBD(String tipoDocumento, String numDocumento, String teleno, String email, String celular);
 
 	public Cliente buscarClientePorId( Long  idCliente);
 	
 	public long consultarExisteClienteRUC(String tipoDocumento,String numDocumento,String ruc);
+
+	public String buscarClienteNumCel(String tipoBusqueda, String numDocumento);
 	
 	
 

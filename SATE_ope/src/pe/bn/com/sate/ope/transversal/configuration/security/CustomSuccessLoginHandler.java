@@ -34,8 +34,8 @@ public class CustomSuccessLoginHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        logger.info("Autenticación exitosa para el usuario: " + authentication.getName());
-        logger.info("Redireccionando a la página principal.");
+        logger.debug("Autenticación exitosa para el usuario: " + authentication.getName());
+        logger.debug("Redireccionando a la página principal.");
         UsefulWebApplication.redireccionar("/principal.jsf");
     }
 }

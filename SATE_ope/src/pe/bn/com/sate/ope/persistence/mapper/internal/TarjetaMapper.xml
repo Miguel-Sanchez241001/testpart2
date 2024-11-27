@@ -28,7 +28,7 @@
 		<result property="nroAutorizacion" column="B05_NRO_AUTORIZACION" />
 		<result property="fechaAutorizacion" column="B05_FEC_AUTORIZACION" />
 		<result property="fechaCreacion" column="B05_FEC_CREACION" />
-		<result property="usuarioCreacion" column="B05_USUARIO_CREACION" />
+		<result property="usuarioCreacion" column="INICIALES" />
 		<result property="fechaInicioLinea" column="B05_FEC_INICIO_LINEA" />
 		<result property="fechaTerminoLinea" column="B05_FEC_TERMINO_LINEA" />
 		<result property="montoLineaAsignado" column="B05_MONTO_LINEA_ASIGNADO" />

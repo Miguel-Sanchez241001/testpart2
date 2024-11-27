@@ -10,7 +10,7 @@ public class ConstantesGenerales {
 
 	public static final String DESC_VERSIONES = "Versiones";
 	public static final String DESC_MENSAJES = "Mensajes";
-	public static final String PORCENTAJE_EFECTIVO = "10000"; // 2 decimales
+	public static String PORCENTAJE_EFECTIVO = "10000"; 
 
 	/**
 	 * Constantes para los mensajes de validacion, operacion exitosa

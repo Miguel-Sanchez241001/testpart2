@@ -3,8 +3,8 @@ package pe.bn.com.sate.ope.transversal.util.enums;
 public enum MotivosBloqueoCuenta {
 
 	NORMAL("N", "Activar Cuenta"), 
-	TEMPORAL("L", "Fallecido");
-	//TEMPORAL("K", "Bloqueo Temporal de Cuenta");
+	TEMPORAL("L", "Fallecido"),
+	INVALIDEZ("V", "Invalides");
 
 	private String id;
 	private String descripcion;
@@ -56,10 +56,9 @@ public enum MotivosBloqueoCuenta {
 	public static MotivosBloqueoCuenta[] motivosBloqueoPorIdMotivoWS(String id) {
 		MotivosBloqueoCuenta motivos[] = null;
 	
-		motivos = new MotivosBloqueoCuenta[2];
+		motivos = new MotivosBloqueoCuenta[3];
 		motivos[0] = MotivosBloqueoCuenta.TEMPORAL;
-		motivos[1] = MotivosBloqueoCuenta.NORMAL;
-
+		motivos[2] = MotivosBloqueoCuenta.INVALIDEZ;
 		return motivos;
 	}
 }

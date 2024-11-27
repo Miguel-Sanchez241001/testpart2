@@ -26,7 +26,7 @@ public class CicsSoapConnection {
      */
     public BodySolicitud enviarTrama(BodySolicitud cabecera, BodySolicitud body) throws Exception {
 
-        logger.info("[CicsSoapConnection] - Inicio del método enviarTrama");
+        logger.debug("[CicsSoapConnection] - Inicio del método enviarTrama");
 
         // Input
         BodySolicitud bodyOut = null;
@@ -35,8 +35,8 @@ public class CicsSoapConnection {
         String trama = head + body;
         String out = null;
 
-        logger.info("[CicsSoapConnection] - Cabecera enmascarada: " + head);
-        logger.info("[CicsSoapConnection] - Trama completa: " + trama);
+        logger.debug("[CicsSoapConnection] - Cabecera enmascarada: " + head);
+        logger.debug("[CicsSoapConnection] - Trama completa: " + trama);
 
         GatewayInterfaceProxy proxy = new GatewayInterfaceProxy();
         ServicioWebUtil.cambiarTiempoEspera("10", "10", (BindingProvider) proxy._getDescriptor().getProxy());
@@ -52,7 +52,7 @@ public class CicsSoapConnection {
         ResponseGateway respuesta = new ResponseGateway();
 
         try {
-            logger.info("[CicsSoapConnection] - Enviando trama al sistema CICS");
+            logger.debug("[CicsSoapConnection] - Enviando trama al sistema CICS");
             //MGL-login
             // TODO MODIFICAR =========> COMUNICACION HOST TRAMA LOCAL AUTENTICACION
             // AUTENTICACION HOST
@@ -64,7 +64,7 @@ public class CicsSoapConnection {
 //            respuesta.setMsgno("0000");
 //            respuesta.setFiller("");
             
-            logger.info("[CicsSoapConnection] - Respuesta del sistema CICS: " + respuesta);
+            logger.debug("[CicsSoapConnection] - Respuesta del sistema CICS: " + respuesta);
 
             String msgnoHost = "";
             String msjeHost = "";
@@ -83,7 +83,7 @@ public class CicsSoapConnection {
                 out = respuesta.getDatos() + tramaMensajes;
                 bodyOut.FillBobyOk(out);
 
-                logger.info("[CicsSoapConnection] - Trama procesada correctamente: " + out);
+                logger.debug("[CicsSoapConnection] - Trama procesada correctamente: " + out);
 
             } else if ("9995".equals(respuesta.getMsgno()) && respuesta.getDatos().equals("")) {
                 msgnoHost = respuesta.getMsgno();
@@ -94,7 +94,7 @@ public class CicsSoapConnection {
                 logger.warn("[CicsSoapConnection] - Error en la respuesta del sistema CICS: " + tramaMensajes);
             }
 
-            logger.info("[CicsSoapConnection] - Fin del método enviarTrama");
+            logger.debug("[CicsSoapConnection] - Fin del método enviarTrama");
 
         } catch (Exception e) {
             logger.error("[CicsSoapConnection] - Error al conectar con el sistema CICS: " + e.getMessage(), e);

@@ -36,10 +36,10 @@ public class ClienteServiceImpl implements ClienteService {
 	
 	@Override
 	@Transactional
-	public void actualizarClienteBD(String tipoDocumento, String numDocumento, String telefono, String email) {
+	public void actualizarClienteBD(String tipoDocumento, String numDocumento, String telefono, String email, String celular) {
 		try {
 			clienteMapper.actualizarTelefonoCliente(tipoDocumento, numDocumento, telefono);
-			clienteMapper.actualizarEmailTarjeta(tipoDocumento, numDocumento, email);
+			clienteMapper.actualizarEmailYCelularTarjeta(tipoDocumento, numDocumento, email, celular);
 		} catch (Exception ex) {
 			throw new InternalServiceException(ex.getMessage(), ex);
 		}
@@ -62,6 +62,15 @@ public class ClienteServiceImpl implements ClienteService {
 		long num = clienteMapper.consultarExisteClienteRUC(tipoDocumento, numDocumento, ruc);
 		
 		return num;
+	}
+
+	@Override
+	public String buscarClienteNumCel(String tipoBusqueda, String numDocumento) {
+		try {
+			return clienteMapper.buscarClienteNumCel(tipoBusqueda,numDocumento) ;
+		} catch (Exception ex) {
+			throw new InternalServiceException(ex.getMessage(), ex);
+		}
 	}
 	
 }

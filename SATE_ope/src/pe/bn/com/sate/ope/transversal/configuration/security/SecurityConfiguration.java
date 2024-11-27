@@ -21,8 +21,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private @Autowired
 	CustomAuthenticationProvider customAuthenticationProvider;
-	private @Autowired
-	CustomFailureLoginHandler customFailureLoginHandler;
+ 
 
 	@Override
 	public void configure(WebSecurity webSecurity) throws Exception {

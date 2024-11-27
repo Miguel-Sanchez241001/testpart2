@@ -1,5 +1,6 @@
 package pe.bn.com.sate.ope.infrastructure.service.internal.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
 import pe.bn.com.sate.ope.persistence.mapper.internal.ClienteMapper;
 import pe.bn.com.sate.ope.persistence.mapper.internal.EmpresaMapper;
+import pe.bn.com.sate.ope.persistence.mapper.internal.ParametroMapper;
 import pe.bn.com.sate.ope.persistence.mapper.internal.TarjetaMapper;
 import pe.bn.com.sate.ope.transversal.configuration.security.SecurityContextFacade;
 import pe.bn.com.sate.ope.transversal.dto.host.Solicitud;
@@ -23,6 +25,7 @@ import pe.bn.com.sate.ope.transversal.dto.sate.SolicitudTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.TarjetaResumen;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
+import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 import pe.bn.com.sate.ope.transversal.util.constantes.ExceptionConstants;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;
@@ -44,17 +47,15 @@ public class TarjetaServiceImpl implements TarjetaService {
 
 	private @Autowired
 	EmpresaMapper empresaMapper;
-
+	private @Autowired
+	ParametroMapper parametroMapper;
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	//@Transactional
 	public void registrarSolicitudTarjeta(Tarjeta tarjeta, Cliente cliente) {
 		try {
 			logger.info("Inicio metodo registrarSolicitudTarjeta ");
-		/*	if (tarjetaMapper.cantidadTarjetasDisponiblesPorDocumento(
-					cliente.getTipoDocumento(), cliente.getNroDocumento(),
-					SecurityContextFacade.getAuthenticatedUser().getRuc()) == 0) {*/
-				
+ 
 				if(verificarTarjetasDisponiblesPorTipoTar(
 						cliente.getTipoDocumento(), cliente.getNroDocumento(),
 						SecurityContextFacade.getAuthenticatedUser().getRuc())){
@@ -365,8 +366,7 @@ public class TarjetaServiceImpl implements TarjetaService {
 
 	@Override
 	public String verificarSolicitudes(String tipoDocumento, String nroDocumento) {
-	    // Obtiene el RUC del usuario autenticado
-	    String ruc = SecurityContextFacade.getAuthenticatedUser().getRuc();
+ 	    String ruc = SecurityContextFacade.getAuthenticatedUser().getRuc();
 
 	    // Buscar solicitudes en estado "registrada"
 	    List<SolicitudTarjeta> solicitudesRegistradas = tarjetaMapper.buscarTodosSolicitudesTarjetaPendientes(
@@ -456,7 +456,6 @@ public class TarjetaServiceImpl implements TarjetaService {
 	@Override
 	public Tarjeta buscarPrimeraTarjetaCliente(String tipoDocumento,
 			String numeroDocumento) {
-		// TODO Auto-generated method stub		
 		try {
 			return tarjetaMapper.buscarPrimeraTarjetaCliente(tipoDocumento,	numeroDocumento);
 		} catch (Exception ex) {
@@ -480,7 +479,6 @@ public class TarjetaServiceImpl implements TarjetaService {
 
 	@Override
 	public long consultarExisteTarjetaRUC(String numTarjeta, String ruc) {
-		// TODO Auto-generated method stub
 		long num = tarjetaMapper.consultarExisteTarjetaRUC(numTarjeta, ruc);
 		
 		return num;
@@ -489,10 +487,41 @@ public class TarjetaServiceImpl implements TarjetaService {
 	@Override
 	public long consultarExisteTipNumDocRUC(String tipoDocumento,
 			String numDocumento, String ruc) {
-		// TODO Auto-generated method stub
 		long num = tarjetaMapper.consultarExisteTipNumDocRUC(tipoDocumento, numDocumento, ruc);
 		
 		return num;
+	}
+
+	@Override
+	public List<TipoTarjetaNegocio> consultaTipoTarjetaNegocio(String bim) throws InternalServiceException{
+		
+		try {
+			String ENCARGO,CAJACHICA,VIATICO;
+			CAJACHICA = parametroMapper.buscarParametro("15", "CAJACHICA").getValor();
+			VIATICO = parametroMapper.buscarParametro("15", "VIATICO").getValor();
+			ENCARGO = parametroMapper.buscarParametro("15", "ENCARGO").getValor();
+			  List<TipoTarjetaNegocio> listaBase;
+		        if (bim.equals(ConstantesGenerales.BIM_BLACK)) {
+		            listaBase = TipoTarjetaNegocio.buscarTipoTarjetaBLACK();
+		        } else if (bim.equals(ConstantesGenerales.BIM_CORPORATE) ){
+		            listaBase = TipoTarjetaNegocio.buscarTipoTarjetaCORP();
+		        }else {
+		        	throw new Exception("bim no valido");
+		        }
+		        List<TipoTarjetaNegocio> listaFiltrada = new ArrayList<>();
+		        for (TipoTarjetaNegocio tarjeta : listaBase) {
+		            if ((tarjeta.getDescripcion().equalsIgnoreCase("ENCARGO") && ENCARGO.equalsIgnoreCase("SI")) 
+		            		&&  tarjeta.getCodigo().equalsIgnoreCase(ConstantesGenerales.BIM_CORPORATE) ||
+		                (tarjeta.getDescripcion().equalsIgnoreCase("CAJA CHICA") && CAJACHICA.equalsIgnoreCase("SI")) ||
+		                (tarjeta.getDescripcion().equalsIgnoreCase("VIATICO") && VIATICO.equalsIgnoreCase("SI"))) {
+		                listaFiltrada.add(tarjeta);
+		            }
+		        }
+			
+		        return listaFiltrada;
+	    } catch (Exception ex) {
+	        throw new InternalServiceException(ex.getMessage(), ex);
+	    }
 	}
 
  
