@@ -14,6 +14,7 @@
 		<h2>MOVIMIENTOS POR TARJETA</h2>
 
 		<h:form id="formMovimientoTarjeta">
+		<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 					<h:panelGrid style="width:80%;text-align:center;">
@@ -196,7 +197,7 @@
 			draggable="false" position="center" showEffect="clip"
 			header="Seleccionar Asignación" widgetVar="wvSeleccionarAsignacion">
 			<h:form id="formSeleccionarAsignacion">
-
+<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 				<p:panelGrid id="panel-seleccionarAsignacion" columns="1"
 					style="widht:100%">
 					<h:outputText value="Lista de Asignación" />

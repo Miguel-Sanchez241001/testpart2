@@ -42,12 +42,14 @@
 		<h:outputStylesheet name="css/iconos.css" />
 		<h:outputScript library="js" name="calendar_es.js" />
 		<h:outputScript library="js" name="funcion.js" />
-
+    <h:outputScript>
+        window.csrfToken = "#{sessionScope.csrfToken}";
+    </h:outputScript>
 	</h:head>
 
 	<h:body onkeydown="return (event.keyCode != 116)">
-
-		<input type="hidden" id="baseurl" name="baseurl"
+   <!-- Disparar el evento PreRenderViewEvent -->
+ 		<input type="hidden" id="baseurl" name="baseurl"
 			value="#{request.contextPath}" />
 
 		<div id="contenedor">
@@ -151,6 +153,7 @@
 						});
 			}
 		</script>
+ 
 
 	</h:body>
 </f:view>

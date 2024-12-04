@@ -15,7 +15,7 @@
 		<h2>CAMBIAR ESTADO TARJETA</h2>
 
 		<h:form id="formCambiarEstadoTarjeta">
-
+<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 
@@ -58,7 +58,7 @@
 							<p:inputText id="numDocumento" required="true" style="margin-left:20px;"
 								onkeypress="javascript:return jsValidarKey(event,/[0-9]/);"
 								value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.numDocumento}"
-								maxlength="19"
+								maxlength="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.obtenerBusquedaLength()}"
 								requiredMessage="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.obtenerBusquedaRequiredMessage()}"
 								validatorMessage="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.obtenerBusquedaValidatorMessage()}">
 								<f:validateLength
@@ -122,12 +122,13 @@
 										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.datosTarjetaCliente.tarjeta.numTarjeta}" />
 									<p:inputText readonly="true"
 										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.descripcionTipoTarjetaWS(cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.datosTarjetaCliente.tarjeta.tipoTarjeta)}" />
+									
 									<h:outputText value="Estado" />
-									<h:outputText value="Estado autorización" />
+									<h:outputText value="Numero autorización" />
 									<p:inputText readonly="true"
 										value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.descripcionMotivoBloqueoWS(cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.estadoBloqueoWS)}" />
 									
-									<p:inputText readonly="true" value="- -" />
+									<p:inputText readonly="true" value="#{cambiarEstadoTarjetaController.cambiarEstadoTarjetaModel.datosTarjetaCliente.tarjeta.codAutoriza}" />
 								</p:panelGrid>
 
 							</p:panel>
@@ -231,6 +232,7 @@
 			draggable="false" position="center" showEffect="clip"
 			header="Seleccionar Representante" widgetVar="wvSeleccionarTajeta">
 			<h:form id="formSeleccionarTarjeta">
+				<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 				<p:panelGrid id="panel-seleccionarTarjeta" columns="1"
 					style="widht:100%">
 					<h:outputText value="Lista de tarjetas" />
@@ -277,6 +279,7 @@
 			draggable="false" position="center" showEffect="clip"
 			header="Actualización de Solicitar Tarjeta" widgetVar="dgSolicitarTarjeta">
 			<h:form id="formSolicitarTarjeta">
+			<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 				<p:panelGrid columns="1">
 					<center>
 						<p:fieldset legend="Datos de entrega"
@@ -443,6 +446,7 @@
 
 		<h:form id="formCambiar" style="width: 400px; font-size: 11px;"
 			prependId="false">
+			<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<center>
 				<div style="margin: 15px 0 5px 0;">
 					<h:outputText value="¿Está seguro de cambiar de estado a la tarjeta empresarial?" />
@@ -473,7 +477,7 @@
 			draggable="false" position="center" showEffect="clip"
 			header="Seleccionar Asignación" widgetVar="wvSeleccionarAsignacion">
 		<h:form id="formSeleccionarAsignacion">
-			
+			<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<p:panelGrid id="panel-seleccionarAsignacion" columns="1"
 					style="widht:100%">
 				<h:outputText value="Lista de Asignación" />

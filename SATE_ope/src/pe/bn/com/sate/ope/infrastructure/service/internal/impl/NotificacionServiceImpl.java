@@ -1,14 +1,34 @@
 package pe.bn.com.sate.ope.infrastructure.service.internal.impl;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.xml.ws.BindingProvider;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.ResponseMessage;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.ArrayOfTns1ReqListMessage;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.DatosCorreo;
@@ -17,9 +37,14 @@ import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.ReqList
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.RequestMessage;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.message.ServiceMessageProxy;
 import pe.bn.com.sate.ope.infrastructure.service.internal.NotificacionService;
+import pe.bn.com.sate.ope.transversal.dto.aldeamo.EmailRequest;
+import pe.bn.com.sate.ope.transversal.dto.aldeamo.Person;
+import pe.bn.com.sate.ope.transversal.dto.aldeamo.Recipient;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Usuario;
+import pe.bn.com.sate.ope.transversal.util.CertificadoUtil;
 import pe.bn.com.sate.ope.transversal.util.ServicioWebUtil;
+import pe.bn.com.sate.ope.transversal.util.TarjetaUtils;
 import pe.bn.com.sate.ope.transversal.util.componentes.Parametros;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 
@@ -101,11 +126,224 @@ public class NotificacionServiceImpl implements NotificacionService {
         
         try {
 
+            // Crear el objeto EmailRequest
+            EmailRequest emailRequest = new EmailRequest();
+            emailRequest.setAttachments(new ArrayList<>());
+
+            LocalDateTime now = LocalDateTime.now();
+            String fechaActual = now.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            String horaActual = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+             
+     
+ 
+
+            // Plantilla HTML
+            String body = String.format(
+            	    "<!DOCTYPE html>"
+            	    + "<html lang=\"es\">"
+            	    + "<head>"
+            	    + "    <meta charset=\"UTF-8\">"
+            	    + "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+            	    + "    <title>Constancia de Bloqueo</title>"
+            	    + "    <style>"
+            	    + "        body {"
+            	    + "            font-family: Arial, sans-serif;"
+            	    + "            margin: 0;"
+            	    + "            padding: 0;"
+            	    + "            background-color: #f9f9f9;"
+            	    + "        }"
+            	    + "        .container {"
+             	    + "            padding: 20px;"
+            	    + "            background-color: #ffffff;"
+             	    + "        }"
+            	    + "        .header {"
+            	    + "            font-size: 18px;"
+            	    + "            font-weight: bold;"
+            	    + "            margin-bottom: 20px;"
+            	    + "            color: #333333;"
+            	    + "        }"
+            	    + "        .content {"
+            	    + "            font-size: 14px;"
+            	    + "            color: #555555;"
+            	    + "            line-height: 1.6;"
+            	    + "        }"
+            	    + "        .details-table {"
+            	    + "            width: 50%%;"
+            	    + "            border-collapse: collapse;"
+            	    + "            margin-top: 10px;"
+            	    + "        }"
+            	    + "        .details-table td {"
+            	    + "            padding: 8px 0;"
+            	    + "        }"
+            	    + "        .label {"
+            	    + "            font-weight: bold;"
+            	    + "            text-align: left;"
+            	    + "            width: 50%%;"
+            	    + "        }"
+            	    + "        .value {"
+            	    + "            text-align: left;"
+            	    + "        }"
+            	    + "        .footer {"
+            	    + "            margin-top: 20px;"
+            	    + "            font-size: 12px;"
+            	    + "            color: #888888;"
+            	    + "            text-align: left;"
+            	    + "        }"
+            	    + "        .footer a {"
+            	    + "            color: #007bff;"
+            	    + "            text-decoration: none;"
+            	    + "        }"
+            	    + "        .footer a:hover {"
+            	    + "            text-decoration: underline;"
+            	    + "        }"
+            	    + "        .footer img {"
+            	    + "            margin-top: 10px;"
+            	    + "            width: 150px;"
+            	    + "        }"
+            	    + "    </style>"
+            	    + "</head>"
+            	    + "<body>"
+            	    + "    <div class=\"container\">"
+            	    + "        <div class=\"header\">"
+            	    + "            Estimado(a) %s,"
+            	    + "        </div>"
+            	    + "        <div class=\"content\">"
+            	    + "            Mediante el presente, remitimos <span class=\"highlight\">CONSTANCIA DE BLOQUEO DE TARJETA TESORO</span>, porque elegiste el envío electrónico.<br><br>"
+            	    + "            A continuación, los detalles de tu solicitud de bloqueo:"
+            	    + "            <table class=\"details-table\">"
+            	    + "                <tr>"
+            	    + "                    <td class=\"label\">N° de Tarjeta:</td>"
+            	    + "                    <td class=\"value\">%s</td>"
+            	    + "                </tr>"
+            	    + "                <tr>"
+            	    + "                    <td class=\"label\">Código de Bloqueo:</td>"
+            	    + "                    <td class=\"value\">%s</td>"
+            	    + "                </tr>"
+            	    + "                <tr>"
+            	    + "                    <td class=\"label\">Fecha:</td>"
+            	    + "                    <td class=\"value\">%s</td>"
+            	    + "                </tr>"
+            	    + "                <tr>"
+            	    + "                    <td class=\"label\">Hora:</td>"
+            	    + "                    <td class=\"value\">%s</td>"
+            	    + "                </tr>"
+            	    + "            </table>"
+            	    + "            Si tienes alguna consulta, llámanos a nuestra Mesa de Ayuda al <strong>440-5305</strong> / <strong>442-4470</strong>, o también a nuestra línea gratuita desde teléfonos fijos <strong>0800-10700</strong>, o ingresa a <a href=\"https://www.bn.com.pe\">www.bn.com.pe</a>."
+            	    + "        </div>"
+            	    + "        <div class=\"footer\">"
+            	    + "            Atentamente,<br>"
+            	    + "            <strong>Banco de la Nación</strong><br>"
+             
+            	    + "        </div>"
+            	    + "    </div>"
+            	    + "</body>"
+            	    + "</html>",
+            	    nombreCompleto,    // Nombre completo
+            	    TarjetaUtils.procesarTarjeta(tarjeta.getNumTarjeta()),     // Número de tarjeta
+            	    codBloqueo,     // Código de bloqueo
+            	    fechaActual,             // Fecha
+            	    horaActual 
+            	);
+
+
+
+            emailRequest.setBody(body);
+
+            Person replyTo = new Person();
+            replyTo.setName("Banco de la Nacion");
+            replyTo.setEmail(parametros.getCorreoEmisor());
+            emailRequest.setReplyTo(replyTo);
+
+            Person from = new Person();
+            from.setName("Banco de la Nacion");
+            from.setEmail(parametros.getCorreoEmisor());
+            emailRequest.setFrom(from);
+
+            Recipient recipient = new Recipient();
+            recipient.setEmail(tarjeta.getEmail());
+            List<Recipient> toList = new ArrayList<>();
+            toList.add(recipient);
+            emailRequest.setTo(toList);
+
+            emailRequest.setSubject("ASUNTO BLOQUEO TARJETA");
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonPayload = objectMapper.writeValueAsString(emailRequest);
+            // Configurar la solicitud HTTP
+            String urlString = parametros.getUrlAldeamo();
+            URL url = new URL(urlString);
+            String host = url.getHost();
+            Map<String, String> headers = new HashMap<>();
+            headers.put("Content-Type", "application/json");
+            String token = parametros.getTokenAldeamo();
+            headers.put("Authorization", "Bearer " + token);
+            // Enviar la solicitud REST
+ 
+            String response = enviarSolicitudRest(urlString, host, jsonPayload, headers);
+
+            // Procesar la respuesta
+            logger.info("Respuesta del servidor: " + response);
+
+
         } catch (Exception ex) {
             logger.error("Error en enviarMailCambioClave: " + ex.getMessage(), ex);
             throw new InternalServiceException(ex.getMessage(), ex);
         } finally {
             logger.info("Fin del método enviarMailCambioClave");
         }
+
     }
+    public String enviarSolicitudRest(String urlString, String host, String jsonPayload, Map<String, String> headers) throws Exception {
+        // Obtener el SSLContext personalizado
+        SSLContext sslContext = CertificadoUtil.getSslContext(host, ConstantesGenerales.certiAldeamo);
+        SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+        // Configurar la conexión HTTPS
+        URL url = new URL(urlString);
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setSSLSocketFactory(sslSocketFactory);
+
+        // Configurar el método y las propiedades de la conexión
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        connection.setDoInput(true);
+        connection.setConnectTimeout(15000); // 15 segundos
+        connection.setReadTimeout(15000); // 15 segundos
+
+        // Establecer los encabezados de la petición
+        connection.setRequestProperty("Content-Type", "application/json");
+        for (Map.Entry<String, String> header : headers.entrySet()) {
+            connection.setRequestProperty(header.getKey(), header.getValue());
+        }
+
+        // Enviar el cuerpo de la solicitud
+        try (OutputStream os = connection.getOutputStream()) {
+            byte[] input = jsonPayload.getBytes("UTF-8");
+            os.write(input, 0, input.length);
+        }
+
+        // Leer la respuesta
+        int statusCode = connection.getResponseCode();
+
+        InputStream is;
+        if (statusCode >= 200 && statusCode < 400) {
+            is = connection.getInputStream();
+        } else {
+            is = connection.getErrorStream();
+        }
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        StringBuilder response = new StringBuilder();
+        String responseLine;
+        while ((responseLine = br.readLine()) != null) {
+            response.append(responseLine.trim());
+        }
+
+        // Cerrar la conexión
+        connection.disconnect();
+
+        // Devolver la respuesta
+        return response.toString();
+    }
+
+
 }

@@ -3,14 +3,18 @@ package pe.bn.com.sate.ope.application.model;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import pe.bn.com.sate.ope.transversal.dto.sate.Rol;
 import pe.bn.com.sate.ope.transversal.dto.sate.Usuario;
-import pe.bn.com.sate.ope.transversal.util.NumeroALetras;
-import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.OperadorMovil;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstado;
 
+@Getter
+@Setter
+@ToString
 public class ModificarUsuarioModel {
 
 	private String tipoDocumentoSeleccionado;
@@ -39,69 +43,7 @@ public class ModificarUsuarioModel {
 		numDocumentoSeleccionado = "";
 	}
 
-	public String getTipoDocumentoSeleccionado() {
-		return tipoDocumentoSeleccionado;
-	}
-
-	public void setTipoDocumentoSeleccionado(String tipoDocumentoSeleccionado) {
-		this.tipoDocumentoSeleccionado = tipoDocumentoSeleccionado;
-	}
-
-	public String getNumDocumentoSeleccionado() {
-		return numDocumentoSeleccionado;
-	}
-
-	public void setNumDocumentoSeleccionado(String numDocumentoSeleccionado) {
-		this.numDocumentoSeleccionado = numDocumentoSeleccionado;
-	}
-
-	public List<TipoDocumento> getListaTipoDocumento() {
-		return listaTipoDocumento;
-	}
-
-	public void setListaTipoDocumento(List<TipoDocumento> listaTipoDocumento) {
-		this.listaTipoDocumento = listaTipoDocumento;
-	}
-
-	public List<OperadorMovil> getListaOperadorMovil() {
-		return listaOperadorMovil;
-	}
-
-	public void setListaOperadorMovil(List<OperadorMovil> listaOperadorMovil) {
-		this.listaOperadorMovil = listaOperadorMovil;
-	}
-
-	public Usuario getUsuarioSeleccionado() {
-		return usuarioSeleccionado;
-	}
-
-	public void setUsuarioSeleccionado(Usuario usuarioSeleccionado) {
-		this.usuarioSeleccionado = usuarioSeleccionado;
-	}
-
-	public List<Rol> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Rol> roles) {
-		this.roles = roles;
-	}
-
-	public Long getRolSeleccionado() {
-		return rolSeleccionado;
-	}
-
-	public void setRolSeleccionado(Long rolSeleccionado) {
-		this.rolSeleccionado = rolSeleccionado;
-	}
-
-	public boolean isPersonaExiste() {
-		return personaExiste;
-	}
-
-	public void setPersonaExiste(boolean personaExiste) {
-		this.personaExiste = personaExiste;
-	}
+ 
 
 	public void inicializarFormularioUsuario() {
 		usuarioSeleccionado = new Usuario();
@@ -111,21 +53,9 @@ public class ModificarUsuarioModel {
 		personaExiste = false;
 	}
 
-	public String getEstadoSeleccionado() {
-		return estadoSeleccionado;
-	}
+ 
 
-	public void setEstadoSeleccionado(String estadoSeleccionado) {
-		this.estadoSeleccionado = estadoSeleccionado;
-	}
-
-	public List<TipoEstado> getEstadosUsuario() {
-		return estadosUsuario;
-	}
-
-	public void setEstadosUsuario(List<TipoEstado> estadosUsuario) {
-		this.estadosUsuario = estadosUsuario;
-	}
+ 
 
 	public boolean esTipoDocumentoDNI() {
 		if (tipoDocumentoSeleccionado != null

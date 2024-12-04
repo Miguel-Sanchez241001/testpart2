@@ -11,7 +11,7 @@ public enum MotivosBloqueoWS {
 	ROBO("X","Robo"),
 	TEMPORAL("L", "Fallecido"),
 	INVALIDEZ("V", "Invalides");
-//	
+ 
 
 	private String id;
 	private String descripcion;

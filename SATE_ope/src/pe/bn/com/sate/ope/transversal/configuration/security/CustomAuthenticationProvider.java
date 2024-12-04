@@ -184,6 +184,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		if (aliasGrupo.equals(ConstantesGenerales.GRUPO_TIEMPO)) {
 			this.setDatosTiempo(param, valor);
 		}
+		if (aliasGrupo.equals(ConstantesGenerales.GRUPO_CONEXION_SFTP_MC)) {
+			this.setServiceAntiguos(param, valor);
+		}
+		if (aliasGrupo.equals(ConstantesGenerales.GRUPO_SERVICE_ALDEAMO)) {
+			this.setCorreoAldeamo(param, valor);
+		}
 	}
 
 	private void setDatosReniec(String param, String valor) {
@@ -218,36 +224,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			parametros.setWsComercioMc(valor);
 		}
 	}
-//	private void setDatosMC(String param, String valor) {
-//		parametros.setPrefijoNumReferenciaMc("AC");
-//		parametros.setWsClaveMc("aza877azutht98b8");
-//		parametros.setWsSoapMc("https://172.25.22.202:446/WCFGestionTarjetas/Service1.svc");
-//		parametros.setCodigoUsuarioMc("TT9999");
-//		parametros.setNumTerminalMc("11010101");
-//		parametros.setCodigoEmisorMc("191");
-//		parametros.setWsComercioMc("4058950");
-//		parametros.setWsUsuarioMc("4858643428");	
-// 
-//	/*	if (param.equals(ConstantesGenerales.PARAM_CODIGOEMISOR)) {
-//			parametros.setCodigoEmisorMc(valor);
-//		} else if (param.equals(ConstantesGenerales.PARAM_CODIGOUSUARIO)) {
-//			parametros.setCodigoUsuarioMc(valor);
-//		} else if (param.equals(ConstantesGenerales.PARAM_NUMTERMINAL)) {
-//			parametros.setNumTerminalMc(valor);
-//		} else if (param.equals(ConstantesGenerales.PARAM_PREFIJONUMREFERENCIA)) {
-//			parametros.setPrefijoNumReferenciaMc(valor);
-//		} else if (param.equals(ConstantesGenerales.PARAM_WSUSUARIOMC)) {
-//			parametros.setWsUsuarioMc(valor);
-//		} else if (param.equals(ConstantesGenerales.PARAM_WSCLAVEMC)) {
-//			parametros.setWsClaveMc(valor);
-//		} else if (param.equals(ConstantesGenerales.PARAM_WSURLSOAPMC)) {
-//			parametros.setWsSoapMc(valor);
-//		} else if (param.equals(ConstantesGenerales.PARAM_COMERCIO)) {
-//			parametros.setWsSoapMc(valor);
-//		}*/
-// 
-//	}
-
+ 
 	private void setDatosTiempo(String param, String valor) {
 		if (param.equals(ConstantesGenerales.PARAM_SESIONEXPIRADATIEMPO)) {
 			parametros.setSesionExpiradaTiempo(valor);
@@ -258,6 +235,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		}
 	}
 
+	
+	private void setServiceAntiguos(String param, String valor) {
+		if (param.equals(ConstantesGenerales.PARAM_URLSERVICESATEREST)) {
+			parametros.setUrlServiceRestAntiguos(valor);
+		}  
+	}
+	private void setCorreoAldeamo(String param, String valor) {
+		if (param.equals(ConstantesGenerales.PARAM_URLALDEAMO)) {
+			parametros.setUrlAldeamo(valor);
+		} else if (param.equals(ConstantesGenerales.PARAM_TOKENALDEAMO)) {
+			parametros.setTokenAldeamo(valor);
+		} else if (param.equals(ConstantesGenerales.PARAM_CORREOALDEAMO)) {
+			parametros.setCorreoEmisor(valor);
+		}
+	}
+	
 	public byte[] leerClavesSegurades() {
 		try {
 			FileInputStream fis = new FileInputStream(new File(

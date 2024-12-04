@@ -10,8 +10,11 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+ import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
-import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesPagina;
+import pe.bn.com.sate.ope.transversal.util.CsrfTokenFilter;
+ import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesPagina;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesSeguridad;
 
 @Configuration
@@ -22,10 +25,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private @Autowired
 	CustomAuthenticationProvider customAuthenticationProvider;
  
-
 	@Override
 	public void configure(WebSecurity webSecurity) throws Exception {
 		webSecurity.ignoring().antMatchers("/resources/**");
+		webSecurity.ignoring().antMatchers("/error/*");
 	}
 
 	@Autowired
@@ -38,7 +41,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().maximumSessions(1)
 				.expiredUrl(ConstantesPagina.PAGINA_INDEX).and()
 				.invalidSessionUrl(ConstantesPagina.PAGINA_INDEX);
-
+		
+		// TODO: VULNERABILIDAD Cabecera Content Security Policy (CSP) no configurada
+	    http.headers()
+	    .addHeaderWriter(new StaticHeadersWriter("Content-Security-Policy", 
+                "default-src 'self';img-src 'self' data: ; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"))
+	    .addHeaderWriter(new StaticHeadersWriter("X-Frame-Options", "DENY")) // Anti-Clickjacking
+        .httpStrictTransportSecurity() // HSTS
+        .cacheControl();
 		http.authorizeRequests()
 				.antMatchers(
 						ConstantesPagina.PAGINA_OPERACIONES_SOLICITAR_TARJETA)
@@ -51,14 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers(
 						ConstantesPagina.PAGINA_OPERACIONES_AUTORIZAR_TARJETA)
 				.hasAnyAuthority(
-						ConstantesSeguridad.ACCESO_OPERACIONES_AUTORIZAR_TARJETA)						
-						
-				.antMatchers(
-						ConstantesPagina.PAGINA_CONSULTA_CLIENTE)
-				.hasAnyAuthority(
-						ConstantesSeguridad.ACCESO_CONSULTA_CLIENTE)					
-					
-						
+						ConstantesSeguridad.ACCESO_OPERACIONES_AUTORIZAR_TARJETA)
 				.antMatchers(ConstantesPagina.PAGINA_OPERACIONES_BUSCAR_TARJETA)
 				.hasAnyAuthority(
 						ConstantesSeguridad.ACCESO_CONSULTA_MOVIMIENTO_TARJETA)
@@ -95,13 +98,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.accessDeniedPage(ConstantesPagina.PAGINA_ACCESO_DENEGADO)
 				.and().logout()
 				.logoutUrl(ConstantesPagina.LOGIN_URL_CERRAR_SESION)
-				.logoutSuccessUrl(ConstantesPagina.PAGINA_INDEX).and().csrf()
-				.disable();
-
+				.logoutSuccessUrl(ConstantesPagina.PAGINA_INDEX).and()
+				.csrf().disable();
+ 	 			http.addFilterBefore(csrfTokenFilterV(), UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
 		return new CustomSuccessLoginHandler();
+	}
+	
+	@Bean
+	public CsrfTokenFilter csrfTokenFilterV() {
+		return new CsrfTokenFilter();
 	}
 }

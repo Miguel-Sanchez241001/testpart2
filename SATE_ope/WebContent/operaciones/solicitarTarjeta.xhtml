@@ -41,6 +41,8 @@
 			</div>
 		</center>
 		<h:form id="formSolicitarTarjeta" class="formularioTarjeta">
+				<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
+			
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 					<center>
@@ -91,7 +93,7 @@
 		            <p:commandButton value="Buscar"
 		                onclick="statusDialog.show();"
 		                oncomplete="statusDialog.hide();"
-		                disabled="#{!solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}"
+		                disabled="#{!solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumento()}"
 		                process="@this somTipoDocumento,numDocumento"
 		                actionListener="#{solicitarTarjetaController.buscarCliente()}"
 		                update=":formSolicitarTarjeta:pgBusqueda :formSolicitarTarjeta:pgDatosContacto msgs"
@@ -104,7 +106,7 @@
 		        <p:inputText id="itNombres"
 		            maxlength="30"
 		            onkeypress="return validarSoloLetras(event)"
-		            readonly="#{solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}"
+		            readonly="#{solicitarTarjetaController.solicitarTarjetaModel.personaExiste}"
 		            required="true"
 		            requiredMessage="#{valMsg['required.nombres']}"
  		            value="#{solicitarTarjetaController.solicitarTarjetaModel.clienteSeleccionado.nombres}" >
@@ -116,7 +118,7 @@
 		            maxlength="30"
 		            onkeypress="return validarSoloLetras(event)"
 		            requiredMessage="#{valMsg['required.apPaterno']}"
-		            readonly="#{solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}"
+		            readonly="#{solicitarTarjetaController.solicitarTarjetaModel.personaExiste}"
 		            value="#{solicitarTarjetaController.solicitarTarjetaModel.clienteSeleccionado.apPaterno}" />
 		
 		        <h:outputText value="Apellido materno *" />
@@ -127,7 +129,7 @@
 		            maxlength="30"
 		            requiredMessage="#{valMsg['required.apMaterno']}"
 		            onkeypress="return validarSoloLetras(event)"
-		            readonly="#{solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}"
+		            readonly="#{solicitarTarjetaController.solicitarTarjetaModel.personaExiste}"
 		            value="#{solicitarTarjetaController.solicitarTarjetaModel.clienteSeleccionado.apMaterno}" />
 		
 		        <p:calendar id="itFechaNacimiento"
@@ -137,7 +139,7 @@
 		            
  		            
 		            placeholder="DD/MM/AAAA"
-		            disabled="#{solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}"
+		            disabled="#{solicitarTarjetaController.solicitarTarjetaModel.personaExiste}"
 		            navigator="true"
 		            required="true"
 		            requiredMessage="#{valMsg['required.fechaNacimiento']}"
@@ -154,7 +156,7 @@
 		        <p:selectOneRadio id="soSexo"
 		            required="true"
 		            requiredMessage="#{valMsg['required.sexo']}"
-		            disabled="#{solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}"
+		            disabled="#{solicitarTarjetaController.solicitarTarjetaModel.personaExiste}"
 		            value="#{solicitarTarjetaController.solicitarTarjetaModel.clienteSeleccionado.sexo}">
 		            <f:selectItem itemLabel="Masculino" itemValue="M" />
 		            <f:selectItem itemLabel="Femenino" itemValue="F" />
@@ -165,7 +167,7 @@
 		            required="true"
 		            requiredMessage="#{valMsg['required.estadoCivil']}"
 		            value="#{solicitarTarjetaController.solicitarTarjetaModel.clienteSeleccionado.estadoCivil}"
-		            disabled="#{solicitarTarjetaController.solicitarTarjetaModel.esTipoDocumentoDNI()}">
+		            disabled="#{solicitarTarjetaController.solicitarTarjetaModel.personaExiste}">
 		            <f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 		            <f:selectItems
 		                value="#{solicitarTarjetaController.solicitarTarjetaModel.listaEstadoCivil}"

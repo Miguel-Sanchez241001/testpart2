@@ -32,6 +32,7 @@
 		href="#{request.contextPath}/resources/css/teclado.css" />
 	<link rel="stylesheet" type="text/css"
 		href="#{request.contextPath}/resources/css/mejoras.css" />
+<h:outputScript name="jsf.js" library="javax.faces" target="head" />
 
 	<script type="text/javascript"
 		src="#{request.contextPath}/resources/js/jquery.ui.js"></script>
@@ -39,10 +40,15 @@
 		src="#{request.contextPath}/resources/js/select.js"></script>
 	<script type="text/javascript"
 		src="#{request.contextPath}/resources/js/bn-funciones.js"></script>
-
+    <!-- Definir window.csrf_token y agregar logs para depuración -->
+    <h:outputScript target="head">
+        window.csrf_token = "#{sessionScope.csrf_token}";
+    </h:outputScript>
 </h:head>
 <h:body>
 
+  
+    
 	<div class="cabecera sombra-inferior">
 		<div class="cabecera-izq">
 			<span class="sp1"></span> <span class="sp2"></span>
@@ -66,7 +72,7 @@
 
 			<div class="login-div sombra-inferior">
 				<h:form name="formlog" id="formlog" prependId="false">
-
+ 					<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 					<table class="tabla-sate noBorders redondeado ">
 
 						<tr>
@@ -95,7 +101,7 @@
 										widgetVar="tipoDocumentoWv" required="true"
 										value="#{loginController.loginModel.tipoDocumentoSeleccionado}"
 										requiredMessage="Seleccione un tipo de documento">
-										<f:validator validatorId="loginModelValidator" />
+    							<f:validator validatorId="tipoDocumentoValidator" />
 										<p:ajax event="change" update="formlog:numeroDocumento"
 											listener="#{loginController.loginModel.setTipoDocumentoSeleccionado(loginController.loginModel.tipoDocumentoSeleccionado)}" />
 										<f:selectItems
@@ -195,9 +201,10 @@
 									<p:password
 										style="font-size:12.5px !important;background:#fff !important;text-align:center;width:70%;margin:5px;"
 										name="password"
+										onkeydown="javascript:return false;"
 										value="#{loginController.loginModel.teclado.clave}"
 										id="password" maxlength="6" required="true" redisplay="true"
-										onkeydown="javascript:return false;"
+										 
 										requiredMessage="Ingrese una clave"
 										validatorMessage="La clave debe tener 6 dígitos">
 										<f:validateLength minimum="6" />
@@ -249,8 +256,6 @@
 						validateClient="true" styleClass="loginBtn" update="formlog"
 						onclick="generateUserName();" ajax="false"
 						actionListener="#{loginController.iniciarSesion()}" />
-						
-					
 
 
 				</h:form>
@@ -281,6 +286,8 @@
 
 		<h:form id="formlogRecuperar" style="width: 400px; font-size: 11px;"
 			prependId="false">
+		<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
+			
 			<center>
 				<table style="width: 90%; margin: 2.5% 0 2.5% -10%;"
 					class="redondeado">
@@ -301,13 +308,14 @@
 						<td><h:outputLabel style="text-align:right;float:right;"
 								for="tipoDocumento" value="Tipo de documento :"
 								styleClass="grande" /></td>
-						<td><p:selectOneMenu id="tipoDocumentoRecuperar"
+						<td>
+						<p:selectOneMenu id="tipoDocumentoRecuperar"
 								name="tipoDocumento" styleClass="form-control"
 								style="text-align:left;font-size:12px !important;margin-left:5%;width:90%"
 								widgetVar="tipoDocumentoRecuperarWv" required="true"
 								value="#{loginController.loginModel.tipoDocumentoRecuperar}"
 								requiredMessage="Seleccione un tipo de documento">
-								<f:validator validatorId="loginModelValidator" />
+								    <f:validator validatorId="tipoDocumentoValidator" />
 								<p:ajax event="change"
 									update="formlogRecuperar:numeroDocumentoRecuperar"
 									listener="#{loginController.loginModel.setTipoDocumentoRecuperar(loginController.loginModel.tipoDocumentoRecuperar)}" />
@@ -315,7 +323,9 @@
 									value="#{loginController.loginModel.listaTipoDocumento}"
 									var="item" itemLabel="#{item.nombre}"
 									itemValue="#{item.codigoBduc}" />
-							</p:selectOneMenu></td>
+							</p:selectOneMenu>
+							
+							</td>
 					</tr>
 					<tr>
 						<td><h:outputLabel style="text-align:right;float:right;"
@@ -334,7 +344,7 @@
 								<f:validateLength
 									minimum="#{loginController.loginModel.obtenerDocumentoLength(loginController.loginModel.tipoDocumentoRecuperar)}" />
 							</p:inputText></td>
-					</tr>
+					</tr>					
 					<tr>
 						<td><h:outputLabel style="text-align:right;float:right;"
 								for="correoRecuperar" value="Correo Electrónico:"
@@ -361,9 +371,16 @@
 					<p:commandButton style="margin:5px;" id="Aceptar" value="Si"
 						actionListener="#{loginController.recuperarClave()}"
 						update="formlogRecuperar" styleClass="smallBtn" />
-					<p:commandButton style="margin:5px;" process="@this" id="cancelar"
-						value="No" oncomplete="recuperarClaveWv.hide()"
-						styleClass="smallBtn" update=":formlog" />
+					<p:commandButton 
+					    style="margin:5px;" 
+					    process="@this" 
+					    id="cancelar"
+					    value="No" 
+					    oncomplete="recuperarClaveWv.hide(); redirigirIndex();" 
+					    styleClass="smallBtn" />
+					
+					<p:remoteCommand name="redirigirIndex" action="index?faces-redirect=true" />
+
 				</div>
 			</center>
 		</h:form>
@@ -383,7 +400,22 @@
 		</center>
 		<p:graphicImage name="/img/ajaxloadingbar.gif" />
 	</p:dialog>
-
+    <!-- Scripts al final del body para interceptar las solicitudes Ajax de PrimeFaces -->
+    <h:outputScript target="body">
+        (function() {
+            if (window.PrimeFaces &amp;&amp; PrimeFaces.ajax) {
+                var originalAjaxRequest = PrimeFaces.ajax.AjaxRequest;
+                PrimeFaces.ajax.AjaxRequest = function(cfg, ext) {
+                    if (!cfg.headers) {
+                        cfg.headers = {};
+                    }
+                    cfg.headers['X-Csrf-Token'] = window.csrf_token;
+                     return originalAjaxRequest.call(this, cfg, ext);
+                };
+             } else {
+             }
+        })();
+    </h:outputScript>
 	<script type="text/javascript">
 		$("html, body").animate({
 			scrollTop : $("body").height() * .1
@@ -405,6 +437,8 @@
 							+ $('#numeroDocumento').val())
 		};
 	</script>
+	
+ 
 
 </h:body>
 

@@ -1,20 +1,25 @@
 package pe.bn.com.sate.ope.application.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
+import pe.bn.com.sate.ope.transversal.util.enums.OperacionMovimientoMC;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMoneda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMontoMC;
-import pe.bn.com.sate.ope.transversal.util.enums.OperacionMovimientoMC;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaMC;
 
+@Getter
+@Setter
+@ToString
 public class ConsultarMovimientosModel {
 
 	private Date fechaInicio;
@@ -58,8 +63,7 @@ public class ConsultarMovimientosModel {
 	private DatosTarjetaCliente datosTarjetaCliente;
 
 	public ConsultarMovimientosModel() {
-		//listaTipoBusqueda = Arrays.asList(TipoBusqueda.values());
-		tipoBusqueda = TipoBusqueda.NUM_TARJETA.getId();	
+ 		tipoBusqueda = TipoBusqueda.NUM_TARJETA.getId();	
 		
 		listaTipoBusquedaPor = new ArrayList<>();
         listaTipoBusquedaPor.add("Por Documento");
@@ -79,48 +83,10 @@ public class ConsultarMovimientosModel {
 			movimientosTarjetaExp.clear();
 	}
 
-	public List<MovimientoTarjeta> getMovimientosTarjeta() {
-		return movimientosTarjeta;
-	}
-
-	public void setMovimientosTarjeta(List<MovimientoTarjeta> movimientosTarjeta) {
-		this.movimientosTarjeta = movimientosTarjeta;
-	}
-	
-	
-	public List<MovimientoTarjetaExpediente> getMovimientosTarjetaExp() {
-		return movimientosTarjetaExp;
-	}
-
-	public void setMovimientosTarjetaExp(List<MovimientoTarjetaExpediente> movimientosTarjetaExp) {
-		this.movimientosTarjetaExp = movimientosTarjetaExp;
-	}
-	
+ 
 	
 
-	public Date getFechaInicio() {
-		return fechaInicio;
-	}
-
-	public void setFechaInicio(Date fechaInicio) {
-		this.fechaInicio = fechaInicio;
-	}
-
-	public Date getFechaFin() {
-		return fechaFin;
-	}
-
-	public void setFechaFin(Date fechaFin) {
-		this.fechaFin = fechaFin;
-	}
-
-	public String getNumeroTarjeta() {
-		return numeroTarjeta;
-	}
-
-	public void setNumeroTarjeta(String numeroTarjeta) {
-		this.numeroTarjeta = numeroTarjeta;
-	}
+ 
 
 	public String tipoMontoLetras(String tipoMonto) {
 		return TipoMontoMC.enLetras(tipoMonto);
@@ -148,30 +114,8 @@ public class ConsultarMovimientosModel {
 				: false;
 	}
 
-	public List<TipoBusqueda> getListaTipoBusqueda() {
-		//numeroTarjeta = null;
-		return listaTipoBusqueda;
-	}
-
-	public void setListaTipoBusqueda(List<TipoBusqueda> listaTipoBusqueda) {
-		this.listaTipoBusqueda = listaTipoBusqueda;
-	}
-
-	public String getTipoBusqueda() {
-		return tipoBusqueda;
-	}
-
-	public void setTipoBusqueda(String tipoBusqueda) {
-		this.tipoBusqueda = tipoBusqueda;
-	}
-
-	public DatosTarjetaCliente getDatosTarjetaCliente() {
-		return datosTarjetaCliente;
-	}
-
-	public void setDatosTarjetaCliente(DatosTarjetaCliente datosTarjetaCliente) {
-		this.datosTarjetaCliente = datosTarjetaCliente;
-	}
+ 
+ 
 	
 	public int obtenerBusquedaLength() {
 
@@ -188,15 +132,7 @@ public class ConsultarMovimientosModel {
 				+ TipoBusqueda.tipoBusquedaLetras(tipoBusqueda);
 	}
 	
-	
-	
-	public boolean isBusquedaRealizada() {
-		return busquedaRealizada;
-	}
-
-	public void setBusquedaRealizada(boolean busquedaRealizada) {
-		this.busquedaRealizada = busquedaRealizada;
-	}
+ 
 
 	public void inicializarFormulario() {
 		datosTarjetaCliente = new DatosTarjetaCliente();
@@ -214,23 +150,7 @@ public class ConsultarMovimientosModel {
 		
 	}
 
-	public List<String> getListaTipoBusquedaPor() {
-		return listaTipoBusquedaPor;
-	}
-
-	public void setListaTipoBusquedaPor(List<String> listaTipoBusquedaPor) {
-		this.listaTipoBusquedaPor = listaTipoBusquedaPor;
-	}
-
-	public String getTipoBusquedaPor() {
-		return tipoBusquedaPor;
-	}
-
-	public void setTipoBusquedaPor(String tipoBusquedaPor) {
-		this.tipoBusquedaPor = tipoBusquedaPor;
-	}
-	
-
+ 
 	
 	
 }

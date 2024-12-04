@@ -4,8 +4,8 @@ public enum MotivosBloqueoCuenta {
 
 	NORMAL("N", "Activar Cuenta"), 
 	TEMPORAL("L", "Fallecido"),
-	INVALIDEZ("V", "Invalides");
-
+	INVALIDEZ("V", "Invalides permanente"),
+	CANCELACION("I", "Cancelación cuenta");
 	private String id;
 	private String descripcion;
 
@@ -53,12 +53,13 @@ public enum MotivosBloqueoCuenta {
 		return motivos;
 	}
 	
-	public static MotivosBloqueoCuenta[] motivosBloqueoPorIdMotivoWS(String id) {
+	public static MotivosBloqueoCuenta[] motivosBloqueoPorIdMotivoWS() {
 		MotivosBloqueoCuenta motivos[] = null;
 	
 		motivos = new MotivosBloqueoCuenta[3];
 		motivos[0] = MotivosBloqueoCuenta.TEMPORAL;
-		motivos[2] = MotivosBloqueoCuenta.INVALIDEZ;
+		motivos[1] = MotivosBloqueoCuenta.INVALIDEZ;
+		motivos[2] = MotivosBloqueoCuenta.CANCELACION;
 		return motivos;
 	}
 }

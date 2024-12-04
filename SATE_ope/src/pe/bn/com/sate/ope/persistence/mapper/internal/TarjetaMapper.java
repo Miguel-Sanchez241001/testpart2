@@ -38,7 +38,7 @@ public interface TarjetaMapper {
             "B05_NUM_CELULAR," +
             "B05_FLAG_ACT_CONTACTO," +
             "B05_DISENO) " +
-            "VALUES (#{idEmpresa}, #{idUsu}, #{idCli},#{entregaAgenciaBNombre},  #{usoDispocionEfectivo}, #{porcentajeDisposicionEfectivo}, #{usoExtranjero}, #{usoComprasWeb}, #{tipoTarjeta}, #{observaciones}, #{tipoMoneda}, #{entregaUbicacion}, #{entregaAgenciaBN}, #{entregaUbigeo}, #{entregaDireccion}, #{entregaReferencia}, #{fechaCreacion}, #{email}, #{operadorCelular}, #{numeroCelular}, #{flagActualizarContacto}, #{diseno})")
+            "VALUES (#{idEmpresa}, #{idUsu}, #{idCli},#{nombreAgenciaBN},  #{usoDispocionEfectivo}, #{porcentajeDisposicionEfectivo}, #{usoExtranjero}, #{usoComprasWeb}, #{tipoTarjeta}, #{observaciones}, #{tipoMoneda}, #{entregaUbicacion}, #{entregaAgenciaBN}, #{entregaUbigeo}, #{entregaDireccion}, #{entregaReferencia}, #{fechaCreacion}, #{email}, #{operadorCelular}, #{numeroCelular}, #{flagActualizarContacto}, #{diseno})")
     public void registrarTarjeta(Tarjeta tarjeta);
 
     @Insert("INSERT INTO BN_SATE.BNSATE07_EST_TARJETA(" +
@@ -46,13 +46,15 @@ public interface TarjetaMapper {
             "B07_ESTADO," +
             "B07_MOTIVO," +
             "B07_FEC_REGISTRO," +
-            "B07_USUARIO_CREA) " +
+            "B07_USUARIO_CREA,"
+            + "B07_COD_AUTORIZA) " +
             "VALUES (" +
             "#{idTarjeta}," +
             "#{estado}," +
             "#{motivo}," +
             "#{fechaRegistro}," +
-            "#{usuarioRegistro})")
+            "#{usuarioRegistro},"
+            + "#{codAutorizacion})")
     public void registrarEstadoTarjeta(EstadoTarjeta estadoTarjeta);
 
     @Select("SELECT BN05.B05_ID_TAR," +
@@ -106,6 +108,7 @@ public interface TarjetaMapper {
             "BN07.B07_MOTIVO, " +
             "BN07.B07_FEC_REGISTRO, " +
             "BN07.B07_USUARIO_CREA " +
+            "BN07.B07_COD_AUTORIZA " +
             "FROM BN_SATE.BNSATE05_TARJETA BN05 " +
             "INNER JOIN BN_SATE.BNSATE07_EST_TARJETA BN07 ON BN07.B05_ID_TAR = BN05.B05_ID_TAR " +
             "INNER JOIN BN_SATE.BNSATE00_EMPRESA BN00 ON BN00.B00_ID_EMP = BN05.B00_ID_EMP " +
@@ -183,7 +186,10 @@ public interface TarjetaMapper {
             "SUBSTR(BN05.B05_ENTREGA_UBIGEO, 5, 2) AS B05_ENTREGA_DISTRITO," +
             "(CASE WHEN BN05.B05_ENTREGA_UBICACION = '4' THEN (SELECT B00_RAZON_SOCIAL FROM BN_SATE.BNSATE00_EMPRESA BN00 WHERE BN00.B00_ID_EMP = BN05.B05_ENTREGA_AGENCIA_BN) ELSE '' END) AS ENTREGA_UBICACION_UE," +
             "BN07.B07_ESTADO," +
-            "BN07.B07_MOTIVO, BN07.B07_FEC_REGISTRO, BN07.B07_USUARIO_CREA " +
+            "BN07.B07_MOTIVO,"
+            + " BN07.B07_FEC_REGISTRO,"
+            + " BN07.B07_USUARIO_CREA, " +
+            "BN07.B07_COD_AUTORIZA " +
             "FROM BN_SATE.BNSATE05_TARJETA BN05 " +
             "INNER JOIN BN_SATE.BNSATE06_CLIENTE BN06 ON BN05.B06_ID_CLI = BN06.B06_ID_CLI " +
             "INNER JOIN BN_SATE.BNSATE07_EST_TARJETA BN07 ON BN07.B05_ID_TAR = BN05.B05_ID_TAR " +
@@ -199,18 +205,76 @@ public interface TarjetaMapper {
             @Param("numDocumento") String numDocumento,
             @Param("numRuc") String numRuc);
 
-    @Select("SELECT emp.b00_razon_social, tar.b05_usuario_creacion, tar.b05_fec_creacion, eta.b07_estado, eta.b07_fec_registro, tar.b05_tipo_tarjeta, tar.b05_diseno, tar.b05_num_tarjeta, cli.b06_tipo_documento, cli.b06_num_documento, cli.b06_nombres, cli.b06_appaterno || ' ' || cli.b06_apmaterno AS b06_apellidos " +
-            "FROM BN_SATE.BNSATE05_TARJETA tar " +
-            "JOIN BN_SATE.BNSATE00_EMPRESA emp ON tar.b00_id_emp = emp.b00_id_emp " +
-            "JOIN BN_SATE.BNSATE06_CLIENTE cli ON tar.b06_id_cli = cli.b06_id_cli " +
-            "JOIN BN_SATE.BNSATE07_EST_TARJETA eta ON eta.b05_id_tar = tar.b05_id_tar " +
-            "JOIN (SELECT tar1.b05_id_tar, MAX(eta1.b07_fec_registro) b07_fec_registro FROM BN_SATE.BNSATE05_TARJETA tar1 " +
-            "JOIN BN_SATE.BNSATE07_EST_TARJETA eta1 ON eta1.b05_id_tar = tar1.b05_id_tar " +
-            "GROUP BY tar1.b05_id_tar) qry ON tar.b05_id_tar = qry.b05_id_tar AND eta.b07_fec_registro = qry.b07_fec_registro " +
-            "WHERE emp.b00_num_cuenta_corriente = #{cuentaCorriente} AND tar.b05_num_tarjeta IS NOT NULL AND TRUNC(eta.b07_fec_registro) BETWEEN TRUNC(TO_DATE(#{fechaInicio}, 'dd/mm/yy')) AND TRUNC(TO_DATE(#{fechaFin}, 'dd/mm/yy'))")
+    @Select("SELECT   "
+    		+ "    tar.b05_id_tar AS B05_ID_TAR, " + 
+ 
+    		"    emp.b00_razon_social,   " + 
+    		"     CASE   " + 
+    		"                WHEN usuario.B02_APPATERNO IS NOT NULL AND usuario.B02_APMATERNO IS NOT NULL THEN   " + 
+    		"                    SUBSTR(usuario.B02_NOMBRES, 1, 1) ||   " + 
+    		"                    SUBSTR(REGEXP_SUBSTR(usuario.B02_NOMBRES, '[^ ]+', 1, 2), 1, 1) ||   " + 
+    		"                    SUBSTR(usuario.B02_APPATERNO, 1, 1) ||   " + 
+    		"                    SUBSTR(usuario.B02_APMATERNO, 1, 1)   " + 
+    		"                WHEN INSTR(usuario.B02_NOMBRES, '|') > 0 THEN   " + 
+    		"                    REGEXP_REPLACE(   " + 
+    		"                        REGEXP_SUBSTR(usuario.B02_NOMBRES, '\\\\|([^|]+)\\\\|', 1, 1),   " + 
+    		"                        '(^| )([A-Za-z])[^ ]*',   " + 
+    		"                        '\\\\2'   " + 
+    		"                    )   " + 
+    		"                ELSE REGEXP_REPLACE(   " + 
+    		"                         usuario.B02_NOMBRES,   " + 
+    		"                         '(^| )([A-Za-z])[^ ]*',   " + 
+    		"                         '\\\\2'   " + 
+    		"                     )   " + 
+    		"            END AS b05_usuario_creacion,   " + 
+    		"    tar.b05_fec_creacion,   " + 
+    		"    eta.b07_estado,   " + 
+    		"    eta.b07_fec_registro,   " + 
+    		"    tar.b05_tipo_tarjeta,   " + 
+    		"    tar.b05_diseno,   " + 
+    		"     SUBSTR(tar.b05_num_tarjeta, 4) AS B05_NUM_TARJETA,   " + 
+    		"    cli.b06_tipo_documento,   " + 
+    		"    cli.b06_num_documento,   " + 
+    		"    cli.b06_nombres,   " + 
+    		"    cli.b06_appaterno || ' ' || cli.b06_apmaterno AS b06_apellidos  " + 
+    		"FROM   " + 
+    		"    BN_SATE.BNSATE05_TARJETA tar  " + 
+    		"JOIN   " + 
+    		"    BN_SATE.BNSATE00_EMPRESA emp   " + 
+    		"    ON tar.b00_id_emp = emp.b00_id_emp  " + 
+    		"JOIN   " + 
+    		"    BN_SATE.BNSATE06_CLIENTE cli   " + 
+    		"    ON tar.b06_id_cli = cli.b06_id_cli  " + 
+    		"JOIN  " + 
+    		"    BN_SATE.BNSATE02_USUARIO usuario  " + 
+    		"    ON tar.B02_REP = usuario.B02_REP  " + 
+    		"JOIN   " + 
+    		"    BN_SATE.BNSATE07_EST_TARJETA eta   " + 
+    		"    ON eta.b05_id_tar = tar.b05_id_tar  " + 
+    		"JOIN   " + 
+    		"    (  " + 
+    		"        SELECT   " + 
+    		"            tar1.b05_id_tar,   " + 
+    		"            MAX(eta1.b07_fec_registro) AS b07_fec_registro   " + 
+    		"        FROM   " + 
+    		"            BN_SATE.BNSATE05_TARJETA tar1  " + 
+    		"        JOIN   " + 
+    		"            BN_SATE.BNSATE07_EST_TARJETA eta1   " + 
+    		"            ON eta1.b05_id_tar = tar1.b05_id_tar  " + 
+    		"        GROUP BY   " + 
+    		"            tar1.b05_id_tar  " + 
+    		"    ) qry   " + 
+    		"    ON tar.b05_id_tar = qry.b05_id_tar   " + 
+    		"    AND eta.b07_fec_registro = qry.b07_fec_registro  " + 
+    		"WHERE   " + 
+    		"    emp.B00_NUM_RUC = #{numruc}  " + 
+    		"    AND tar.b05_num_tarjeta IS NOT NULL  " + 
+    		"    AND TRUNC(tar.B05_FEC_CREACION)  " + 
+    		"        BETWEEN TRUNC(TO_DATE(#{fechaInicio}, 'dd/mm/yy'))   " + 
+    		"        AND TRUNC(TO_DATE(#{fechaFin}, 'dd/mm/yy'))")
     @ResultMap("mapTarjetaResumen")
     public List<TarjetaResumen> obtenerListaTarjetas(
-            @Param("cuentaCorriente") String cuentaCorriente,
+            @Param("numruc") String numruc,
             @Param("fechaInicio") String fechaInicio,
             @Param("fechaFin") String fechaFin);
 
@@ -330,7 +394,9 @@ public interface TarjetaMapper {
             "SUBSTR(BN05.B05_ENTREGA_UBIGEO, 5, 2) AS B05_ENTREGA_DISTRITO," +
             "(CASE WHEN BN05.B05_ENTREGA_UBICACION = '4' THEN (SELECT B00_RAZON_SOCIAL FROM BN_SATE.BNSATE00_EMPRESA BN00 WHERE BN00.B00_ID_EMP = BN05.B05_ENTREGA_AGENCIA_BN) ELSE '' END) AS ENTREGA_UBICACION_UE," +
             "BN07.B07_ESTADO," +
-            "BN07.B07_MOTIVO, BN07.B07_FEC_REGISTRO, BN07.B07_USUARIO_CREA " +
+            "BN07.B07_MOTIVO, BN07.B07_FEC_REGISTRO,"
+            + " BN07.B07_USUARIO_CREA, " +
+            "BN07.B07_COD_AUTORIZA " +
             "FROM BN_SATE.BNSATE05_TARJETA BN05 " +
             "INNER JOIN BN_SATE.BNSATE06_CLIENTE BN06 ON BN05.B06_ID_CLI = BN06.B06_ID_CLI " +
             "INNER JOIN BN_SATE.BNSATE07_EST_TARJETA BN07 ON BN07.B05_ID_TAR = BN05.B05_ID_TAR " +

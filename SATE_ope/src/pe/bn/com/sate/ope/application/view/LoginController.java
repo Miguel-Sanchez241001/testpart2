@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.SocketTimeoutException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
@@ -30,16 +29,13 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 
 import pe.bn.com.sate.ope.application.model.LoginModel;
-import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceMCProcesosException;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
-import pe.bn.com.sate.ope.infrastructure.facade.FWMCProcesos;
 import pe.bn.com.sate.ope.infrastructure.facade.InterfaceGatewayFacade;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.novatronic.captcha.Captcha;
 import pe.bn.com.sate.ope.infrastructure.service.internal.CaptchaService;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
-import pe.bn.com.sate.ope.transversal.util.excepciones.InternalExcepcion;
 import pe.bn.com.sate.ope.transversal.util.excepciones.LoginException;
 
 /**
@@ -58,8 +54,7 @@ public class LoginController implements PhaseListener, Serializable {
 
     @Autowired
     private InterfaceGatewayFacade fWInterfaceGateway;
-    private @Autowired
-	FWMCProcesos fwmcProcesos;
+
     /**
      * Inicializa el modelo de login y genera un captcha.
      */

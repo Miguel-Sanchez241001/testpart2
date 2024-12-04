@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import pe.bn.com.sate.ope.application.model.AutorizarSolicitudModel;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
@@ -17,6 +19,8 @@ import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 
 @Controller("autorizarSolicitudesController")
 @Scope("view")
+@Getter
+@Setter
 public class AutorizarSolicitudesController implements Serializable {
 
 	private final Logger logger = Logger
@@ -85,14 +89,6 @@ public class AutorizarSolicitudesController implements Serializable {
 					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
 		}
 	}
-
-	public AutorizarSolicitudModel getAutorizarSolicitudModel() {
-		return autorizarSolicitudModel;
-	}
-
-	public void setAutorizarSolicitudModel(
-			AutorizarSolicitudModel autorizarSolicitudModel) {
-		this.autorizarSolicitudModel = autorizarSolicitudModel;
-	}
+ 
 
 }

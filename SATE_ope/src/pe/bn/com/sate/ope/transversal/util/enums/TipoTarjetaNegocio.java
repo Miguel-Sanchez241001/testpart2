@@ -68,6 +68,16 @@ public enum TipoTarjetaNegocio {
 			}
 		return "Ninguno";
 	}
+	public static String descripcionTipotarjetaConplete(String codigo, String diseno) {
+		if (codigo != null && diseno != null)
+			for (TipoTarjetaNegocio tipoTarjeta : values()) {
+				if (codigo.equals(tipoTarjeta.getCodigo())
+						&& diseno.equals(tipoTarjeta.getDiseno())) {
+					return TipoTarjeta.descripcionTipotarjeta(codigo)+ "-"+ tipoTarjeta.getDescripcion();
+				}
+			}
+		return "Ninguno";
+	}
 	public static String descripcionTipotarjeta( String diseno) {
 		if ( diseno != null)
 			for (TipoTarjetaNegocio tipoTarjeta : values()) {

@@ -12,11 +12,9 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -32,6 +30,7 @@ import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
+import pe.bn.com.sate.ope.transversal.util.TarjetaUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
@@ -159,8 +158,8 @@ public class ConsultarMovimientosController {
 	        HSSFWorkbook workbook = (HSSFWorkbook) document;
 	        workbook.setSheetName(0, "Movimientos de tarjeta tesoro");
 	        Sheet sheet = workbook.getSheetAt(0); // Acceder a la primera hoja
-	        // Desplazar todas las filas hacia abajo (1 espacio)
-	        sheet.shiftRows(0, sheet.getLastRowNum(), 1); // Mover todo hacia abajo desde la fila 0
+	        
+	        sheet.shiftRows(0, sheet.getLastRowNum(), 2); // Mover todo hacia abajo desde la fila 0
 
 	        // Crear la nueva fila al inicio para el título
 	        Row titleRow = sheet.createRow(0); // Ahora la fila 0 está vacía
@@ -183,6 +182,27 @@ public class ConsultarMovimientosController {
 	        titleCell.setCellStyle(titleStyle);
 
 	        
+	        CellStyle labelStyle = workbook.createCellStyle();
+	        Font labelFont = workbook.createFont();
+	        labelFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // Negrita
+	        labelFont.setColor(HSSFColor.WHITE.index);
+
+	        labelStyle.setFont(labelFont);
+	        labelStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
+	        labelStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	        
+	        Row additionalExpediente = sheet.createRow(1); // Fila para datos adicionales
+	        
+	        // Celda: Dato (Etiqueta)
+	        Cell asiLabelCell = additionalExpediente.createCell(0);
+	        asiLabelCell.setCellValue("N de expediente:");
+	        asiLabelCell.setCellStyle(labelStyle);
+
+	        // Celda: Valor
+	        Cell asiValueCell = additionalExpediente.createCell(1);
+	        asiValueCell.setCellValue(consultarMovimientosModel.getAsignacionSeleccionada().getCodigoAsignacion());
+	        
+	        
 	        CellStyle columnStyle = workbook.createCellStyle();
 	        Font  columnFont = workbook.createFont();
 	        columnFont.setColor(HSSFColor.WHITE.index);
@@ -191,7 +211,7 @@ public class ConsultarMovimientosController {
 	        columnStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
 	        columnStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 	        
-	        Row headerRow = sheet.getRow(1); // La fila 1 tiene los encabezados
+	        Row headerRow = sheet.getRow(2); // La fila 1 tiene los encabezados
 	        if (headerRow != null) {
 	  
 
@@ -209,7 +229,7 @@ public class ConsultarMovimientosController {
 	        
 	        
 	        // Combinar celdas para que el título ocupe toda la fila
-	        int lastColumn = sheet.getRow(1).getLastCellNum() - 1; // Última columna en la fila de datos
+	        int lastColumn = sheet.getRow(2).getLastCellNum() - 1; // Última columna en la fila de datos
 	        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, lastColumn)); // Combinar columnas
 
 	        // Agregar datos al final
@@ -217,15 +237,7 @@ public class ConsultarMovimientosController {
 
 
 	        // Estilo para etiquetas
-	        CellStyle labelStyle = workbook.createCellStyle();
-	        Font labelFont = workbook.createFont();
-	        labelFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // Negrita
-	        labelFont.setColor(HSSFColor.WHITE.index);
-
-	        labelStyle.setFont(labelFont);
-	        labelStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
-	        labelStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-	        
+	  
 	        Row additionalDatFecha = sheet.createRow(lastRowIndex); // Fila para datos adicionales
 	        
 	        // Celda: Dato (Etiqueta)
@@ -257,10 +269,10 @@ public class ConsultarMovimientosController {
 	        Cell ipLabelCell = additionalNumTar.createCell(0);
 	        ipLabelCell.setCellValue("Numero Tarjeta:");
 	        ipLabelCell.setCellStyle(labelStyle);
-
+	       String numTar = TarjetaUtils.procesarTarjeta(consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta());
 	        // Celda: Valor
 	        Cell ipValueCell = additionalNumTar.createCell(1);
-	        ipValueCell.setCellValue(consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta());
+	        ipValueCell.setCellValue(numTar);
 	      
 	        Row additionalclie = sheet.createRow(lastRowIndex+3); // Fila para datos adicionales
 

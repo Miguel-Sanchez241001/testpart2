@@ -9,7 +9,7 @@
 			xmi:id="PortQnameBinding_1540147413076"
 			portQnameNamespaceLink="http://interfaz.mq2.bn"
 			portQnameLocalNameLink="ServiceReniec2"
-			overriddenEndpointURI="http://10.7.106.115:80/WSConsultaReniec/services/ServiceReniec2" />
+			overriddenEndpointURI="http://10.7.12.123:9080/WSConsultaReniec/services/ServiceReniec2" />
 	</serviceRefs>
 	<serviceRefs xmi:id="ServiceRef_1540168109702"
 		serviceRefLink="service/GatewayInterfaceService">

@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
@@ -40,9 +38,8 @@ public class ReporteResumenFacade {
 	public List<TarjetaResumen> obtenerListaTarjetas(String fechaInicio,
 			String fechaFin) throws ServiceException {
 		return tarjetaService.obtenerListaTarjetas(
-				empresaService.buscarEmpresaPorRUC(
-						UsefulWebApplication.obtenerUsuario().getRuc())
-						.getCuentaCorriente(), fechaInicio, fechaFin);
+				
+						UsefulWebApplication.obtenerUsuario().getRuc(), fechaInicio, fechaFin);
 
 	}
 

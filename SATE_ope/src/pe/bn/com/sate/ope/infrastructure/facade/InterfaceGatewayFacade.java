@@ -48,6 +48,7 @@ public class InterfaceGatewayFacade {
 	private final static Logger logger = Logger
 			.getLogger(InterfaceGatewayFacade.class);
 	
+	// TODO AUTENTICACION GATEWAY
 	public Authentication buscarUsuarioInterfaceGateway(String ruc, String cic,
 			String tipoDocumento, String numDocumento, String password)
 			throws ServiceException {
@@ -77,11 +78,11 @@ public class InterfaceGatewayFacade {
 				}
 
 				UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(
-						"No username", password,
+						numDocumento, password,
 						obtenerPermisosSeguridad(permisos));
 
 				UsuarioSeguridad usuarioSeguridad = new UsuarioSeguridad(
-						"No username", password,
+						numDocumento, password,
 						obtenerPermisosSeguridad(permisos), usuario.getId(),
 						usuario.getApPaterno(), usuario.getApMaterno(),
 						usuario.getNombres(), usuario.getTipoDocumento(),

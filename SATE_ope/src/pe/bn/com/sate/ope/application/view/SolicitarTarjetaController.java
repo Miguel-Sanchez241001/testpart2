@@ -23,6 +23,7 @@ import pe.bn.com.sate.ope.transversal.dto.sate.Empresa;
 import pe.bn.com.sate.ope.transversal.dto.tablas.Agencia;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
 
@@ -81,20 +82,27 @@ public class SolicitarTarjetaController implements Serializable {
                 solicitarTarjetaModel.getTipoDocumentoSeleccionado(),
                 solicitarTarjetaModel.getNumDocumentoSeleccionado());
 
-            if (clienteBusqueda == null) {
+            if (clienteBusqueda == null &&  solicitarTarjetaModel.getTipoDocumentoSeleccionado().equals(TipoDocumento.DNI.getCodigoBduc()) ) {
                 clienteBusqueda = fwPersonaNatural.buscarCliente(
                     solicitarTarjetaModel.getTipoDocumentoSeleccionado(),
                     solicitarTarjetaModel.getNumDocumentoSeleccionado());
             }
 
-            if (clienteBusqueda == null) {
+            if (clienteBusqueda == null  &&  solicitarTarjetaModel.getTipoDocumentoSeleccionado().equals(TipoDocumento.DNI.getCodigoBduc()) ) {
                 solicitarTarjetaModel.setClienteSeleccionado(new Cliente());
                 solicitarTarjetaModel.setPersonaExiste(false);
                 UsefulWebApplication.mostrarMensajeJSF(
                     ConstantesGenerales.SEVERITY_ERROR,
                     ConstantesGenerales.TITULO_ERROR_AGREGAR_PARAMETRO,
                     "No existe persona con el tipo y número de documento.");
-            } else {
+            } else if (clienteBusqueda == null  &&  solicitarTarjetaModel.getTipoDocumentoSeleccionado().equals(TipoDocumento.CARNET_EXTRANJERIA.getCodigoBduc()) ) {
+            	solicitarTarjetaModel.setClienteSeleccionado(new Cliente());
+                solicitarTarjetaModel.setPersonaExiste(false);
+                UsefulWebApplication.mostrarMensajeJSF(
+                    ConstantesGenerales.SEVERITY_INFO,
+                    ConstantesGenerales.TITULO_ERROR_AGREGAR_PARAMETRO,
+                    "Ingrese los datos para continuar.");
+			}else {
                 solicitarTarjetaModel.setPersonaExiste(true);
                 solicitarTarjetaModel.setClienteSeleccionado(clienteBusqueda);
             }
@@ -129,8 +137,7 @@ public class SolicitarTarjetaController implements Serializable {
                 solicitarTarjetaModel.getTipoDocumentoSeleccionado());
             solicitarTarjetaModel.getClienteSeleccionado().setNroDocumento(
                 solicitarTarjetaModel.getNumDocumentoSeleccionado());
-			solicitarTarjetaModel.getTarjeta().setEntregaAgenciaBNombre(solicitarTarjetaModel.getAgenciaSeleccionada().getDescripcion());          
-		  tarjetaService.registrarSolicitudTarjeta(
+            tarjetaService.registrarSolicitudTarjeta(
                 solicitarTarjetaModel.getTarjeta(),
                 solicitarTarjetaModel.getClienteSeleccionado());
             reiniciarPasos();
@@ -172,15 +179,26 @@ public class SolicitarTarjetaController implements Serializable {
     public void buscarTipoTarjetaNegocio() {
     	
     	  if (solicitarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim().equals(ConstantesGenerales.BIM_BLACK)) {
-              solicitarTarjetaModel.setListaTipoTarjetaNegocio( tarjetaService.consultaTipoTarjetaNegocio(ConstantesGenerales.BIM_BLACK));
+              solicitarTarjetaModel.setListaTipoTarjetaNegocio(
+              		TipoTarjetaNegocio.buscarTipoTarjetaBLACK());
           } else if (solicitarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim().equals(ConstantesGenerales.BIM_CORPORATE)) {
-              solicitarTarjetaModel.setListaTipoTarjetaNegocio( tarjetaService.consultaTipoTarjetaNegocio(ConstantesGenerales.BIM_CORPORATE));
+              solicitarTarjetaModel.setListaTipoTarjetaNegocio(
+              		TipoTarjetaNegocio.buscarTipoTarjetaCORP());
           
           } else {
               solicitarTarjetaModel.setListaTipoTarjetaNegocio(null);
           }
     	  
- 
+    /*    if (solicitarTarjetaModel.getTarjeta().getUsoExtranjero().equals(ConstantesGenerales.USO_EXTRANJERO)) {
+            solicitarTarjetaModel.setListaTipoTarjetaNegocio(
+            		TipoTarjetaNegocio.buscarTipoTarjetaUsoNacional());
+        } else if (solicitarTarjetaModel.getTarjeta().getUsoExtranjero().equals(ConstantesGenerales.USO_NACIONAL)) {
+            solicitarTarjetaModel.setListaTipoTarjetaNegocio(
+            		TipoTarjetaNegocio.buscarTipoTarjetaUsoNacional());
+        
+        } else {
+            solicitarTarjetaModel.setListaTipoTarjetaNegocio(null);
+        }*/
     }
     /**
      * Fija el tipo de tarjeta y el diseño seleccionados en el modelo.
@@ -368,7 +386,7 @@ public class SolicitarTarjetaController implements Serializable {
         logger.debug("[SolicitarTarjetaController] valor departamento: " + departamento);
 
         if (provincia == null) {
-            logger.info("[SolicitarTarjetaController] Provincia nulo");
+            logger.debug("[SolicitarTarjetaController] Provincia nulo");
             solicitarTarjetaModel.setDistritos(null);
             solicitarTarjetaModel.getTarjeta().setEntregaDistrito(null);
             solicitarTarjetaModel.setAgenciaSeleccionada(null);
@@ -420,37 +438,35 @@ public class SolicitarTarjetaController implements Serializable {
      */
     public void avanzarPaso() {
     	
-    	   // Nueva lógica que solo se ejecuta cuando el paso actual es 0
-        if (solicitarTarjetaModel.getPasoActual() == 0) {
-            // Aquí agregas la lógica adicional que deseas validar
-        	String resVerificacion = tarjetaService.verificarSolicitudes(
+         if (solicitarTarjetaModel.getPasoActual() == 0) {
+         	String resVerificacion = tarjetaService.verificarSolicitudes(
             		solicitarTarjetaModel.getTipoDocumentoSeleccionado(),
             		solicitarTarjetaModel.getNumDocumentoSeleccionado()
             		);
-            if (resVerificacion != null) { // Reemplaza 'condicionAdicional' con tu lógica específica
+            if (resVerificacion != null) {  
                 UsefulWebApplication.mostrarMensajeJSF(
                     ConstantesGenerales.SEVERITY_ERROR,
                     ConstantesGenerales.TITULO_ERROR_AGREGAR_PARAMETRO,
                     resVerificacion);
-                return; // Salir del método si no se cumple la condición
+                return;  
             }
         }
     	
         if (solicitarTarjetaModel.getPasoActual() == 2) {
-            // Aquí agregas la lógica adicional que deseas validar
-        	String resVerificacion = tarjetaService.verificarTarjetasDisponible(
+         	String resVerificacion = tarjetaService.verificarTarjetasDisponible(
             		solicitarTarjetaModel.getTipoDocumentoSeleccionado(),
             		solicitarTarjetaModel.getNumDocumentoSeleccionado(),
             		solicitarTarjetaModel.getTarjeta()
             		);
-            if (resVerificacion != null) { // Reemplaza 'condicionAdicional' con tu lógica específica
+            if (resVerificacion != null) { 
                 UsefulWebApplication.mostrarMensajeJSF(
                     ConstantesGenerales.SEVERITY_ERROR,
                     ConstantesGenerales.TITULO_ERROR_AGREGAR_PARAMETRO,
                     resVerificacion);
-                return; // Salir del método si no se cumple la condición
+                return; 
             }
         }
+        
         if (solicitarTarjetaModel.getPasoActual() != 0 || (!solicitarTarjetaModel.esTipoDocumentoDNI() || solicitarTarjetaModel.validarDNI())) {
             if (solicitarTarjetaModel.getPasoActual() < 3) {
                 solicitarTarjetaModel.setPasoActual(solicitarTarjetaModel.getPasoActual() + 1);
@@ -485,8 +501,8 @@ public class SolicitarTarjetaController implements Serializable {
      * Reinicia el formulario del cliente debido a un cambio en el tipo de documento.
      */
     public void reiniciarFormularioCliente() {
-        logger.info("Reiniciando el formulario debido al cambio en el tipo de documento.");
+        logger.debug("Reiniciando el formulario debido al cambio en el tipo de documento.");
         solicitarTarjetaModel.reiniciarDatosCliente();
-        logger.info("Formulario reiniciado.");
+        logger.debug("Formulario reiniciado.");
     }
 }

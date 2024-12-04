@@ -15,7 +15,7 @@
 		<h2>CONSULTAR CLIENTE</h2>
 
 		<h:form id="formConsultarCliente">
-
+		<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 
@@ -108,7 +108,8 @@
 									<h:outputText value="Correo electrónico" />
 									<h:outputText value="Número de celular"
 										style="margin-left:20px;" />
-									<p:inputText id="email" maxlength="30" 									
+									<p:inputText id="email" 
+									 								
 										value="#{consultarClienteController.consultarClienteModel.datosTarjetaCliente.tarjeta.email}"
 										validatorMessage="Correo electrónico no válido">
 										<p:ajax update="msgs" event="keyup" />

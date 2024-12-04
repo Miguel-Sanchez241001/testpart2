@@ -15,7 +15,7 @@
 		<h2>BUSCAR TARJETA</h2>
 
 		<h:form id="formBuscarTarjeta">
-
+<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 
@@ -363,7 +363,7 @@
 			draggable="false" position="center" showEffect="clip"
 			header="Seleccionar Asignación" widgetVar="wvSeleccionarAsignacion">
 		<h:form id="formSeleccionarAsignacion">
-			
+			<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<p:panelGrid id="panel-seleccionarAsignacion" columns="1"
 					style="widht:100%">
 				<h:outputText value="Lista de Asignación" />
@@ -430,6 +430,7 @@
 			hideEffect="clip" header="Seleccionar Tarjeta"
 			widgetVar="wvSeleccionarTajeta">
 			<h:form id="formSeleccionarTarjeta">
+				<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 				<p:panelGrid id="panel-seleccionarTarjeta" columns="1"
 					style="widht:100%">
 					<h:outputText value="Lista de tarjetas" />

@@ -39,7 +39,7 @@ public class WSMCMovimientoAntiguos {
 
 	    // Paso 1: Crear cliente para consumir el servicio REST
 	    RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:9080/wsSateRest/api/v1/movimientos/listarMovimientosRangoAndCount";
+	    String url = parametros.getUrlServiceRestAntiguos();
 
 	    // Crear el request para el servicio
 	    MovimientoRequest request = new MovimientoRequest();

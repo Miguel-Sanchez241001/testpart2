@@ -64,10 +64,11 @@ public class CrearUsuarioController implements Serializable {
 					crearUsuarioModel.getTipoDocumentoSeleccionado(),
 					crearUsuarioModel.getNumDocumentoSeleccionado());
 			crearUsuarioModel.setPersonaExiste(usuarioBusqueda != null);
+			
+			
 			// Se realiza la busqueda en el servicio de la RENIEC
 			if (usuarioBusqueda == null) {
 				crearUsuarioModel.setUsuarioSeleccionado(new Usuario());
-				// Mensaje de validacion
 				UsefulWebApplication.mostrarMensajeJSF(
 						ConstantesGenerales.SEVERITY_ERROR,
 						ConstantesGenerales.TITULO_ERROR_AGREGAR_PARAMETRO,
@@ -89,12 +90,9 @@ public class CrearUsuarioController implements Serializable {
 	public void registrarCuentaUsuario() {
 		try {
 
-			if (!crearUsuarioModel.esTipoDocumentoDNI()
-					|| crearUsuarioModel.validarDNI()) {
+			if (!crearUsuarioModel.esTipoDocumentoDNI() || crearUsuarioModel.validarDNI()) {
 
-				if (usuarioService.buscarUsuario(
-						crearUsuarioModel.getTipoDocumentoSeleccionado(),
-						crearUsuarioModel.getNumDocumentoSeleccionado()) == null) {
+				if (usuarioService.buscarUsuario( crearUsuarioModel.getTipoDocumentoSeleccionado(), crearUsuarioModel.getNumDocumentoSeleccionado()) == null) {
 
 					if (crearUsuarioModel.getUsuarioSeleccionado().getId() == null) {
 						crearUsuarioModel
@@ -163,8 +161,7 @@ public class CrearUsuarioController implements Serializable {
 							ConstantesGenerales.SEVERITY_ERROR,
 							ConstantesGenerales.TITULO_ERROR_AGREGAR_PARAMETRO,
 							"Usuario ya se encuentra registrado");
-					UsefulWebApplication
-							.actualizarComponente("formCrearCuenta:msgs");
+					UsefulWebApplication.actualizarComponente("formCrearCuenta:msgs");
 				}
 			} else {
 				UsefulWebApplication.mostrarMensajeJSF(

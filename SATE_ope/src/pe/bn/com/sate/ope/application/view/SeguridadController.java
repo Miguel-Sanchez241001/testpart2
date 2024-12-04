@@ -41,12 +41,10 @@ public class SeguridadController implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		// try{
+ 
 		seguridadModel = new SeguridadModel(
 				UsefulWebApplication.obtenerUsuario());
-		// }catch (Exception e) {
-		// e.printStackTrace();
-		// }
+ 
 	}
 
 	public void cerrarSesion() throws IOException {

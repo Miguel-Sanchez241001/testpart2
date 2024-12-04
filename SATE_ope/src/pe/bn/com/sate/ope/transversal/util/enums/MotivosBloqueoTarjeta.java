@@ -7,7 +7,7 @@ public enum MotivosBloqueoTarjeta {
 	PERDIDA("E", "Perdida"),
 	FRAUDE("F", "Fraude"),
 	MAL_REALCE("Q","Mal realce"),
-	ALERTA("T","Alerta"),
+	//ALERTA("T","Alerta"),
 	ROBO("X","Robo"),
 	INVALIDEZ("V", "Invalides");
 //	NORMAL("N","Activar"),
@@ -54,12 +54,11 @@ public enum MotivosBloqueoTarjeta {
 	public static MotivosBloqueoTarjeta[] motivosBloqueoPorIdMotivo(String id){
 		MotivosBloqueoTarjeta motivos[] = null;
 		if(id.equals(TipoEstadoTarjeta.TARJETA_ACTIVADA.getCod())){
-			motivos =new MotivosBloqueoTarjeta[5];
+			motivos =new MotivosBloqueoTarjeta[4];
 			motivos[0] = MotivosBloqueoTarjeta.FRAUDE;
 			motivos[1] = MotivosBloqueoTarjeta.PERDIDA;
 			motivos[2] = MotivosBloqueoTarjeta.MAL_REALCE;
-			motivos[3] = MotivosBloqueoTarjeta.ALERTA;
-			motivos[4] = MotivosBloqueoTarjeta.ROBO;		
+ 			motivos[3] = MotivosBloqueoTarjeta.ROBO;		
 			
 		}else if(id.equals(TipoEstadoTarjeta.TARJETA_BLOQUEADA.getCod())){
 			motivos =new MotivosBloqueoTarjeta[1];
@@ -69,15 +68,14 @@ public enum MotivosBloqueoTarjeta {
 		return motivos;
 	}
 	
-	public static MotivosBloqueoTarjeta[] motivosBloqueoPorIdMotivoWS(String id){
+	public static MotivosBloqueoTarjeta[] motivosBloqueoPorIdMotivoWS(){
 		MotivosBloqueoTarjeta motivos[] = null;
 		
-		motivos =new MotivosBloqueoTarjeta[6];
+		motivos =new MotivosBloqueoTarjeta[4];
 		motivos[0] = MotivosBloqueoTarjeta.FRAUDE;
 		motivos[1] = MotivosBloqueoTarjeta.PERDIDA;
 		motivos[2] = MotivosBloqueoTarjeta.MAL_REALCE;
-		motivos[3] = MotivosBloqueoTarjeta.ALERTA;
-		motivos[4] = MotivosBloqueoTarjeta.ROBO;			
+		motivos[3] = MotivosBloqueoTarjeta.ROBO;		
 		
 		return motivos;
 	}

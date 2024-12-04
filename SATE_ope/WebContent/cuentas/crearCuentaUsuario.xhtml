@@ -12,7 +12,7 @@
 	</ui:define>
 	<ui:define name="content">
 		<h:form id="formCrearCuenta">
-
+<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<h2>CREAR CUENTA DE USUARIO</h2>
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">

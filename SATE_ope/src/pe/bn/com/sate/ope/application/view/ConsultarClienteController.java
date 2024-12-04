@@ -12,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import pe.bn.com.sate.ope.application.model.ConsultarClienteModel;
 import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceMCProcesosException;
 import pe.bn.com.sate.ope.infrastructure.facade.FWMCProcesos;
-import pe.bn.com.sate.ope.infrastructure.facade.ReporteResumenFacade;
 import pe.bn.com.sate.ope.infrastructure.service.internal.ClienteService;
-import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
-import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosCliente;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionClientes;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
@@ -34,9 +31,7 @@ public class ConsultarClienteController implements Serializable {
 
 	private ConsultarClienteModel consultarClienteModel;
 
-	private @Autowired
-	TarjetaService tarjetaService;
-
+ 
 	private @Autowired
 	ClienteService clienteService;
 
@@ -145,9 +140,6 @@ public class ConsultarClienteController implements Serializable {
 		
 		
 		logger.info("LLEGO A actualizarDatosCliente");
-		
-//		consultarClienteModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
-//				consultarClienteModel.getTipoBusqueda(), consultarClienteModel.getNumDocumento(), "B"));
 				
 		String tipoDoc = consultarClienteModel.getDatosTarjetaCliente().getCliente().getTipoDocumento();
 		String numDoc = consultarClienteModel.getDatosTarjetaCliente().getCliente().getNroDocumento();		

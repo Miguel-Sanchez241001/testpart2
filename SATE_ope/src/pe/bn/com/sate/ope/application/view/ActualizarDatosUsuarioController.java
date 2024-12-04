@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import lombok.Getter;
+import lombok.Setter;
 import pe.bn.com.sate.ope.application.model.ActualizarDatosUsuarioModel;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
@@ -20,6 +22,8 @@ import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 
 @Controller("actualizarDatosUsuarioController")
 @Scope("view")
+@Getter
+@Setter
 public class ActualizarDatosUsuarioController implements Serializable {
 
 	private final Logger logger = Logger
@@ -109,13 +113,6 @@ public class ActualizarDatosUsuarioController implements Serializable {
 		}
 	}
 
-	public ActualizarDatosUsuarioModel getActualizarDatosUsuarioModel() {
-		return actualizarDatosUsuarioModel;
-	}
 
-	public void setActualizarDatosUsuarioModel(
-			ActualizarDatosUsuarioModel actualizarDatosUsuarioModel) {
-		this.actualizarDatosUsuarioModel = actualizarDatosUsuarioModel;
-	}
 
 }

@@ -28,6 +28,7 @@
 			</div>
 			<div id="datosContacto" class="tab-content" style="display: block;">
 				<h:form id="formActualizarDatosContacto">
+				<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 					<center>
 						<h:panelGrid style="width:80%;text-align:center;" columns="1">
 							<p:panelGrid id="pgDatosContacto" columns="2"
@@ -126,7 +127,7 @@
 			</div>
 			<div id="cambioClave" class="tab-content">
 				<h:form id="formActualizarDatosClave">
-
+<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 					<center>
 						<h:panelGrid id="pgDatosContrasenia"
 							style="width:80%;text-align:center;">
@@ -380,7 +381,7 @@
 									styleClass="btnGrande"
 									actionListener="#{actualizarDatosUsuarioController.cambiarContrasenia()}"
 									process="@this itContraseniaActual,itContraseniaNueva,itConfirmarContrasenia"
-									update="formActualizarDatosClave msgs"
+									update="@form"
 									onstart="statusDialog.show();"
 									oncomplete="statusDialog.hide();">
 									<center>

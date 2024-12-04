@@ -1,10 +1,14 @@
 package pe.bn.com.sate.ope.application.model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
@@ -13,20 +17,19 @@ import pe.bn.com.sate.ope.transversal.util.NumeroALetras;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
-import pe.bn.com.sate.ope.transversal.util.enums.BuscarTarjetaTD;
 import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.DisposicionEfectivo;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoWS;
 import pe.bn.com.sate.ope.transversal.util.enums.OperadorMovil;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
-import pe.bn.com.sate.ope.transversal.util.enums.TipoBusquedaTD;
-import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoMoneda;
-import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjeta;
-import java.util.ArrayList;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
 
+@Getter
+@Setter
+@ToString
 public class BuscarTarjetaModel {
 
 	private List<TipoBusqueda> listaTipoBusqueda;
@@ -47,30 +50,19 @@ public class BuscarTarjetaModel {
 	private EstadoTarjeta estadoTarjeta;
 	
 	private String estadoBloqueoWS;
-	
 	private Asignacion asignacionSeleccionada;
-	
 	private List<Asignacion> asignacionesTotal;
-	
 	private Tarjeta tarjeta;
-	
 	private TipoTarjeta tipoTarjetaSeleccionada;
-	
 	private TipoTarjetaNegocio tipoTarjetaNegocioSeleccionada;
-	
 	private List<TipoTarjetaNegocio> listaTipoTarjetaNegocio;	
 	private List<TipoTarjeta> listaTipoTarjeta;
-	
-	
 	private List<String> listaTipoBusquedaPor;
 	private String tipoBusquedaPor;
 		
 
 	public BuscarTarjetaModel() {
-		//listaTipoBusqueda = Arrays.asList(TipoBusqueda.values());
 		listaTipoTarjeta = Arrays.asList(TipoTarjeta.values());
-		
-		//listabuscarTarjetaTD = Arrays.asList(BuscarTarjetaTD.values());
 		tipoTarjetaNegocioSeleccionada= null;
 		listaTipoBusquedaPor = new ArrayList<>();
         listaTipoBusquedaPor.add("Por Documento");
@@ -82,102 +74,19 @@ public class BuscarTarjetaModel {
 	
 	
 	
-	public List<TipoTarjeta> getListaTipoTarjeta() {
-		return listaTipoTarjeta;
-	}
-
-	public void setListaTipoTarjeta(List<TipoTarjeta> listaTipoTarjeta) {
-		this.listaTipoTarjeta = listaTipoTarjeta;
-	}
+ 
 	
-	public Asignacion getAsignacionSeleccionada() {
-		return asignacionSeleccionada;
-	}
+ 
 
-	public void setAsignacionSeleccionada(Asignacion asignacionSeleccionada) {
-		this.asignacionSeleccionada = asignacionSeleccionada;
-	}
+ 
 
-	public EstadoTarjeta getEstadoTarjeta() {
-		return estadoTarjeta;
-	}
+ 
 
-	public void setEstadoTarjeta(EstadoTarjeta estadoTarjeta) {
-		this.estadoTarjeta = estadoTarjeta;
-	}
+ 
 
-	public boolean isTipoOperacionCancelar() {
-		return tipoOperacionCancelar;
-	}
-
-	public void setTipoOperacionCancelar(boolean tipoOperacionCancelar) {
-		this.tipoOperacionCancelar = tipoOperacionCancelar;
-	}
-
-	public boolean isTipoOperacionActualizar() {
-		return tipoOperacionActualizar;
-	}
-
-	public void setTipoOperacionActualizar(boolean tipoOperacionActualizar) {
-		this.tipoOperacionActualizar = tipoOperacionActualizar;
-	}
-
-	public Tarjeta getTarjetaSeleccionada() {
-		return tarjetaSeleccionada;
-	}
-
-	public void setTarjetaSeleccionada(Tarjeta tarjetaSeleccionada) {
-		this.tarjetaSeleccionada = tarjetaSeleccionada;
-	}
-
-	public List<TipoBusqueda> getListaTipoBusqueda() {
-		return listaTipoBusqueda;
-	}
-
-	public void setListaTipoBusqueda(List<TipoBusqueda> listaTipoBusqueda) {
-		this.listaTipoBusqueda = listaTipoBusqueda;
-	}
-
-	public String getTipoBusqueda() {
-		return tipoBusqueda;
-	}
-
-	public void setTipoBusqueda(String tipoBusqueda) {
-		this.tipoBusqueda = tipoBusqueda;
-	}
-
-	public String getNumDocumento() {
-		return numDocumento;
-	}
-
-	public void setNumDocumento(String numDocumento) {
-		this.numDocumento = numDocumento;
-	}
-
-	public DatosTarjetaCliente getDatosTarjetaCliente() {
-		return datosTarjetaCliente;
-	}
-
-	public void setDatosTarjetaCliente(DatosTarjetaCliente datosTarjetaCliente) {
-		this.datosTarjetaCliente = datosTarjetaCliente;
-	}
-
-	public boolean isBusquedaRealizada() {
-		return busquedaRealizada;
-	}
-
-	public void setBusquedaRealizada(boolean busquedaRealizada) {
-		this.busquedaRealizada = busquedaRealizada;
-	}
-
-	public List<OperadorMovil> getListaOperadorMovil() {
-		return listaOperadorMovil;
-	}
-
-	public void setListaOperadorMovil(List<OperadorMovil> listaOperadorMovil) {
-		this.listaOperadorMovil = listaOperadorMovil;
-	}
-
+ 
+ 
+ 
 	public String descripcionTipoDocumento(String codigo) {
 		return CodDocumentoWebservice.descripcionCodDocumentoWebservice(codigo);
 	}
@@ -278,75 +187,9 @@ public class BuscarTarjetaModel {
 		
 		return mensaje;
 	}
-	
-	public List<Asignacion> getAsignacionesTotal() {
-		return asignacionesTotal;
-	}
-
-	public void setAsignacionesTotal(List<Asignacion> asignacionesTotal) {
-		this.asignacionesTotal = asignacionesTotal;
-	}
-
-	public Tarjeta getTarjeta() {
-		return tarjeta;
-	}
-
-	public void setTarjeta(Tarjeta tarjeta) {
-		this.tarjeta = tarjeta;
-	}
-
-	public TipoTarjeta getTipoTarjetaSeleccionada() {
-		return tipoTarjetaSeleccionada;
-	}
-
-	public void setTipoTarjetaSeleccionada(TipoTarjeta tipoTarjetaSeleccionada) {
-		this.tipoTarjetaSeleccionada = tipoTarjetaSeleccionada;
-	}
-
-	public TipoTarjetaNegocio getTipoTarjetaNegocioSeleccionada() {
-		return tipoTarjetaNegocioSeleccionada;
-	}
-
-	public void setTipoTarjetaNegocioSeleccionada(
-			TipoTarjetaNegocio tipoTarjetaNegocioSeleccionada) {
-		this.tipoTarjetaNegocioSeleccionada = tipoTarjetaNegocioSeleccionada;
-	}
-	
-	public List<TipoTarjetaNegocio> getListaTipoTarjetaNegocio() {
-		return listaTipoTarjetaNegocio;
-	}
-
-	public void setListaTipoTarjetaNegocio(List<TipoTarjetaNegocio> listaTipoTarjeta) {
-		this.listaTipoTarjetaNegocio = listaTipoTarjeta;
-	}
-
-	public List<String> getListaTipoBusquedaPor() {
-		return listaTipoBusquedaPor;
-	}
-
-	public void setListaTipoBusquedaPor(List<String> listaTipoBusquedaPor) {
-		this.listaTipoBusquedaPor = listaTipoBusquedaPor;
-	}
-
-	public String getTipoBusquedaPor() {
-		return tipoBusquedaPor;
-	}
-
-	public void setTipoBusquedaPor(String tipoBusquedaPor) {
-		this.tipoBusquedaPor = tipoBusquedaPor;
-	}
-
-
-
-	public String getEstadoBloqueoWS() {
-		return estadoBloqueoWS;
-	}
-
-
-
-	public void setEstadoBloqueoWS(String estadoBloqueoWS) {
-		this.estadoBloqueoWS = estadoBloqueoWS;
-	}
+ 
+ 
+ 
 
 	public String descripcionMotivoBloqueoWS(String codigo) {
 		return MotivosBloqueoWS.descripcionMotivoBloqueoWS(codigo);

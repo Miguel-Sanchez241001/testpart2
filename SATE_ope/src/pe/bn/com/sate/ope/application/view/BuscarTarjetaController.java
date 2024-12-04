@@ -25,15 +25,12 @@ import pe.bn.com.sate.ope.infrastructure.service.internal.ClienteService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.tablas.Ubigeo;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
-import pe.bn.com.sate.ope.transversal.util.enums.BuscarTarjetaTD;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
@@ -114,16 +111,6 @@ public class BuscarTarjetaController implements Serializable {
 		buscarTarjetaModel.setTipoOperacionCancelar(TipoEstadoTarjeta
 				.esEstadoTarjetaCancelarTarjeta(buscarTarjetaModel
 						.getDatosTarjetaCliente().getTarjeta().getEstado()));
-		// buscarTarjetaModel
-		// .getDatosTarjetaCliente()
-		// .getCliente()
-		// .setFlagActualizar(
-		// buscarTarjetaModel
-		// .getDatosTarjetaCliente()
-		// .getTarjeta()
-		// .getEstado()
-		// .equals(TipoEstadoTarjeta.TARJETA_ACTIVADA
-		// .getCod()) ? "1" : "0");
 
 		if (buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta()
 				.getEntregaUbigeo() != null) {
@@ -169,14 +156,6 @@ public class BuscarTarjetaController implements Serializable {
 				
 			if (buscarTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
 				
-				//buscarTarjetaFacade.actualizarSaldoTarjeta(buscarTarjetaModel.getNumDocumento());
-				
-				String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(buscarTarjetaModel.getNumDocumento(), 19);
-				
-//				buscarTarjetaModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
-//								buscarTarjetaModel.getTipoBusqueda(),
-//								tarjeta19, "B"));
-				
 				buscarTarjetaModel.getDatosTarjetaCliente().setCliente(clienteService.buscarClientePorId(buscarTarjetaModel.getAsignacionSeleccionada().getIdCliente()));
 				buscarTarjetaModel.getDatosTarjetaCliente().setTarjeta(tarjetaService.buscarTarjetaId(buscarTarjetaModel.getAsignacionSeleccionada().getIdTar()));
 				
@@ -200,7 +179,6 @@ public class BuscarTarjetaController implements Serializable {
 					
 					
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -214,11 +192,7 @@ public class BuscarTarjetaController implements Serializable {
 									.getEstado().equals(TipoEstadoTarjeta.TARJETA_BLOQUEADA.getCod())) {
 						
 						buscarTarjetaModel.setBusquedaRealizada(true);
-						
-						//apMaterno	"ZAPATA" (id=29469)	
-
-						
-						//buscarTarjetaModel.getdatosTarjetaCliente.getcliente.set
+				
 						
 						buscarTarjetaModel.getDatosTarjetaCliente().getCliente().setApCompleto(
 								buscarTarjetaModel.getDatosTarjetaCliente().getCliente().getApPaterno()+" "+
@@ -264,34 +238,24 @@ public class BuscarTarjetaController implements Serializable {
 						buscarTarjetaModel.setTipoOperacionCancelar(TipoEstadoTarjeta
 										.esEstadoTarjetaCancelarTarjeta(buscarTarjetaModel
 												.getDatosTarjetaCliente().getTarjeta().getEstado()));
-						// buscarTarjetaModel
-						// .getDatosTarjetaCliente()
-						// .getCliente()
-						// .setFlagActualizar(
-						// buscarTarjetaModel
-						// .getDatosTarjetaCliente()
-						// .getTarjeta()
-						// .getEstado()
-						// .equals(TipoEstadoTarjeta.TARJETA_ACTIVADA
-						// .getCod()) ? "1" : "0");
 
-						System.out.println("EntregaUbigeo:"+ buscarTarjetaModel.getDatosTarjetaCliente()
+						logger.info("EntregaUbigeo:"+ buscarTarjetaModel.getDatosTarjetaCliente()
 								.getTarjeta().getEntregaUbigeo());
 						String codDepartamento = buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta()
 								.getEntregaUbigeo().substring(0, 2);
-						System.out.println("EntregaUbigeo:"	+ buscarTarjetaModel.getDatosTarjetaCliente()
+						logger.info("EntregaUbigeo:"	+ buscarTarjetaModel.getDatosTarjetaCliente()
 										.getTarjeta().getEntregaUbigeo().substring(0, 2));
 						String codProvincia = buscarTarjetaModel
 								.getDatosTarjetaCliente().getTarjeta()
 								.getEntregaUbigeo().substring(2, 4);
-						System.out.println("EntregaUbigeo:"
+						logger.info("EntregaUbigeo:"
 								+ buscarTarjetaModel.getDatosTarjetaCliente()
 										.getTarjeta().getEntregaUbigeo()
 										.substring(2, 4));
 						String codDistrito = buscarTarjetaModel
 								.getDatosTarjetaCliente().getTarjeta()
 								.getEntregaUbigeo().substring(4);
-						System.out.println("EntregaUbigeo:"
+						logger.info("EntregaUbigeo:"
 								+ buscarTarjetaModel.getDatosTarjetaCliente()
 										.getTarjeta().getEntregaUbigeo()
 										.substring(4));
@@ -369,13 +333,7 @@ public class BuscarTarjetaController implements Serializable {
 					|| buscarTarjetaModel.getTipoBusqueda().equals(
 							TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
 				
-				
-//				buscarTarjetaModel.setDatosTarjetaCliente(tarjetaService
-//						.buscarDatosTarjetasCliente(
-//								buscarTarjetaModel.getTipoBusqueda(),
-//								buscarTarjetaModel.getNumDocumento(), "B"));
-				
-				buscarTarjetaModel.getDatosTarjetaCliente().setCliente(clienteService.buscarClientePorId(buscarTarjetaModel.getAsignacionSeleccionada().getIdCliente()));
+								buscarTarjetaModel.getDatosTarjetaCliente().setCliente(clienteService.buscarClientePorId(buscarTarjetaModel.getAsignacionSeleccionada().getIdCliente()));
 				buscarTarjetaModel.getDatosTarjetaCliente().setTarjeta(tarjetaService.buscarTarjetaId(buscarTarjetaModel.getAsignacionSeleccionada().getIdTar()));
 				
 
@@ -390,8 +348,6 @@ public class BuscarTarjetaController implements Serializable {
 					UsefulWebApplication.actualizarComponente("msgs");
 				} else {
 					
-					//seleccionarTarjeta();
-					//buscarTarjetaModel.getDatosTarjetaCliente().setTarjeta(buscarTarjetaModel.getDatosTarjetaCliente().getTarjetas().get(0));
 					Tarjeta tarjetaMC = new Tarjeta();
 					try {
 						tarjetaMC = buscarTarjetaFacade.obtenerDatosCredito(						
@@ -434,16 +390,6 @@ public class BuscarTarjetaController implements Serializable {
 							
 							String motivoBlo ="";
 							
-//							if(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getMotivoBloqueo()!=null){
-//								motivoBlo=buscarTarjetaModel.descripcionMotivoBloqueoWS(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getMotivoBloqueo());
-//								buscarTarjetaModel.setEstadoBloqueoWS(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getMotivoBloqueo()+" - "+motivoBlo);
-//							}else if(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta() != null){
-//								motivoBlo=buscarTarjetaModel.descripcionMotivoBloqueoWS(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta());
-//								buscarTarjetaModel.setEstadoBloqueoWS(buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta()+" - "+motivoBlo);
-//							}else{
-//								buscarTarjetaModel.setEstadoBloqueoWS("");
-//							}
-							
 							DTOConsultaDatosTarjeta dato = new DTOConsultaDatosTarjeta();
 							
 							try {
@@ -481,34 +427,25 @@ public class BuscarTarjetaController implements Serializable {
 									buscarTarjetaModel.getDatosTarjetaCliente().getCliente().getApMaterno()
 									);
 							
-							// buscarTarjetaModel
-							// .getDatosTarjetaCliente()
-							// .getCliente()
-							// .setFlagActualizar(
-							// buscarTarjetaModel
-							// .getDatosTarjetaCliente()
-							// .getTarjeta()
-							// .getEstado()
-							// .equals(TipoEstadoTarjeta.TARJETA_ACTIVADA
-							// .getCod()) ? "1" : "0");
 
-							System.out.println("EntregaUbigeo:"+ buscarTarjetaModel.getDatosTarjetaCliente()
+
+							logger.info("EntregaUbigeo:"+ buscarTarjetaModel.getDatosTarjetaCliente()
 									.getTarjeta().getEntregaUbigeo());
 							String codDepartamento = buscarTarjetaModel.getDatosTarjetaCliente().getTarjeta()
 									.getEntregaUbigeo().substring(0, 2);
-							System.out.println("EntregaUbigeo:"	+ buscarTarjetaModel.getDatosTarjetaCliente()
+							logger.info("EntregaUbigeo:"	+ buscarTarjetaModel.getDatosTarjetaCliente()
 											.getTarjeta().getEntregaUbigeo().substring(0, 2));
 							String codProvincia = buscarTarjetaModel
 									.getDatosTarjetaCliente().getTarjeta()
 									.getEntregaUbigeo().substring(2, 4);
-							System.out.println("EntregaUbigeo:"
+							logger.info("EntregaUbigeo:"
 									+ buscarTarjetaModel.getDatosTarjetaCliente()
 											.getTarjeta().getEntregaUbigeo()
 											.substring(2, 4));
 							String codDistrito = buscarTarjetaModel
 									.getDatosTarjetaCliente().getTarjeta()
 									.getEntregaUbigeo().substring(4);
-							System.out.println("EntregaUbigeo:"
+							logger.info("EntregaUbigeo:"
 									+ buscarTarjetaModel.getDatosTarjetaCliente()
 											.getTarjeta().getEntregaUbigeo()
 											.substring(4));
@@ -679,10 +616,9 @@ public class BuscarTarjetaController implements Serializable {
 				String tipoTar = buscarTarjetaModel.getTipoTarjetaNegocioSeleccionada().getCodigo();
 				String rucUsuario = UsefulWebApplication.obtenerUsuario().getRuc();				
 				
-				System.out.println("diseño de asignacion::"+ diseño);	
-				System.out.println("tipoTar de asignacion::"+ tipoTar);
+				logger.info("diseño de asignacion::"+ diseño);	
+				logger.info("tipoTar de asignacion::"+ tipoTar);
 				
-				//asignaciones = reporteResumenFacade.obtenerAsignacionesPorTarjeta(buscarTarjetaModel.getNumDocumento());
 
 				String tarjeta19 = StringsUtils.llenarCerosAlaIzquierdaV2(buscarTarjetaModel.getNumDocumento(), 19);
 				
@@ -730,8 +666,8 @@ public class BuscarTarjetaController implements Serializable {
 				String tipoTar = buscarTarjetaModel.getTipoTarjetaNegocioSeleccionada().getCodigo();
 				String rucUsuario = UsefulWebApplication.obtenerUsuario().getRuc();		
 				
-				System.out.println("diseño de asignacion::"+ diseño);	
-				System.out.println("tipoTar de asignacion::"+ tipoTar);
+				logger.info("diseño de asignacion::"+ diseño);	
+				logger.info("tipoTar de asignacion::"+ tipoTar);
 				
 				long valor=0;
 				
@@ -787,9 +723,9 @@ public class BuscarTarjetaController implements Serializable {
 	
 	public void seleccionarAsignacion() {
 		UsefulWebApplication.mostrarDialogo("statusDialog");
-		System.out.println("LLEGO A seleccionarAsignacion");
+		logger.info("LLEGO A seleccionarAsignacion");
 		buscarTarjeta();
-		System.out.println("SALIO A seleccionarAsignacion");
+		logger.info("SALIO A seleccionarAsignacion");
 		UsefulWebApplication.ocultarDialogo("statusDialog");
 		
 		

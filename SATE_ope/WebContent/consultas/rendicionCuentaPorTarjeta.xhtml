@@ -15,6 +15,7 @@
 
 		<h2>RENDICIÓN DE CUENTAS POR TARJETA</h2>
 		<h:form id="formRendicionCuenta">
+		<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 					<h:panelGrid style="width:80%;text-align:center;">

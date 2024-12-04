@@ -10,7 +10,7 @@ import pe.bn.com.sate.ope.transversal.dto.sate.Rol;
 
 public interface RolMapper {
 
-	@Select("SELECT * FROM BN_SATE.BNSATE11_ROLES WHERE B11_ID_ROL !=1")
+	@Select("SELECT * FROM BN_SATE.BNSATE11_ROLES WHERE B11_ID_ROL !=1 AND B11_ID_ROL<5")
 	@ResultMap("mapRol")
 	public List<Rol> buscarRoles();
 

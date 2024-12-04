@@ -125,7 +125,7 @@ public class TarjetaServiceImpl implements TarjetaService {
  		        
 		    }
 		 // TODO MAXIMO DE TARJETAS DISPONIBLES POR ENTIDAD
-		if (countTarjetasActivadas >=2) {
+		if (countTarjetasActivadas >=3) {
 			return false;
 		}else{
 			return true;
@@ -401,8 +401,7 @@ public class TarjetaServiceImpl implements TarjetaService {
 	    String ruc = SecurityContextFacade.getAuthenticatedUser().getRuc();
 	    TipoTarjetaNegocio typeTarActual = TipoTarjetaNegocio.fromCodigoYDiseno(tarjeta.getTipoTarjeta(), tarjeta.getDiseno());
 	   
-	    List<Tarjeta> tarjetasDelCliente = tarjetaMapper.buscarTarjetaPorTipoDocumento
-	    		(tipoDocumento,nroDocuemnto , ruc);
+	    List<Tarjeta> tarjetasDelCliente = tarjetaMapper.buscarTarjetaPorTipoDocumento(tipoDocumento,nroDocuemnto , ruc);
 		
 	    if (existeEnListaTarjetas(typeTarActual,tarjetasDelCliente)) {
 	        return ExceptionConstants.TARJETA_NO_VALID ;
@@ -414,25 +413,22 @@ public class TarjetaServiceImpl implements TarjetaService {
 	private boolean existeEnListaTarjetas(TipoTarjetaNegocio typeTarActual, List<Tarjeta> tarjetasDelCliente) {
 
 	    if (typeTarActual == null) {
-	        return false; // Si el tipo de tarjeta actual no es válido, no se puede hacer la verificación.
+	        return false;
 	    }
 
-	    // Recorrer la lista de tarjetas existentes del cliente
 	    for (Tarjeta tarjetaExistente : tarjetasDelCliente) {
-	        // Obtener el tipo de tarjeta de cada tarjeta existente
 	        TipoTarjetaNegocio tipoTarjetaExistente = TipoTarjetaNegocio.fromCodigoYDiseno(tarjetaExistente.getTipoTarjeta(), tarjetaExistente.getDiseno());
-	        // Verificar si el estado de la tarjeta es activada, bloqueada o cancelada
 	        boolean tarjetaActiva = TipoEstadoTarjeta.TARJETA_ACTIVADA.getCod().equals(tarjetaExistente.getEstado()) ||
 	                                TipoEstadoTarjeta.TARJETA_BLOQUEADA.getCod().equals(tarjetaExistente.getEstado()) ||
 	                                TipoEstadoTarjeta.TARJETA_CANCELADA.getCod().equals(tarjetaExistente.getEstado());
 
 	        // Comparar si coinciden el tipo de tarjeta y el diseño
 	        if (typeTarActual.getDiseno().equals(tipoTarjetaExistente.getDiseno()) && tarjetaActiva    ) {
-	            return true; // Ya existe una tarjeta del mismo tipo y diseño
+	            return true;  
 	        }
 	    }
 
-	    return false; // No se encontró una tarjeta del mismo tipo y diseño
+	    return false;  
 	}
 
 	/**

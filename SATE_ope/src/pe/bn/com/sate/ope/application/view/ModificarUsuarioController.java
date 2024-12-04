@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 
 import pe.bn.com.sate.ope.application.model.ModificarUsuarioModel;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
-import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
-import pe.bn.com.sate.ope.infrastructure.facade.InterfaceGatewayFacade;
 import pe.bn.com.sate.ope.infrastructure.service.internal.RolService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.UsuarioService;
 import pe.bn.com.sate.ope.transversal.dto.sate.Usuario;
@@ -36,9 +34,7 @@ public class ModificarUsuarioController implements Serializable {
 	private @Autowired
 	RolService rolService;
 
-	private @Autowired
-	InterfaceGatewayFacade fwInterfaceGateway;
-
+ 
 	@PostConstruct
 	public void init() {
 		modificarUsuarioModel = new ModificarUsuarioModel();
