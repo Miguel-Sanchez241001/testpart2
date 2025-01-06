@@ -71,4 +71,19 @@ public interface UsuarioMapper {
 	@Update("UPDATE BN_SATE.BNSATE02_USUARIO SET B02_ESTADO=#{estado}, B02_PERFIL_USUARIO=#{usuarioPerfil}, B02_FLAG_CAMBIO_CLAVE=#{flagCambioClave}, B02_CORREO = #{correoLaboral}, B02_TELEFONO_MOVIL = #{telefonoMovil} WHERE B02_REP=#{id}")
 	public void actualizarUsuario(Usuario usuario);
 
+	
+	@Select("SELECT CASE " +
+			"          WHEN usu.B02_APPATERNO IS NOT NULL " +
+			"               AND LENGTH(TRIM(usu.B02_APPATERNO)) > 0 THEN " +
+			"               REGEXP_SUBSTR(usu.B02_NOMBRES, '[^ ]+', 1, 1) || ' ' || usu.B02_APPATERNO " +
+			"          ELSE " +
+			"               REGEXP_SUBSTR(usu.B02_NOMBRES, '[^ ]+', 1, 1) || ' ' || REGEXP_SUBSTR(usu.B02_NOMBRES, '[^ ]+', 1, 2) " +
+			"       END AS NOMBRE_COMPLETO " +
+			"FROM BN_SATE.BNSATE02_USUARIO usu " +
+			"WHERE usu.B02_NUM_DOCUMENTO = #{numeroDocumento}")
+			public String buscarClienteNumDoc(@Param("numeroDocumento") String numDocumento);
+
+
+	
+	
 }

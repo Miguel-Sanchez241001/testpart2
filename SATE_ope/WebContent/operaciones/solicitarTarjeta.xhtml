@@ -135,9 +135,7 @@
 		        <p:calendar id="itFechaNacimiento"
 		            locale="es"
 		            style="margin-left:20px;"
-		            readonlyInput="true"
-		            
- 		            
+		            readonlyInput="true"    
 		            placeholder="DD/MM/AAAA"
 		            disabled="#{solicitarTarjetaController.solicitarTarjetaModel.personaExiste}"
 		            navigator="true"
@@ -147,8 +145,9 @@
 		            pattern="dd/MM/yyyy"
 		            mask="true" 
 		            mode="popup"
-		            showButtonPanel="true"
-		            />
+		            showButtonPanel="true">   
+		            <f:validator validatorId="ageValidator"/>
+</p:calendar>
 		
 		        <h:outputText value="Sexo *" />
 		        <h:outputText value="Estado civil *" style="margin-left:20px;" />

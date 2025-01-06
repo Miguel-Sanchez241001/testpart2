@@ -60,45 +60,7 @@ public class ConsultarMovimientosController {
 		consultarMovimientosModel = new ConsultarMovimientosModel();
 	}
 
-	public void buscarMovimientos() {
-		consultarMovimientosModel.limpiarMovimientosTarjeta();
-		try {
-			consultarMovimientosModel.setDatosTarjetaCliente(tarjetaService.buscarDatosTarjetasCliente(
-					consultarMovimientosModel.getTipoBusqueda(), consultarMovimientosModel.getNumeroTarjeta(), "B"));
-
-			try {
-
-				if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
-					fwmcProcesos.consultaMovimientoPorExpediente(
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getNumeroCuenta(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getTipoMoneda(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getFechaTerminoLinea()
-
-					);
-
-				} else if (consultarMovimientosModel.getTipoBusqueda().equals(TipoBusqueda.DNI.getId())
-						|| consultarMovimientosModel.getTipoBusqueda()
-								.equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
-
-					fwmcProcesos.consultaMovimientoPorExpediente(
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getNumeroCuenta(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0).getTipoMoneda(),
-							consultarMovimientosModel.getDatosTarjetaCliente().getTarjetas().get(0)
-									.getFechaTerminoLinea());
-				}
-
-			} catch (InternalExcepcion e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		} catch (ServiceException se) {
-			logger.error(se.getMessage());
-			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR, "", se.getMessage());
-			UsefulWebApplication.actualizarComponente("msgs");
-			UsefulWebApplication.actualizarComponente("formMovimientoTarjeta:pgResultadoFin");
-		}
-	}
+ 
 
 	public void seleccionarAsignacion() {
 		consultarMovimientosModel.limpiarMovimientosTarjeta();

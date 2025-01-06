@@ -54,7 +54,7 @@ public class LoginController implements PhaseListener, Serializable {
 
     @Autowired
     private InterfaceGatewayFacade fWInterfaceGateway;
-
+ 
     /**
      * Inicializa el modelo de login y genera un captcha.
      */
@@ -71,13 +71,9 @@ public class LoginController implements PhaseListener, Serializable {
     public void iniciarSesion() {
         logger.info("[loginController] - Iniciando método iniciarSesion");
 
-     // TODO VALIDAR CATCHAP 
-       //MGL - captcha
-        // if (true) {
         if (captchaService.validarCaptcha(loginModel.getCaptcha(), loginModel.getCaptchaTexto())) {
-        
-        
-        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+       // if (true) {
+            ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
             RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/login_autenticacion");
             try {
                 dispatcher.forward((ServletRequest) context.getRequest(), (ServletResponse) context.getResponse());
@@ -109,8 +105,6 @@ public class LoginController implements PhaseListener, Serializable {
     }
 
     
-    
-   
     
  
 

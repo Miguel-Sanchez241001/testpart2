@@ -1,14 +1,12 @@
 package pe.bn.com.sate.ope.transversal.dto.ws;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
 import pe.bn.com.sate.ope.transversal.util.Fecha;
 
 @XmlRootElement(name = "Consulta_Movimientos")

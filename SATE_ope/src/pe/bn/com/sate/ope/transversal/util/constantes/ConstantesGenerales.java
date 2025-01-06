@@ -128,7 +128,7 @@ public class ConstantesGenerales {
 	public final static String PARAM_URLALDEAMO = "URLALDEAMO";
 	public final static String PARAM_TOKENALDEAMO = "TOKENALDEAMO";
 	public final static String PARAM_CORREOALDEAMO = "CORREOALDEAMO";
-
+	public final static String PARAM_CROMENVIOCORREO = "CROMENVIOCORREO";
 
 	// HOST TIPO OPERACION
 	public static String GENERAR_CLAVE = "01";

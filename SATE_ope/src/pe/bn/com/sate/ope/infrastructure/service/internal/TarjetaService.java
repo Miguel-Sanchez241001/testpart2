@@ -12,6 +12,7 @@ import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.SolicitudTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.TarjetaResumen;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
 
 public interface TarjetaService {
@@ -31,7 +32,7 @@ public interface TarjetaService {
 			String numDocumento);
 
 	public DatosTarjetaCliente buscarDatosTarjetasCliente(String tipoBusqueda,
-			String numDocumento, String tipoOperacion);
+			String numDocumento );
 
 	public void actualizarEstadoTarjeta(EstadoTarjeta estadoTarjeta);
 
@@ -59,6 +60,10 @@ public interface TarjetaService {
 	public long consultarExisteTipNumDocRUC(String tipoDocumento,String numDocumento,String ruc);
 	
 	public List<TipoTarjetaNegocio> consultaTipoTarjetaNegocio(String bim) throws InternalException;
+
+	public Tarjeta verificarEstadoTarjeta(Tarjeta tarjeta, DTOConsultaDatosTarjeta data);
+
+ 
 	
 	
 }

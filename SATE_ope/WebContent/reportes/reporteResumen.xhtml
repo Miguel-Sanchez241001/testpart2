@@ -26,39 +26,35 @@
 							<p:selectOneMenu id="selectTipoReporte"
 								style="width:300px;vertical-align:middle;"
 								value="#{reporteResumenController.reporteResumenModel.tipoReporteSeleccionado}"
-								required="true" requiredMessage="Seleccione tipo de documento">
+								required="true" requiredMessage="Seleccione tipo de reporte">
 								<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 								<f:selectItems
 									value="#{reporteResumenController.reporteResumenModel.listaReporteResumen}"
 									var="item" itemLabel="#{item.descripcion}"
 									itemValue="#{item.id}" />
 							</p:selectOneMenu>
-							<h:outputText value="Fecha corte *" />
-						<h:panelGrid columns="4">
-    <h:outputText value="Del" />
-    <p:inputMask id="maskFechaCorteInicial"
-                 value="#{reporteResumenController.reporteResumenModel.fechaCorteInicialSeleccionada}"
-                 mask="99/99/9999"
-                 required="true"
-                 placeholder="DD/MM/AAAA"
-                 requiredMessage="Ingrese una fecha inicial"
-                 validatorMessage="la fecha inicio tiene el formato de DD/MM/AAAA"
-                 style="width:120px;">
-        <f:validator validatorId="fechaValidator" />
-    </p:inputMask>
-    
-    <h:outputText value="Al" />
-    <p:inputMask id="maskFechaCorteFinal"
-                 value="#{reporteResumenController.reporteResumenModel.fechaCorteFinalSeleccionada}"
-                 mask="99/99/9999"
-                 required="true"
-                 placeholder="DD/MM/AAAA"
-                 requiredMessage="Ingrese una fecha final"
-                 validatorMessage="la fecha fin tiene el formato de DD/MM/AAAA"
-                 style="width:120px;">
-        <f:validator validatorId="fechaValidator" />
-    </p:inputMask>
-</h:panelGrid>
+							<h:outputText value="Fecha *" />
+							<h:panelGrid columns="4">
+								<h:outputText value="Del" />
+								<p:inputMask id="maskFechaCorteInicial"
+									value="#{reporteResumenController.reporteResumenModel.fechaCorteInicialSeleccionada}"
+									mask="99/99/9999" required="true" placeholder="DD/MM/AAAA"
+									requiredMessage="Ingrese una fecha inicial"
+									validatorMessage="la fecha inicio tiene el formato de DD/MM/AAAA"
+									style="width:120px;">
+									<f:validator validatorId="fechaValidator" />
+								</p:inputMask>
+
+								<h:outputText value="Al" />
+								<p:inputMask id="maskFechaCorteFinal"
+									value="#{reporteResumenController.reporteResumenModel.fechaCorteFinalSeleccionada}"
+									mask="99/99/9999" required="true" placeholder="DD/MM/AAAA"
+									requiredMessage="Ingrese una fecha final"
+									validatorMessage="la fecha fin tiene el formato de DD/MM/AAAA"
+									style="width:120px;">
+									<f:validator validatorId="fechaValidator" />
+								</p:inputMask>
+							</h:panelGrid>
 
 
 
@@ -84,15 +80,13 @@
 									rendered="#{reporteResumenController.reporteResumenModel.listaTarjetas!=null and !reporteResumenController.reporteResumenModel.listaTarjetas.isEmpty() and reporteResumenController.reporteResumenModel.tipoReporteSeleccionado==1}">
 									<p:panelGrid id="pgExporter" columns="2"
 										style="float:right;margin-right:2px;">
-								 
-											<p:commandButton value="Descargar Documento"
-										icon="ui-icon-arrowthick-1-s"
-										ajax="false">
-										<p:dataExporter type="xls" target="dtListadoTarjetas"
-											fileName="lista_Tarjetas" 
-									 
-											 postProcessor="#{reporteResumenController.customizeXLS}" />
-									</p:commandButton>
+
+										<p:commandButton value="Descargar Documento"
+											icon="ui-icon-arrowthick-1-s" ajax="false">
+											<p:dataExporter type="xls" target="dtListadoTarjetas"
+												fileName="lista_Tarjetas"
+												postProcessor="#{reporteResumenController.customizeXLS}" />
+										</p:commandButton>
 									</p:panelGrid>
 									<p:dataTable var="tarjeta" id="dtListadoTarjetas"
 										paginator="true" paginatorPosition="bottom" rows="5"
@@ -102,16 +96,10 @@
 										rowsPerPageTemplate="5,10,15"
 										value="#{reporteResumenController.reporteResumenModel.listaTarjetas}"
 										rowKey="#{tarjeta.id}"
-										style="table-layout: fixed;margin-top:30px;width:80%;"
+										style="margin-top:30px;width:100%;"
 										rowIndexVar="index" emptyMessage="No hay tarjetas">
 
-										<p:column style="text-align: center">
-											<f:facet name="header">
-												<h:outputText value="Unidad Ejecutora" />
-											</f:facet>
-											<h:outputText
-												value="#{tarjeta.razonSocialUE!=null?tarjeta.razonSocialUE:'--'}" />
-										</p:column>
+									
 										<p:column style="text-align: center">
 											<f:facet name="header">
 												<h:outputText value="Usuario creador" />
@@ -126,7 +114,7 @@
 											<h:outputText
 												value="#{tarjeta.fechaCreacion!=null?tarjeta.fechaCreacion:'--'}">
 												<f:convertDateTime type="date"
-													pattern="dd/MM/yyyy hh:mm:ss a" />
+													pattern="dd/MM/yyyy" />
 											</h:outputText>
 										</p:column>
 										<p:column style="text-align: center">
@@ -143,7 +131,7 @@
 											<h:outputText
 												value="#{tarjeta.fechaEstado!=null?tarjeta.fechaEstado:'--'}">
 												<f:convertDateTime type="date"
-													pattern="dd/MM/yyyy hh:mm:ss a" />
+													pattern="dd/MM/yyyy" />
 											</h:outputText>
 										</p:column>
 										<p:column style="text-align: center">

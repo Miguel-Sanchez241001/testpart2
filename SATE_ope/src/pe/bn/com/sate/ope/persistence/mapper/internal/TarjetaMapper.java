@@ -107,7 +107,7 @@ public interface TarjetaMapper {
             "BN07.B07_ESTADO, " +
             "BN07.B07_MOTIVO, " +
             "BN07.B07_FEC_REGISTRO, " +
-            "BN07.B07_USUARIO_CREA " +
+            "BN07.B07_USUARIO_CREA, " +
             "BN07.B07_COD_AUTORIZA " +
             "FROM BN_SATE.BNSATE05_TARJETA BN05 " +
             "INNER JOIN BN_SATE.BNSATE07_EST_TARJETA BN07 ON BN07.B05_ID_TAR = BN05.B05_ID_TAR " +
@@ -437,6 +437,118 @@ public interface TarjetaMapper {
     		@Param("numDocumento")String numDocumento,
     		@Param("ruc")String ruc
     		);
+    
+    
+    
+    
+    
+    
+    
+    
+    @Select("SELECT BN05.*," +
+            "CASE " +
+            "    WHEN usuario.B02_APPATERNO IS NOT NULL AND usuario.B02_APMATERNO IS NOT NULL THEN " +
+            "        SUBSTR(usuario.B02_NOMBRES, 1, 1) || " +
+            "        SUBSTR(REGEXP_SUBSTR(usuario.B02_NOMBRES, '[^ ]+', 1, 2), 1, 1) || " +
+            "        SUBSTR(usuario.B02_APPATERNO, 1, 1) || " +
+            "        SUBSTR(usuario.B02_APMATERNO, 1, 1) " +
+            "    WHEN INSTR(usuario.B02_NOMBRES, '|') > 0 THEN " +
+            "        REGEXP_REPLACE( " +
+            "            REGEXP_SUBSTR(usuario.B02_NOMBRES, '\\|([^|]+)\\|', 1, 1), " +
+            "            '(^| )([A-Za-z])[^ ]*', " +
+            "            '\\2' " +
+            "        ) " +
+            "    ELSE REGEXP_REPLACE( " +
+            "             usuario.B02_NOMBRES, " +
+            "             '(^| )([A-Za-z])[^ ]*', " +
+            "             '\\2' " +
+            "         ) " +
+            "END AS INICIALES, " +
+            "(SELECT BN00.B00_RAZON_SOCIAL FROM BN_SATE.BNSATE00_EMPRESA BN00 WHERE BN00.B00_ID_EMP = BN05.B00_ID_EMP) AS BN00_EMPRESA," +
+            "SUBSTR(BN05.B05_ENTREGA_UBIGEO, 1, 2) AS B05_ENTREGA_DEPARTAMENTO," +
+            "SUBSTR(BN05.B05_ENTREGA_UBIGEO, 3, 2) AS B05_ENTREGA_PROVINCIA," +
+            "SUBSTR(BN05.B05_ENTREGA_UBIGEO, 5, 2) AS B05_ENTREGA_DISTRITO," +
+            "(CASE WHEN BN05.B05_ENTREGA_UBICACION = '4' THEN (SELECT B00_RAZON_SOCIAL FROM BN_SATE.BNSATE00_EMPRESA BN00 WHERE BN00.B00_ID_EMP = BN05.B05_ENTREGA_AGENCIA_BN) ELSE '' END) AS ENTREGA_UBICACION_UE," +
+            "BN07.B07_ESTADO," +
+            "BN07.B07_MOTIVO, BN07.B07_FEC_REGISTRO,"
+            + " BN07.B07_USUARIO_CREA, " +
+            "BN07.B07_COD_AUTORIZA " +
+            "FROM BN_SATE.BNSATE05_TARJETA BN05 " +
+            "INNER JOIN BN_SATE.BNSATE06_CLIENTE BN06 ON BN05.B06_ID_CLI = BN06.B06_ID_CLI " +
+            "INNER JOIN BN_SATE.BNSATE07_EST_TARJETA BN07 ON BN07.B05_ID_TAR = BN05.B05_ID_TAR " +
+            "INNER JOIN BN_SATE.BNSATE00_EMPRESA BN00 ON BN00.B00_ID_EMP = BN05.B00_ID_EMP " +
+            "INNER JOIN BN_SATE.BNSATE02_USUARIO usuario ON usuario.B02_REP = BN05.B02_REP " +
+            "WHERE " +
+            " BN07.B07_ETA = (SELECT MAX(B07.B07_ETA) FROM BN_SATE.BNSATE07_EST_TARJETA B07 WHERE B07.B05_ID_TAR = BN05.B05_ID_TAR) " +
+            "AND (BN07.B07_ESTADO = '5' OR BN07.B07_ESTADO = '6'  OR BN07.B07_ESTADO = '7')  " +
+            "AND BN05.B05_NUM_TARJETA = #{numTarjeta} AND BN00.B00_NUM_RUC = #{numRuc} ")
+    @ResultMap("mapTarjeta")
+    public Tarjeta buscarTarjetaValidosParaBloqueoPorNumTar(
+            @Param("numTarjeta") String numTarjeta,
+            @Param("numRuc") String numRuc );
+    
+    
+    @Select("SELECT BN05.*," +
+            "CASE " +
+            "    WHEN usuario.B02_APPATERNO IS NOT NULL AND usuario.B02_APMATERNO IS NOT NULL THEN " +
+            "        SUBSTR(usuario.B02_NOMBRES, 1, 1) || " +
+            "        SUBSTR(REGEXP_SUBSTR(usuario.B02_NOMBRES, '[^ ]+', 1, 2), 1, 1) || " +
+            "        SUBSTR(usuario.B02_APPATERNO, 1, 1) || " +
+            "        SUBSTR(usuario.B02_APMATERNO, 1, 1) " +
+            "    WHEN INSTR(usuario.B02_NOMBRES, '|') > 0 THEN " +
+            "        REGEXP_REPLACE( " +
+            "            REGEXP_SUBSTR(usuario.B02_NOMBRES, '\\|([^|]+)\\|', 1, 1), " +
+            "            '(^| )([A-Za-z])[^ ]*', " +
+            "            '\\2' " +
+            "        ) " +
+            "    ELSE REGEXP_REPLACE( " +
+            "             usuario.B02_NOMBRES, " +
+            "             '(^| )([A-Za-z])[^ ]*', " +
+            "             '\\2' " +
+            "         ) " +
+            "END AS INICIALES, " +
+            "(SELECT BN00.B00_RAZON_SOCIAL FROM BN_SATE.BNSATE00_EMPRESA BN00 WHERE BN00.B00_ID_EMP = BN05.B00_ID_EMP) AS BN00_EMPRESA," +
+            "SUBSTR(BN05.B05_ENTREGA_UBIGEO, 1, 2) AS B05_ENTREGA_DEPARTAMENTO," +
+            "SUBSTR(BN05.B05_ENTREGA_UBIGEO, 3, 2) AS B05_ENTREGA_PROVINCIA," +
+            "SUBSTR(BN05.B05_ENTREGA_UBIGEO, 5, 2) AS B05_ENTREGA_DISTRITO," +
+            "(CASE WHEN BN05.B05_ENTREGA_UBICACION = '4' THEN (SELECT B00_RAZON_SOCIAL FROM BN_SATE.BNSATE00_EMPRESA BN00 WHERE BN00.B00_ID_EMP = BN05.B05_ENTREGA_AGENCIA_BN) ELSE '' END) AS ENTREGA_UBICACION_UE," +
+            "BN07.B07_ESTADO," +
+            "BN07.B07_MOTIVO, BN07.B07_FEC_REGISTRO,"
+            + " BN07.B07_USUARIO_CREA, " +
+            "BN07.B07_COD_AUTORIZA " +
+            "FROM BN_SATE.BNSATE05_TARJETA BN05 " +
+            "INNER JOIN BN_SATE.BNSATE06_CLIENTE BN06 ON BN05.B06_ID_CLI = BN06.B06_ID_CLI " +
+            "INNER JOIN BN_SATE.BNSATE07_EST_TARJETA BN07 ON BN07.B05_ID_TAR = BN05.B05_ID_TAR " +
+            "INNER JOIN BN_SATE.BNSATE00_EMPRESA BN00 ON BN00.B00_ID_EMP = BN05.B00_ID_EMP " +
+            "INNER JOIN BN_SATE.BNSATE02_USUARIO usuario ON usuario.B02_REP = BN05.B02_REP " +
+            "WHERE " +
+            " BN07.B07_ETA = (SELECT MAX(B07.B07_ETA) FROM BN_SATE.BNSATE07_EST_TARJETA B07 WHERE B07.B05_ID_TAR = BN05.B05_ID_TAR) " +
+            "AND (BN07.B07_ESTADO = '5' OR BN07.B07_ESTADO = '6'  OR BN07.B07_ESTADO = '7')  " +
+            "AND BN06.B06_TIPO_DOCUMENTO = #{tipoDocumento} AND BN06.B06_NUM_DOCUMENTO = #{numDocumento}  AND BN00.B00_NUM_RUC = #{numRuc} ")
+    @ResultMap("mapTarjeta")
+    public List<Tarjeta> buscarTarjetaValidosParaBloqueoPorDocumento(
+    		@Param("tipoDocumento")String tipoDocumento,
+    		@Param("numDocumento")String numDocumento,		
+            @Param("numRuc") String numRuc );
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 

@@ -14,4 +14,5 @@ public interface UsuarioService {
 	public boolean existeUsuarioEmpresa(Usuario usuario, String ruc);
 	
 	public void actualizaDatosUsuario(Usuario usuario);
+	public String buscarClienteNumDoc( String numDocumento);
 }

@@ -35,10 +35,12 @@ public class Parametros {
 	private String sesionExpiradaTiempo;
 	private String conexionTiempo;
 	private String urlServiceRestAntiguos;
-
 	private String respuestaTiempo;
+	
+	// PARAMETROS  ALDEAMO
 	private String urlAldeamo;
 	private String tokenAldeamo;
 	private String correoEmisor;
+	private String cromenviocorreo;
 	
 }

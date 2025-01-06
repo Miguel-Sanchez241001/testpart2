@@ -71,6 +71,15 @@ public enum MotivosBloqueoTarjeta {
 	public static MotivosBloqueoTarjeta[] motivosBloqueoPorIdMotivoWS(){
 		MotivosBloqueoTarjeta motivos[] = null;
 		
+		motivos =new MotivosBloqueoTarjeta[2];
+ 		motivos[0] = MotivosBloqueoTarjeta.PERDIDA;
+ 		motivos[1] = MotivosBloqueoTarjeta.ROBO;		
+		
+		return motivos;
+	}
+	public static MotivosBloqueoTarjeta[] motivosBloqueoPorIdMotivoCallCenterWS(){
+		MotivosBloqueoTarjeta motivos[] = null;
+		
 		motivos =new MotivosBloqueoTarjeta[4];
 		motivos[0] = MotivosBloqueoTarjeta.FRAUDE;
 		motivos[1] = MotivosBloqueoTarjeta.PERDIDA;

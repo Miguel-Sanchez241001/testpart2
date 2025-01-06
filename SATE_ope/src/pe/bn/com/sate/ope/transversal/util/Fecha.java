@@ -3,6 +3,8 @@ package pe.bn.com.sate.ope.transversal.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -26,6 +28,11 @@ public class Fecha {
 	 */
 	public static String formatearFechaReporte(Date fecha) {
 		DateFormat fechaFormato = new SimpleDateFormat("dd.MM.yy");
+		return fechaFormato.format(fecha);
+	}
+	
+	public static String formatearFechaEmail(Date fecha) {
+		DateFormat fechaFormato = new SimpleDateFormat("dd-MM-yyyy");
 		return fechaFormato.format(fecha);
 	}
 	public static String formatearFechaWS(Date fecha) {
@@ -81,7 +88,11 @@ public class Fecha {
 		DateFormat fechaFormato = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
 		return fechaFormato.format(fecha);
 	}
-
+    public static String obtenerFechaDiaAnterior() {
+        LocalDate fechaAyer = LocalDate.now().minusDays(1);
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return fechaAyer.format(formato);
+    }
 	/**
 	 * Metodo que sirve para obtener la fecha del INICIO/FIN de semana del mes
 	 * actual.

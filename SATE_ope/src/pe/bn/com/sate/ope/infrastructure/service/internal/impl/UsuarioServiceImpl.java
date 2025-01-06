@@ -74,4 +74,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new InternalServiceException(ex.getMessage(), ex);
 		}
 	}
+
+	@Override
+	public String buscarClienteNumDoc(String numDocumento) {
+		try {
+			return usuarioMapper.buscarClienteNumDoc( numDocumento);
+		} catch (Exception ex) {
+			throw new InternalServiceException(ex.getMessage(), ex);
+		}
+	}
 }

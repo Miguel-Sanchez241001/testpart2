@@ -28,9 +28,11 @@ import pe.bn.com.sate.ope.infrastructure.service.internal.ClienteService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.NotificacionService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
+import pe.bn.com.sate.ope.infrastructure.service.internal.UsuarioService;
 import pe.bn.com.sate.ope.transversal.configuration.security.SecurityContextFacade;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
+import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.Empresa;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
@@ -63,6 +65,8 @@ public class CambiarEstadoTarjetaController implements Serializable {
 
 	private @Autowired ClienteService clienteService;
 
+	private @Autowired UsuarioService usuarioService;
+	
 	private @Autowired NotificacionService notificacionService;
 
 	private @Autowired FWMCProcesos fwmcProcesos;
@@ -84,34 +88,53 @@ public class CambiarEstadoTarjetaController implements Serializable {
 	@PostConstruct
 	public void init() {
 		cambiarEstadoTarjetaModel = new CambiarEstadoTarjetaModel();
+		cambiarEstadoTarjetaModel
+				.setMotivosBloqueoTarjetas(Arrays.asList(MotivosBloqueoTarjeta.motivosBloqueoPorIdMotivoWS()));
+
+		cambiarEstadoTarjetaModel
+				.setMotivosBloqueoCuenta(Arrays.asList(MotivosBloqueoCuenta.motivosBloqueoPorIdMotivoWS()));
+	}
+
+	public void buscarListaTarjetas() {
+		try {
+			String tipoTemp = cambiarEstadoTarjetaModel.getTipoBusqueda();
+			String numdoc = cambiarEstadoTarjetaModel.getNumDocumento();
+			if (cambiarEstadoTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
+				numdoc = StringsUtils.llenarCerosAlaIzquierdaV2(numdoc, 19);
+			}
+			DatosTarjetaCliente datosTarjetaCliente = tarjetaService.buscarDatosTarjetasCliente(tipoTemp, numdoc);
+			cambiarEstadoTarjetaModel.setDatosTarjetaCliente(datosTarjetaCliente);
+			cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getCliente()
+			.setApCompleto(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getCliente().getApPaterno() + " "
+					+ cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getCliente().getApMaterno());
+			if (cambiarEstadoTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.NUM_TARJETA.getId())) {
+				buscarTarjeta();
+			} else {
+
+				UsefulWebApplication.ejecutar("wvSeleccionarTajeta.show()");
+
+				UsefulWebApplication.actualizarComponente("formSeleccionarTarjeta");
+
+			}
+		} catch (ExternalServiceMCProcesosException este) {
+			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+					ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
+					ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
+			logger.error(este.getMessage());
+		} catch (InternalServiceException e) {
+			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+					e.getMessage(), e.getMessage());
+			logger.error(e.getMessage());
+		}
 	}
 
 	public void buscarTarjeta() {
 		// MGL
 		UsefulWebApplication.mostrarDialogo("statusDialog");
 		try {
-			String tipoTemp = cambiarEstadoTarjetaModel.getTipoBusqueda();
-			if (tipoTemp == null) {
-				throw new InternalServiceException("Error en tipo de busqueda cambiar estado tarjeta");
-			}
-			Asignacion asignaSeleccionada = cambiarEstadoTarjetaModel.getAsignacionSeleccionada();
-			if (asignaSeleccionada == null) {
-				throw new InternalServiceException("Error en no hay asignacion seleccionado");
-			}
 
-			// Obtener cliente y tarjeta
-			Cliente cliente = clienteService.buscarClientePorId(asignaSeleccionada.getIdCliente());
-			Tarjeta tarjeta = tarjetaService.buscarTarjetaId(asignaSeleccionada.getIdTar());
+		
 
-			cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setCliente(cliente);
-			cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setTarjeta(tarjeta);
-
-			cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getCliente()
-					.setApCompleto(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getCliente().getApPaterno() + " "
-							+ cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getCliente().getApMaterno());
-			cambiarEstadoTarjetaModel.setMotivosBloqueoTarjetas(Arrays.asList(MotivosBloqueoTarjeta.motivosBloqueoPorIdMotivoWS()));
-
-			cambiarEstadoTarjetaModel.setMotivosBloqueoCuenta( Arrays.asList(MotivosBloqueoCuenta.motivosBloqueoPorIdMotivoWS( )));
 			String numtarjeta = StringsUtils.quitarCeroIzquierdaString(
 					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta());
 			cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setNumTarjeta(numtarjeta);
@@ -127,102 +150,56 @@ public class CambiarEstadoTarjetaController implements Serializable {
 						cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getFechaVencimientoTar());
 
 				cambiarEstadoTarjetaModel.setEstadoBloqueoWS(dato.getCodBloqueo());
-
+				Tarjeta tarjetaResponse = tarjetaService.verificarEstadoTarjeta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta(),dato);
+				cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setTarjeta(tarjetaResponse);
+				cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
 			} catch (ExternalServiceMCProcesosException este) {
 				UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
 						ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
 						ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
 				logger.error(este.getMessage());
-				} catch (InternalExcepcion e) {
+			} catch (InternalExcepcion e) {
 				UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
-						ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
-						ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
+						ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL, ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
 				logger.error(e.getMessage());
-				}
-			
+			}
+
 			EstadoTarjeta estadoTarjeta = new EstadoTarjeta();
-			estadoTarjeta
-					.setEstado(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstado());
+			estadoTarjeta.setEstado(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstado());
 			estadoTarjeta.setFechaRegistro(
 					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getFechaBloqueo());
-			estadoTarjeta.setMotivo(
-					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getMotivoBloqueo());
+			estadoTarjeta.setMotivo(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getMotivoBloqueo());
 			estadoTarjeta.setUsuarioRegistro(
 					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getUsuarioBloqueo());
-			estadoTarjeta.setEstadoCuenta(
-					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta());
+			estadoTarjeta
+					.setEstadoCuenta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta());
 
 			cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setEstadoTarjeta(estadoTarjeta);
-			if (tipoTemp.equals(TipoBusqueda.NUM_TARJETA.getId())) {
 
-			
+			cambiarEstadoTarjetaModel.setBusquedaBloqueoTarjeta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente()
+					.getTarjeta().getEstado().equals(TipoEstadoTarjeta.TARJETA_BLOQUEADA.getCod()));
 
-			 
-
-					cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
-
-			
-
-				
-
-					cambiarEstadoTarjetaModel
-							.setBusquedaBloqueoTarjeta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta()
-									.getEstado().equals(TipoEstadoTarjeta.TARJETA_BLOQUEADA.getCod()));
-
-					UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
-
-			 
-
-			} else if (cambiarEstadoTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.DNI.getId())
-					|| cambiarEstadoTarjetaModel.getTipoBusqueda().equals(TipoBusqueda.CARNET_EXTRANJERIA.getId())) {
-
- 
-			 
-
-				cambiarEstadoTarjetaModel.setBusquedaRealizada(false);
-
-				cambiarEstadoTarjetaModel.setBusquedaBloqueoTarjeta(false);
- 
-
-					cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
-
-					cambiarEstadoTarjetaModel
-							.setMotivosBloqueoTarjetas(Arrays.asList(MotivosBloqueoTarjeta.motivosBloqueoPorIdMotivoWS( )));
-
-					cambiarEstadoTarjetaModel.setMotivosBloqueoCuenta(
-							Arrays.asList(MotivosBloqueoCuenta.motivosBloqueoPorIdMotivoWS( )));
-
-					UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
-			 
-
-			}
+			UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
 		} catch (ExternalServiceMCProcesosException este) {
 			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
 					ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC,
 					ConstantesGenerales.ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC);
 			logger.error(este.getMessage());
- 		} catch (InternalServiceException e) {
+		} catch (InternalServiceException e) {
 			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
 					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL, ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
 			logger.error(e.getMessage());
- 		} finally {
+		} finally {
 			UsefulWebApplication.ocultarDialogo("statusDialog");
 		}
 
 	}
 
 	public void seleccionarTarjeta() {
-		cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
 		cambiarEstadoTarjetaModel.getDatosTarjetaCliente()
 				.setTarjeta(cambiarEstadoTarjetaModel.getTarjetaSeleccionada());
 		logger.info("Motivo:" + cambiarEstadoTarjetaModel.getTarjetaSeleccionada().getMotivoBloqueo());
-
-		cambiarEstadoTarjetaModel
-				.setMotivosBloqueoTarjetas(Arrays.asList(MotivosBloqueoTarjeta.motivosBloqueoPorIdMotivo(
-						cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstado())));
-
-		cambiarEstadoTarjetaModel.setMotivosBloqueoCuenta(Arrays.asList(MotivosBloqueoCuenta.motivosBloqueoPorIdMotivo(
-				cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getEstadoCuenta())));
+		buscarTarjeta();
 	}
 
 	public void cambiarEstadoTarjeta() {
@@ -315,8 +292,7 @@ public class CambiarEstadoTarjetaController implements Serializable {
 						logger.error(este.getMessage());
 						UsefulWebApplication.actualizarComponente("formCambiarEstadoTarjeta:pgResultado");
 					} catch (InternalExcepcion e) {
-						// TODO Auto-generated catch block
-						UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+ 						UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
 								ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
 								ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
 						logger.error(e.getMessage());
@@ -338,12 +314,10 @@ public class CambiarEstadoTarjetaController implements Serializable {
 
 					logger.info("codMotivo:" + codMotivo);
 					logger.info("desMotivo:" + desMotivo);
-					// String dMotivo = desMotivo.substring(0, 19);
-
+ 
 					final DTOModificacionTarjeta modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda,
 							numTarjeta, codMotivo, desMotivo);
-					// modificacionTarjeta.setCodRespuesta("0000");
-					logger.info("codRespuesta:" + modificacionTarjeta.getCodRespuesta());
+ 					logger.info("codRespuesta:" + modificacionTarjeta.getCodRespuesta());
 					logger.info("desRespuesta:" + modificacionTarjeta.getDescRespuesta());
 					ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -360,8 +334,7 @@ public class CambiarEstadoTarjetaController implements Serializable {
 									modificacionTarjeta.getFechaTxnTerminal(), modificacionTarjeta.getHoraTxnTerminal(),
 									modificacionTarjeta.getIdTransaccion());
 						});
-						// cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setEstadoCuenta(cambiarEstadoTarjetaModel.getEstadoCuentaSeleccionado());
-						cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setEstadoCuenta(codMotivo);
+ 						cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setEstadoCuenta(codMotivo);
 						cambiarEstadoTarjetaModel.getEstadoTarjeta().setMotivo(codMotivo);
 						tarjetaService.actualizarEstadoCuenta(
 								cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta());
@@ -510,8 +483,6 @@ public class CambiarEstadoTarjetaController implements Serializable {
 
 					} else {
 
-						cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
-						cambiarEstadoTarjetaModel.setAsignacionesTotal(asignaciones);
 						// MOSTRAR MODAL COMPONENTE
 						UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
 						// formulario del componente
@@ -547,13 +518,9 @@ public class CambiarEstadoTarjetaController implements Serializable {
 
 					} else {
 
-						// cambiarEstadoTarjetaModel.getDatosTarjetaCliente().setTarjeta(cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjetas().get(0));
-
 						cambiarEstadoTarjetaModel.setBusquedaRealizada(true);
-						cambiarEstadoTarjetaModel.setAsignacionesTotal(asignaciones);
-						// MOSTRAR MODAL COMPONENTE
+
 						UsefulWebApplication.ejecutar("wvSeleccionarAsignacion.show()");
-						// formulario del componente
 						UsefulWebApplication.actualizarComponente("formSeleccionarAsignacion");
 					}
 
@@ -766,4 +733,17 @@ public class CambiarEstadoTarjetaController implements Serializable {
 		logger.info("[SolicitarTarjetaController] Fin metodo buscarDistritos");
 	}
 
+	
+	
+	public String obtenerNombreUsuarioBloquea(String usuarioRegistra) {
+		if(usuarioRegistra.equals("No username")) {
+			return usuarioRegistra;
+		}
+		try {
+		return usuarioService.buscarClienteNumDoc(usuarioRegistra);
+		} catch (Exception exe) {
+			logger.error(exe.getMessage());
+			return "No username";
+ 	}
+	}
 }

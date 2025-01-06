@@ -8,11 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
+import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.tablas.Agencia;
 import pe.bn.com.sate.ope.transversal.dto.tablas.Ubigeo;
+import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoCuenta;
@@ -44,8 +46,8 @@ public class CambiarEstadoTarjetaModel {
 	private String tipoBloqueoSeleccionado;
 	private List<String> listaTipoBusquedaPor;
 	private String tipoBusquedaPor;
-	private List<Asignacion> asignacionesTotal;
-	private Asignacion asignacionSeleccionada;
+
+
 	/**/
 	private List<Ubigeo> departamentos;
 	private List<Ubigeo> provincias;
@@ -60,15 +62,11 @@ public class CambiarEstadoTarjetaModel {
 
 	public CambiarEstadoTarjetaModel() {
 		datosTarjetaCliente = new DatosTarjetaCliente();
-
-		tipoBusqueda = TipoBusqueda.NUM_TARJETA.getId();
-
 		listaTipoBusquedaPor = new ArrayList<>();
 		listaTipoBusquedaPor.add("Por Documento");
 		listaTipoBusquedaPor.add("Por Tarjeta");
-
 		tipoBloqueoSeleccionado = "T";
-		asignacionesTotal = new ArrayList<>();
+
 	}
 
 	public String descripcionTipoDocumento(String codigo) {
@@ -82,7 +80,9 @@ public class CambiarEstadoTarjetaModel {
 	public String descripcionTipoTarjetaWS(String codigo) {
 		return TipoTarjeta.descripcionTipotarjeta(codigo);
 	}
-
+	public String  descricionTarSinCeros(String numtar) {
+		return StringsUtils.quitarCeroIzquierdaString(numtar);
+	}
 	public String descripcionEstadoTarjeta(String codigo) {
 		return TipoEstadoTarjeta.descripcionTipoEstadoTarjeta(codigo);
 	}
@@ -98,13 +98,16 @@ public class CambiarEstadoTarjetaModel {
 	public String descripcionNumeroTarjeta(String numTarjeta) {
 		return UsefulWebApplication.formatoNumTarjeta(numTarjeta);
 	}
-
+	public String descripcionNcombreCompleto() {
+		Cliente cleinteTemp = datosTarjetaCliente.getCliente();
+		return cleinteTemp.getNombres()+ " " +  cleinteTemp.getApCompleto();
+	}
 	public void iniciarEstadoTarjeta() {
 		estadoTarjeta = new EstadoTarjeta();
  
 			estadoTarjeta.setFechaRegistro(new Date());
 			estadoTarjeta.setEstado(TipoEstadoTarjeta.TARJETA_BLOQUEADA.getCod());
-			estadoTarjeta.setMotivo(""); // motivoSeleccionado
+			estadoTarjeta.setMotivo("");
 			estadoTarjeta.setUsuarioRegistro(UsefulWebApplication.obtenerUsuario().getUsername());
 			estadoTarjeta.setIdTarjeta(datosTarjetaCliente.getTarjeta().getId());
 		 
@@ -126,7 +129,6 @@ public class CambiarEstadoTarjetaModel {
 		listaTipoBusquedaPor.add("Por Documento");
 		listaTipoBusquedaPor.add("Por Tarjeta");
 		tipoBloqueoSeleccionado = "T";
-		asignacionesTotal = new ArrayList<>();
 
 	}
 

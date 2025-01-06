@@ -19,4 +19,12 @@
 <result property="tarFechaVencimineto" column="B05_FEC_VENCIMIENTO" />
 </resultMap>
  
+ 
+ <resultMap id="mapAsignacionCorreo" type="pe.bn.com.sate.ope.transversal.dto.sate.AsignacionCorreo">
+    <result property="correo" column="correo"/>
+    <result property="linea" column="linea"/>
+    <result property="inicioLinea" column="inicioLinea"/>
+    <result property="finLinea" column="finLinea"/>
+    <result property="nombreCompleto" column="nombreCompleto"/>
+</resultMap>
 </mapper>

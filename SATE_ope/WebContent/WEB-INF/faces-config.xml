@@ -31,7 +31,7 @@
 
     <lifecycle>
         <phase-listener id="nocache">pe.bn.com.sate.ope.transversal.util.vista.CacheControlPhaseListener</phase-listener>
-<!--         <phase-listener>pe.bn.com.sate.ope.application.view.LoginController</phase-listener>
- -->    </lifecycle>
+         <phase-listener>pe.bn.com.sate.ope.application.view.LoginController</phase-listener>
+    </lifecycle>
 
 </faces-config>

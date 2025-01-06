@@ -22,15 +22,12 @@ import pe.bn.com.sate.ope.transversal.util.componentes.Parametros;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 
 public class CertificadoUtil {
-	private @Autowired static Parametros parametros;
+ 
 	private final static Logger log = Logger.getLogger(CertificadoUtil.class);
 
 	public static SSLContext getSslContext(final String vHost,String certPath ) throws KeyStoreException, IOException,
 			NoSuchAlgorithmException, CertificateException, KeyManagementException {
-
-		// final String vHost = host;
-
-		//String certPath = ConstantesGenerales.certificadoIzipay;
+ 
 
 		// Crear KeyStore e importar el certificado
 		KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -85,8 +82,7 @@ public class CertificadoUtil {
 
 			} };
 
-			// Crear SSLContext personalizado con el TrustManager
-			SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+ 			SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
 			sslContext.init(null, trustManagers, null);
 
 			return sslContext;
