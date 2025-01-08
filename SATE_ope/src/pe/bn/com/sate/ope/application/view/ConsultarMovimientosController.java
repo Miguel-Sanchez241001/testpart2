@@ -391,7 +391,7 @@ public class ConsultarMovimientosController {
 					consultarMovimientosModel.getDatosTarjetaCliente().setTarjeta(tarjetaService
 							.buscarTarjetaId(consultarMovimientosModel.getAsignacionSeleccionada().getIdTar()));
 
-					System.out.println("consultarMovimientosModel.getTipoBusqueda():::"
+					logger.info("consultarMovimientosModel.getTipoBusqueda():::"
 							+ consultarMovimientosModel.getTipoBusqueda());
 					dato = fwmcProcesos.consultaMovimientoPorExpediente(
 							consultarMovimientosModel.getDatosTarjetaCliente().getTarjeta().getNumeroCuenta(),
@@ -413,7 +413,7 @@ public class ConsultarMovimientosController {
 					consultarMovimientosModel.getDatosTarjetaCliente().setTarjeta(tarjetaService
 							.buscarTarjetaId(consultarMovimientosModel.getAsignacionSeleccionada().getIdTar()));
 
-					System.out.println("consultarMovimientosModel.getTipoBusqueda():::"
+					logger.info("consultarMovimientosModel.getTipoBusqueda():::"
 							+ consultarMovimientosModel.getTipoBusqueda());
 
 					dato = fwmcProcesos.consultaMovimientoPorExpediente(
@@ -428,7 +428,7 @@ public class ConsultarMovimientosController {
 				if (dato.getCodRespuesta().equals("0000")) {
 
 					String tipoTarjeta = TipoTarjeta.descripcionTipotarjeta(tipTarj);
-					System.out.println("tipoTarjeta:" + tipoTarjeta);
+					logger.info("tipoTarjeta:" + tipoTarjeta);
 
 					listDato = fwmcProcesos.listaMovTarjExp(dato, tipoTarjeta);
 

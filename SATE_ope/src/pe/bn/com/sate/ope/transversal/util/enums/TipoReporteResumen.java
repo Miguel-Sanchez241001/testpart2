@@ -3,8 +3,8 @@ package pe.bn.com.sate.ope.transversal.util.enums;
 public enum TipoReporteResumen {
 
 	LISTADO_TARJETAS(		1, "Listado de Tarjetas."), 
-	LISTADO_TRANSACCIONES(	2, "Listado de Transacciones por periodo."),
-	LISTADO_CARGOS(			3,"Listado de Cargos en cuenta garantía por periodo.");
+	LISTADO_TRANSACCIONES(	2, "Transacciones por periodo."),
+	LISTADO_CARGOS(			3,"Cargos en cuenta garantía por periodo.");
 
 	private int id;
 	private String descripcion;

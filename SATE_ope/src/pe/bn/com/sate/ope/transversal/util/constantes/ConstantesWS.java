@@ -514,46 +514,8 @@ public class ConstantesWS {
 	}
 
 
-	public static void main(String[] args) {
-	    // Obtener el Map de todas las operaciones
-	    Map<String, Map<String, String>> allOperationsMaps = getAllOperationsMaps();
 
-	    // Recorrer todas las operaciones y generar e imprimir sus respectivos XMLs
-	    for (Map.Entry<String, Map<String, String>> entry : allOperationsMaps.entrySet()) {
-	        String operation = entry.getKey();
-	        Map<String, String> operationMap = entry.getValue();
-
-	        String xmlTemplate = "";
-	        switch (operation) {
-	            case SOACTION_Consulta_Datos_Tarjeta:
-	                xmlTemplate = Consulta_Datos_Tarjeta_XML;
-	                break;
-	            case SOACTION_BLOQUEO_TARJETA:
-	                xmlTemplate = MODIFICACION_TARJETA_XML;
-	                break;
-	            case SOACTION_CONSULTA_MOVIMIENTOS_EXPEDIENTE:
-	                xmlTemplate = CONSULTA_MOVIMIENTOS_EXPEDIENTE_XML;
-	                break;
-	            case SOACTION_CONSULTA_DATOS_EXPEDIENTE:
-	                xmlTemplate = CONSULTA_DATOS_EXPEDIENTE_XML;
-	                break;
-	            case SOACTION_MODIFICACION_CLIENTE:
-	                xmlTemplate = MODIFICACION_CLIENTE_XML;
-	                break;
-	            case SOACTION_CONSULTA_DATOS_CLIENTE:
-	                xmlTemplate = CONSULTA_DATOS_CLIENTE_XML;
-	                break;
-	        }
-
-	        // Generar el XML usando el Map correspondiente
-	        String xml = generarXml(xmlTemplate, operationMap);
-
-	        // Imprimir el XML generado en la consola
-	        System.out.println("XML para operación: " + operation);
-	        System.out.println(xml);
-	        System.out.println("--------------------------------------------------");
-	    }
-	}
+ 
 	
 	 	public static final String SOACTION_Consulta_Datos_Tarjeta = "Consulta_Datos_Tarjeta";	 	
 	 	public static final String SOACTION_BLOQUEO_TARJETA = "Modificacion_Tarjetas"; 

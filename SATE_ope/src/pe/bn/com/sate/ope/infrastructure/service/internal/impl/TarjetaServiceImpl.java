@@ -17,7 +17,6 @@ import pe.bn.com.sate.ope.persistence.mapper.internal.EmpresaMapper;
 import pe.bn.com.sate.ope.persistence.mapper.internal.ParametroMapper;
 import pe.bn.com.sate.ope.persistence.mapper.internal.TarjetaMapper;
 import pe.bn.com.sate.ope.transversal.configuration.security.SecurityContextFacade;
-import pe.bn.com.sate.ope.transversal.dto.host.Solicitud;
 import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;
@@ -268,7 +267,7 @@ public class TarjetaServiceImpl implements TarjetaService {
 	public void bloquearTarjetaPorRobo(EstadoTarjeta estadoTarjeta, Long idTarjeta, Long idCliente) {
 		try {
 			Tarjeta nuevaTarjeta = tarjetaMapper.buscarTarjetaPorId(idTarjeta);
-			System.out.println("nuevaTarjeta:" + nuevaTarjeta.toString());
+			logger.info("nuevaTarjeta:" + nuevaTarjeta.toString());
 			tarjetaMapper.registrarEstadoTarjeta(estadoTarjeta);
 			nuevaTarjeta.setIdEmpresa(
 					empresaMapper.buscarEmpresaPorRUC(SecurityContextFacade.getAuthenticatedUser().getRuc()).getId());

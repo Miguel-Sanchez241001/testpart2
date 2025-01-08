@@ -31,7 +31,6 @@ import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.UsuarioService;
 import pe.bn.com.sate.ope.transversal.configuration.security.SecurityContextFacade;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
-import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.Empresa;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;

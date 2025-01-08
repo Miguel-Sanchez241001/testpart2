@@ -95,11 +95,10 @@
 										currentPageReportTemplate="{currentPage} de {totalPages}"
 										rowsPerPageTemplate="5,10,15"
 										value="#{reporteResumenController.reporteResumenModel.listaTarjetas}"
-										rowKey="#{tarjeta.id}"
-										style="margin-top:30px;width:100%;"
+										rowKey="#{tarjeta.id}" style="margin-top:30px;width:100%;"
 										rowIndexVar="index" emptyMessage="No hay tarjetas">
 
-									
+
 										<p:column style="text-align: center">
 											<f:facet name="header">
 												<h:outputText value="Usuario creador" />
@@ -113,8 +112,7 @@
 											</f:facet>
 											<h:outputText
 												value="#{tarjeta.fechaCreacion!=null?tarjeta.fechaCreacion:'--'}">
-												<f:convertDateTime type="date"
-													pattern="dd/MM/yyyy" />
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
 											</h:outputText>
 										</p:column>
 										<p:column style="text-align: center">
@@ -130,8 +128,7 @@
 											</f:facet>
 											<h:outputText
 												value="#{tarjeta.fechaEstado!=null?tarjeta.fechaEstado:'--'}">
-												<f:convertDateTime type="date"
-													pattern="dd/MM/yyyy" />
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
 											</h:outputText>
 										</p:column>
 										<p:column style="text-align: center">
@@ -179,109 +176,205 @@
 									</p:dataTable>
 								</p:panel>
 
-								<p:dataTable var="transaccion" id="dtListadoTransacciones"
-									rendered="#{reporteResumenController.reporteResumenModel.listaTransacciones!=null and !reporteResumenController.reporteResumenModel.listaTransacciones.isEmpty() and reporteResumenController.reporteResumenModel.tipoReporteSeleccionado==2}"
-									value="#{reporteResumenController.reporteResumenModel.listaTransacciones}"
-									rowKey="#{transaccion.id}"
-									style="table-layout: fixed;margin-top:30px;width:80%;"
-									rowIndexVar="index">
 
-									<p:columnGroup type="header">
-										<p:row>
-											<p:column headerText="Fecha Operación*" />
-											<p:column headerText="Fecha Posteo" />
-											<p:column headerText="Operación" />
-											<p:column headerText="Comercio" />
-											<p:column headerText="Monto" />
-											<p:column headerText="Autorización PMC" />
-											<p:column headerText="N° Autorización" />
-											<p:column headerText="Estado" />
-										</p:row>
-									</p:columnGroup>
+								<p:panel id="listaTransaccionPanel"
+									rendered="#{reporteResumenController.reporteResumenModel.listaTransacciones!=null and !reporteResumenController.reporteResumenModel.listaTransacciones.isEmpty() and reporteResumenController.reporteResumenModel.tipoReporteSeleccionado==2}">
+									<p:panelGrid id="pgExportertransaccion" columns="2"
+										style="float:right;margin-right:2px;">
 
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{transaccion.fechaOperacion!=null?transaccion.fechaOperacion:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{transaccion.fechaPosteo!=null?transaccion.fechaPosteo:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{transaccion.operacion!=null?transaccion.operacion!=null:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{transaccion.comercio!=null?transaccion.comercio:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{transaccion.monto!=null?transaccion.monto!=null:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{transaccion.autorizacionPMC!=null?transaccion.autorizacionPMC:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{transaccion.numeroAutorizacion!=null?transaccion.numeroAutorizacion:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{transaccion.estado!=null?transaccion.estado:'--'}" />
-									</p:column>
-								</p:dataTable>
+										<p:commandButton value="Descargar Documento"
+											icon="ui-icon-arrowthick-1-s" ajax="false">
+											<p:dataExporter type="xls" target="dtListadoTransacciones"
+												fileName="lista_transaccion"
+												postProcessor="#{reporteResumenController.customizeXLS}" />
+										</p:commandButton>
+									</p:panelGrid>
+									<p:dataTable var="transaccion" id="dtListadoTransacciones"
+										value="#{reporteResumenController.reporteResumenModel.listaTransacciones}"
+										paginator="true" paginatorPosition="bottom" rows="10"
+										paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+              {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										currentPageReportTemplate="{currentPage} de {totalPages}"
+										rowsPerPageTemplate="5,10,15" rowKey="#{transaccion.id}"
+										style="table-layout: fixed;margin-top:30px;width:80%;"
+										rowIndexVar="index">
 
-								<p:dataTable var="cargo" id="dtListadoCargos"
-									rendered="#{reporteResumenController.reporteResumenModel.listaCargos!=null and !reporteResumenController.reporteResumenModel.listaCargos.isEmpty() and reporteResumenController.reporteResumenModel.tipoReporteSeleccionado==3}"
-									value="#{reporteResumenController.reporteResumenModel.listaCargos}"
-									rowKey="#{cargo.id}"
-									style="table-layout: fixed;margin-top:30px;width:80%;"
-									rowIndexVar="index">
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Numero Tarjeta" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.numeroTarjeta!=null?transaccion.numeroTarjeta:'--'}" />
+										</p:column>
 
-									<p:columnGroup type="header">
-										<p:row>
-											<p:column headerText="Fecha de corte" />
-											<p:column headerText="Fecha Proceso" />
-											<p:column headerText="Número de cuenta" />
-											<p:column headerText="Monto cargado" />
-											<p:column headerText="Monto pendiente por cargar" />
-											<p:column headerText="Saldo Inicial Cuenta" />
-											<p:column headerText="Saldo Final Cuenta" />
-										</p:row>
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Fecha Operación" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.fechaOperacion!=null?transaccion.fechaOperacion:'--'}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
 
-									</p:columnGroup>
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Fecha Posteo" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.fechaPosteo!=null?transaccion.fechaPosteo:'--'}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
 
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{cargo.fechaCorte!=null?cargo.fechaCorte:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{cargo.fechaProceso!=null?cargo.fechaProceso:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{cargo.numeroCuenta!=null?cargo.numeroCuenta:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{cargo.MontoCargado!=null?cargo.MontoCargado:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{cargo.MontoPendiente!=null?cargo.MontoPendiente:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{cargo.saldoInicial!=null?cargo.saldoInicial:'--'}" />
-									</p:column>
-									<p:column style="text-align: center">
-										<h:outputText
-											value="#{cargo.saldoFinal!=null?cargo.saldoFinal:'--'}" />
-									</p:column>
-								</p:dataTable>
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Operación" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.operacion!=null?transaccion.operacion:'--'}" />
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Comercio" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.comercio!=null?transaccion.comercio:'--'}" />
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Monto" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.monto!=null?transaccion.monto:'--'}">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Autorización PMC" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.autorizacionPMC!=null?transaccion.autorizacionPMC:'--'}" />
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="N° Autorización" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.numeroAutorizacion!=null?transaccion.numeroAutorizacion:'--'}" />
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Estado" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.estado!=null?transaccion.estado:'--'}" />
+										</p:column>
+
+									</p:dataTable>
+
+								</p:panel>
+
+								<p:panel id="listaCargoPanel"
+									rendered="#{reporteResumenController.reporteResumenModel.listaCargos!=null and !reporteResumenController.reporteResumenModel.listaCargos.isEmpty() and reporteResumenController.reporteResumenModel.tipoReporteSeleccionado==3}">
+									<p:panelGrid id="pgExportercargo" columns="2"
+										style="float:right;margin-right:2px;">
+
+										<p:commandButton value="Descargar Documento"
+											icon="ui-icon-arrowthick-1-s" ajax="false">
+											<p:dataExporter type="xls" target="dtListadoCargos"
+												fileName="lista_cargo" postProcessor="#{reporteResumenController.customizeXLS}" />
+										</p:commandButton>
+									</p:panelGrid>
+									<p:dataTable var="cargo" id="dtListadoCargos"
+										value="#{reporteResumenController.reporteResumenModel.listaCargos}"
+										paginator="true" paginatorPosition="bottom" rows="10"
+										paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+              {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										currentPageReportTemplate="{currentPage} de {totalPages}"
+										rowsPerPageTemplate="5,10,15" rowKey="#{cargo.id}"
+										style="table-layout: fixed;margin-top:30px;width:80%;"
+										rowIndexVar="index">
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Fecha de corte" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.fechaCorte!=null?cargo.fechaCorte:'--'}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Fecha Proceso" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.fechaProceso!=null?cargo.fechaProceso:'--'}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Número de cuenta" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.numeroCuenta!=null?cargo.numeroCuenta:'--'}" />
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Monto cargado" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.montoCargado!=null?cargo.montoCargado:'--'}">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Monto pendiente por cargar" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.montoPendiente!=null?cargo.montoPendiente:'--'}">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Saldo Inicial Cuenta" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.saldoInicial!=null?cargo.saldoInicial:'--'}">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Saldo Final Cuenta" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.saldoFinal!=null?cargo.saldoFinal:'--'}">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+									</p:dataTable>
+
+								</p:panel>
+
+
 							</center>
 						</p:panel>
 					</h:panelGrid>

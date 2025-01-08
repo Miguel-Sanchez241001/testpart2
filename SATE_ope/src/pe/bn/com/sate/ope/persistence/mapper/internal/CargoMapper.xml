@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pe.bn.com.sate.ope.persistence.mapper.internal.CargoMapper">
 
-	<resultMap id="mapCargo" type="Cargo">
-		<result property="fechaCorte" column="B15_FEC_CORTE"></result>
-		<result property="fechaProceso" column="B15_FEC_PROCESO"></result>
-		<result property="numeroCuenta" column="B15_NUM_CUENTA"></result>
-		<result property="montoCargado" column="B15_MONTO_CARGADO"></result>
-		<result property="montoPendiente" column="B15_MONTO_PENDIENTE"></result>
-		<result property="saldoInicial" column="B15_SALDO_INICIAL"></result>
-		<result property="saldoFinal" column="B15_SALDO_FINAL"></result>
-	</resultMap>
+    <resultMap id="mapCargo" type="Cargo">
+        <result property="fechaCorte" column="fechaCorte" /> <!-- Alias usado en la consulta -->
+        <result property="fechaProceso" column="fechaProceso" /> <!-- Alias usado en la consulta -->
+        <result property="numeroCuenta" column="numeroCuenta" /> <!-- Alias usado en la consulta -->
+        <result property="montoCargado" column="montoCargado" /> <!-- Alias usado en la consulta -->
+        <result property="montoPendiente" column="montoPendiente" /> <!-- Alias usado en la consulta -->
+        <result property="saldoInicial" column="saldoInicial" /> <!-- Alias usado en la consulta -->
+        <result property="saldoFinal" column="saldoFinal" /> <!-- Alias usado en la consulta -->
+    </resultMap>
 
 </mapper>

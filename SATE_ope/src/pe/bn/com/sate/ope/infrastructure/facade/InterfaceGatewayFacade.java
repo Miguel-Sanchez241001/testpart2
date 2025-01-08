@@ -11,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import pe.bn.com.sate.ope.application.view.LoginController;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
@@ -147,7 +146,7 @@ public class InterfaceGatewayFacade {
 							&& usuario.getCorreoLaboral().equals(
 									correoElectronico)) {
 						String clave = StringsUtils.random();
-						System.out.println("CLAVE : " + clave);
+						logger.info("CLAVE : " + clave);
 						
 						Solicitud solicitud = requestMensajeHost.getSolicitud(
 								ruc, empresa.getCic(), tipoDocumento,

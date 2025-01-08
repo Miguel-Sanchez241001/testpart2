@@ -35,7 +35,6 @@ public class Teclado {
 	public void escribirTecla(long posicion) {
 		if (clave.length() < 6) {
 			clave += listaTeclas.get((int) posicion);
-			System.out.println(clave);
 		}
 	}
 

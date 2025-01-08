@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.EstadoTarjeta;

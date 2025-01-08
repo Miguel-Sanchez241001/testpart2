@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import pe.bn.com.sate.ope.application.view.CrearUsuarioController;
 import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceWsReniecException;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.reniec.Identidad2;
 import pe.bn.com.sate.ope.infrastructure.service.external.domain.reniec.ServiceReniec2Proxy;
@@ -36,8 +35,7 @@ public class FWPersonaNatural {
 					parametros.getUser1Reniec(),
 					parametros.getConsultaReniec(), numeroDocumento);
 			Cliente cliente = null;
-			/** System.out.println(vIdentidad2.getError().trim()); */
-			if (!vIdentidad2.getApellidoPaterno().trim().equals("")) {
+ 			if (!vIdentidad2.getApellidoPaterno().trim().equals("")) {
 				cliente = new Cliente(vIdentidad2, tipoDocumento);
 			}
 			return cliente;
@@ -73,8 +71,7 @@ logger.info("[FWPersonaNatural] - DatosConsulta: " +
 	
 
 			Usuario usuario = null;
-			/** System.out.println(vIdentidad2.getError().trim()); */
-			if (!vIdentidad2.getApellidoPaterno().trim().equals("")) {
+ 			if (!vIdentidad2.getApellidoPaterno().trim().equals("")) {
 				usuario = new Usuario(vIdentidad2, tipoDocumento);
 			}
 			logger.info("[FWPersonaNatural] - Fin metodo buscarPersonaReniecProxy");

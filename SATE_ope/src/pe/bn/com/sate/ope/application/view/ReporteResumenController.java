@@ -32,8 +32,7 @@ import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 @Scope("view")
 public class ReporteResumenController {
 
-	private final static Logger logger = Logger
-			.getLogger(ReporteResumenController.class);
+	private final static Logger logger = Logger.getLogger(ReporteResumenController.class);
 
 	private ReporteResumenModel reporteResumenModel;
 
@@ -51,51 +50,37 @@ public class ReporteResumenController {
 				LimpiarListasResumen();
 				switch (reporteResumenModel.getTipoReporteSeleccionado()) {
 				case 1:
-					reporteResumenModel.setListaTarjetas(reporteResumenFacade
-							.obtenerListaTarjetas(reporteResumenModel
-									.getFechaCorteInicialSeleccionada(),
-									reporteResumenModel
-											.getFechaCorteFinalSeleccionada()));
+					reporteResumenModel.setListaTarjetas(reporteResumenFacade.obtenerListaTarjetas(
+							reporteResumenModel.getFechaCorteInicialSeleccionada(),
+							reporteResumenModel.getFechaCorteFinalSeleccionada()));
 					break;
 				case 2:
-					reporteResumenModel
-							.setListaTransacciones(reporteResumenFacade.obtenerListaTransacciones(
-									reporteResumenModel
-											.getFechaCorteInicialSeleccionada(),
-									reporteResumenModel
-											.getFechaCorteFinalSeleccionada()));
+					reporteResumenModel.setListaTransacciones(reporteResumenFacade.obtenerListaTransacciones(
+							reporteResumenModel.getFechaCorteInicialSeleccionada(),
+							reporteResumenModel.getFechaCorteFinalSeleccionada()));
 					break;
 				case 3:
-					reporteResumenModel.setListaCargos(reporteResumenFacade
-							.obtenerListaCargos(reporteResumenModel
-									.getFechaCorteInicialSeleccionada(),
-									reporteResumenModel
-											.getFechaCorteFinalSeleccionada()));
+					reporteResumenModel.setListaCargos(reporteResumenFacade.obtenerListaCargos(
+							reporteResumenModel.getFechaCorteInicialSeleccionada(),
+							reporteResumenModel.getFechaCorteFinalSeleccionada()));
 					break;
 				}
 
-				if ((reporteResumenModel.getListaTarjetas() == null || reporteResumenModel
-						.getListaTarjetas().isEmpty())
-						&& (reporteResumenModel.getListaTransacciones() == null || reporteResumenModel
-								.getListaTransacciones().isEmpty())
-						&& (reporteResumenModel.getListaCargos() == null || reporteResumenModel
-								.getListaCargos().isEmpty()))
-					UsefulWebApplication
-							.mostrarMensajeJSF(
-									ConstantesGenerales.SEVERITY_ERROR, "",
-									"No se encontró ningún registro en el rango de fechas seleccionadas.");
+				if ((reporteResumenModel.getListaTarjetas() == null || reporteResumenModel.getListaTarjetas().isEmpty())
+						&& (reporteResumenModel.getListaTransacciones() == null
+								|| reporteResumenModel.getListaTransacciones().isEmpty())
+						&& (reporteResumenModel.getListaCargos() == null
+								|| reporteResumenModel.getListaCargos().isEmpty()))
+					UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR, "",
+							"No se encontró ningún registro en el rango de fechas seleccionadas.");
 			} else {
 				LimpiarListasResumen();
-				UsefulWebApplication
-						.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
-								"",
-								"Fecha inicial debe estar antes o ser igual que la fecha final.");
+				UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR, "",
+						"Fecha inicial debe estar antes o ser igual que la fecha final.");
 			}
 		} catch (InternalServiceException ise) {
-			UsefulWebApplication.mostrarMensajeJSF(
-					ConstantesGenerales.SEVERITY_ERROR,
-					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL,
-					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
+			UsefulWebApplication.mostrarMensajeJSF(ConstantesGenerales.SEVERITY_ERROR,
+					ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL, ConstantesGenerales.ERROR_PERSISTENCE_INTERNAL);
 			logger.error(ise.getMessage());
 		}
 	}
@@ -107,112 +92,116 @@ public class ReporteResumenController {
 	}
 
 	public void customizeXLS(Object document) {
-        // Casting del documento a un HSSFWorkbook
-        HSSFWorkbook workbook = (HSSFWorkbook) document;
-        workbook.setSheetName(0, "Lista Movimientos Tarjeta");
-        Sheet sheet = workbook.getSheetAt(0); // Acceder a la primera hoja
-        
-        sheet.shiftRows(0, sheet.getLastRowNum(), 1); // Mover todo hacia abajo desde la fila 0
+		
+		String titulo = "";
+		String nombreHoja = "";
+		
+		switch (reporteResumenModel.getTipoReporteSeleccionado()) {
+		case 1:
+			titulo = "Reporte de Tarjeta";
+			nombreHoja = "Lista Tarjeta";
+			break;
+		case 2:
+			titulo = "Reporte de Transacciones";
+			nombreHoja = "Lista Transacciones";
+			break;
+		case 3:
+			titulo = "Reporte de Cargos";
+			nombreHoja = "Lista Cargos";
+			break;
+		}
+		
+		// Casting del documento a un HSSFWorkbook
+		HSSFWorkbook workbook = (HSSFWorkbook) document;
+		workbook.setSheetName(0, nombreHoja);
+		Sheet sheet = workbook.getSheetAt(0); // Acceder a la primera hoja
 
-        // Crear la nueva fila al inicio para el título
-        Row titleRow = sheet.createRow(0); // Ahora la fila 0 está vacía
-        Cell titleCell = titleRow.createCell(0); // Primera celda
+		sheet.shiftRows(0, sheet.getLastRowNum(), 1); // Mover todo hacia abajo desde la fila 0
 
-        // Agregar el texto del título
-        titleCell.setCellValue("Reporte de Tarjeta");
+		// Crear la nueva fila al inicio para el título
+		Row titleRow = sheet.createRow(0); // Ahora la fila 0 está vacía
+		Cell titleCell = titleRow.createCell(0); // Primera celda
 
-        // Estilo del título
-        CellStyle titleStyle = workbook.createCellStyle();
-        Font titleFont = workbook.createFont();
-        titleFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // Negrita
-        titleFont.setFontHeightInPoints((short) 16); // Tamaño de fuente
-        titleFont.setColor(HSSFColor.WHITE.index);
+		// Agregar el texto del título
+		titleCell.setCellValue(titulo);
 
-        titleStyle.setFont(titleFont);
-        titleStyle.setAlignment(CellStyle.ALIGN_CENTER); // Centrar horizontalmente
-        titleStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
-        titleStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-        titleCell.setCellStyle(titleStyle);
+		// Estilo del título
+		CellStyle titleStyle = workbook.createCellStyle();
+		Font titleFont = workbook.createFont();
+		titleFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // Negrita
+		titleFont.setFontHeightInPoints((short) 16); // Tamaño de fuente
+		titleFont.setColor(HSSFColor.WHITE.index);
 
-        
-        CellStyle labelStyle = workbook.createCellStyle();
-        Font labelFont = workbook.createFont();
-        labelFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // Negrita
-        labelFont.setColor(HSSFColor.WHITE.index);
+		titleStyle.setFont(titleFont);
+		titleStyle.setAlignment(CellStyle.ALIGN_CENTER); // Centrar horizontalmente
+		titleStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
+		titleStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		titleCell.setCellStyle(titleStyle);
 
-        labelStyle.setFont(labelFont);
-        labelStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
-        labelStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-        
-    
-        
-        CellStyle columnStyle = workbook.createCellStyle();
-        Font  columnFont = workbook.createFont();
-        columnFont.setColor(HSSFColor.WHITE.index);
-        columnStyle.setFont(columnFont);
-        columnStyle.setAlignment(CellStyle.ALIGN_CENTER);
-        columnStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
-        columnStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-        
-        Row headerRow = sheet.getRow(1); // La fila 1 tiene los encabezados
-        if (headerRow != null) {
-  
+		CellStyle labelStyle = workbook.createCellStyle();
+		Font labelFont = workbook.createFont();
+		labelFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // Negrita
+		labelFont.setColor(HSSFColor.WHITE.index);
 
-            // Recorrer todas las celdas de la fila de encabezados
-            for (int cellNum = 0; cellNum < headerRow.getLastCellNum(); cellNum++) {
-                Cell cell = headerRow.getCell(cellNum);
-                if (cell == null) {
-                    cell = headerRow.createCell(cellNum); // Crear la celda si no existe
-                }
-                cell.setCellStyle(columnStyle); // Aplicar estilo
-            }
-        }
-        
-        
-        
-        
-        // Combinar celdas para que el título ocupe toda la fila
-        int lastColumn = sheet.getRow(2).getLastCellNum() - 1; // Última columna en la fila de datos
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, lastColumn)); // Combinar columnas
+		labelStyle.setFont(labelFont);
+		labelStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
+		labelStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 
-        // Agregar datos al final
-        int lastRowIndex = sheet.getLastRowNum() + 2; // Espacio después de los datos
+		CellStyle columnStyle = workbook.createCellStyle();
+		Font columnFont = workbook.createFont();
+		columnFont.setColor(HSSFColor.WHITE.index);
+		columnStyle.setFont(columnFont);
+		columnStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		columnStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
+		columnStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 
+		Row headerRow = sheet.getRow(1); // La fila 1 tiene los encabezados
+		if (headerRow != null) {
 
-        // Estilo para etiquetas
-  
-        Row additionalDatFecha = sheet.createRow(lastRowIndex); // Fila para datos adicionales
-        
-        // Celda: Dato (Etiqueta)
-        Cell dateLabelCell = additionalDatFecha.createCell(0);
-        dateLabelCell.setCellValue("Fecha y Hora:");
-        dateLabelCell.setCellStyle(labelStyle);
+			// Recorrer todas las celdas de la fila de encabezados
+			for (int cellNum = 0; cellNum < headerRow.getLastCellNum(); cellNum++) {
+				Cell cell = headerRow.getCell(cellNum);
+				if (cell == null) {
+					cell = headerRow.createCell(cellNum); // Crear la celda si no existe
+				}
+				cell.setCellStyle(columnStyle); // Aplicar estilo
+			}
+		}
 
-        // Celda: Valor
-        Cell dateValueCell = additionalDatFecha.createCell(1);
-        dateValueCell.setCellValue(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
-        
-        Row additionalDataRow = sheet.createRow(lastRowIndex+ 1); // Fila para datos adicionales
+		// Combinar celdas para que el título ocupe toda la fila
+		int lastColumn = sheet.getRow(2).getLastCellNum() - 1; // Última columna en la fila de datos
+		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, lastColumn)); // Combinar columnas
 
-        // Celda: Dato (Etiqueta)
-        Cell userLabelCell = additionalDataRow.createCell(0);
-        userLabelCell.setCellValue("Generado por:");
-        userLabelCell.setCellStyle(labelStyle);
+		// Agregar datos al final
+		int lastRowIndex = sheet.getLastRowNum() + 2; // Espacio después de los datos
 
-        // Celda: Valor
-        Cell userValueCell = additionalDataRow.createCell(1);
-        userValueCell.setCellValue(UsefulWebApplication
-				.obtenerUsuario().getUsername());
+		// Estilo para etiquetas
 
-   
+		Row additionalDatFecha = sheet.createRow(lastRowIndex); // Fila para datos adicionales
 
- 
-       
-      
- 
-        // Ajustar automáticamente el ancho de las columnas
-        for (int i = 0; i <= lastColumn; i++) {
-            sheet.autoSizeColumn(i);
-        }
-    }
+		// Celda: Dato (Etiqueta)
+		Cell dateLabelCell = additionalDatFecha.createCell(0);
+		dateLabelCell.setCellValue("Fecha y Hora:");
+		dateLabelCell.setCellStyle(labelStyle);
+
+		// Celda: Valor
+		Cell dateValueCell = additionalDatFecha.createCell(1);
+		dateValueCell.setCellValue(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+
+		Row additionalDataRow = sheet.createRow(lastRowIndex + 1); // Fila para datos adicionales
+
+		// Celda: Dato (Etiqueta)
+		Cell userLabelCell = additionalDataRow.createCell(0);
+		userLabelCell.setCellValue("Generado por:");
+		userLabelCell.setCellStyle(labelStyle);
+
+		// Celda: Valor
+		Cell userValueCell = additionalDataRow.createCell(1);
+		userValueCell.setCellValue(UsefulWebApplication.obtenerUsuario().getUsername());
+
+		// Ajustar automáticamente el ancho de las columnas
+		for (int i = 0; i <= lastColumn; i++) {
+			sheet.autoSizeColumn(i);
+		}
+	}
 }

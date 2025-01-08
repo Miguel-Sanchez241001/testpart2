@@ -9,9 +9,11 @@ import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
 import pe.bn.com.sate.ope.persistence.mapper.internal.AsignacionMapper;
 import pe.bn.com.sate.ope.persistence.mapper.internal.CargoMapper;
+import pe.bn.com.sate.ope.persistence.mapper.internal.RendicionCuentaTarjetaMapper;
 import pe.bn.com.sate.ope.persistence.mapper.internal.TransaccionMapper;
 import pe.bn.com.sate.ope.transversal.dto.sate.Asignacion;
 import pe.bn.com.sate.ope.transversal.dto.sate.Cargo;
+import pe.bn.com.sate.ope.transversal.dto.sate.CuentaTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.TarjetaResumen;
 import pe.bn.com.sate.ope.transversal.dto.sate.Transaccion;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
@@ -34,6 +36,9 @@ public class ReporteResumenFacade {
 	
 	private @Autowired
 	AsignacionMapper asignacionMapper;
+	
+	private @Autowired
+	RendicionCuentaTarjetaMapper rendicionCuentaTarjetaMapper;
 
 	public List<TarjetaResumen> obtenerListaTarjetas(String fechaInicio,
 			String fechaFin) throws ServiceException {
@@ -53,10 +58,11 @@ public class ReporteResumenFacade {
 
 	public List<Cargo> obtenerListaCargos(String fechaInicio, String fechaFin)
 			throws ServiceException {
-		return cargoMapper.obtenerlistaCargos(
-				empresaService.buscarEmpresaPorRUC(
-						UsefulWebApplication.obtenerUsuario().getRuc())
-						.getCuentaCorriente(), fechaInicio, fechaFin);
+		String cuenta = empresaService.buscarEmpresaPorRUC(
+				UsefulWebApplication.obtenerUsuario().getRuc())
+				.getCuentaCorriente();
+		return cargoMapper.obtenerlistaCargos(cuenta
+				, fechaInicio, fechaFin);
 	}
 
 	
@@ -101,6 +107,11 @@ public class ReporteResumenFacade {
 		}
 		
 	}
-
+	
+	public List<CuentaTarjeta> obtenerRendicionCuentaTarjeta(String numtarjeta) throws ServiceException {
+		
+		return rendicionCuentaTarjetaMapper.obtenerListaCuentaTarjeta (numtarjeta,
+						UsefulWebApplication.obtenerUsuario().getRuc());
+	}
 
 }

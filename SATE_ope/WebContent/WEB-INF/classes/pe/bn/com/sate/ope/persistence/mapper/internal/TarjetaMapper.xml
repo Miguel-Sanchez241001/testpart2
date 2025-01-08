@@ -83,7 +83,6 @@
 		<result property="numeroDocumento" column="b06_num_documento" />
 		<result property="nombres" column="b06_nombres" />
 		<result property="apellidos" column="b06_apellidos" />
-
 	</resultMap>
 
 </mapper>

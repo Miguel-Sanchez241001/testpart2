@@ -4,12 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import pe.bn.com.sate.ope.application.view.ConsultarMovimientosController;
 import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.TarjetaService;
-import pe.bn.com.sate.ope.transversal.dto.sate.SaldoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
@@ -24,7 +25,7 @@ public class BuscarTarjetaFacade {
 
 	@Autowired
 	private FWMCProcesos fWMCProcesos;
-
+	private final static Logger logger = Logger.getLogger(BuscarTarjetaFacade.class);
 	public void actualizarSaldoTarjeta(
 			String numTarjeta,
 			String numCuenta, 
@@ -168,15 +169,15 @@ public class BuscarTarjetaFacade {
 						Double.parseDouble(consDatoExp.getSaldoEfectivo())	- Double.parseDouble(consDatoExp.getSaldoDispEfectivo()));
 				//saldoTarjeta.getEfectivo()	- saldoTarjeta.getDispEfectivo()
 				
-				System.out.println("****************************");
-				System.out.println("fechaInicioLinea:"+tarjeta.getFechaInicioLinea());
-				System.out.println("fechaTerminoLinea:"+tarjeta.getFechaTerminoLinea());
-				System.out.println("montoLineaAsignado:"+tarjeta.getMontoLineaAsignado());
-				System.out.println("montoLineaActual:"+tarjeta.getMontoLineaActual());
-				System.out.println("montoCompraUsado:"+tarjeta.getMontoCompraUsado());
-				System.out.println("montoPorProcesar:"+tarjeta.getMontoPorProcesar());
-				System.out.println("dispEfectivoUsado:"+tarjeta.getDispEfectivoUsado());
-				System.out.println("++++++++++++++++++++++++++++");	
+				logger.info("****************************");
+				logger.info("fechaInicioLinea:"+tarjeta.getFechaInicioLinea());
+				logger.info("fechaTerminoLinea:"+tarjeta.getFechaTerminoLinea());
+				logger.info("montoLineaAsignado:"+tarjeta.getMontoLineaAsignado());
+				logger.info("montoLineaActual:"+tarjeta.getMontoLineaActual());
+				logger.info("montoCompraUsado:"+tarjeta.getMontoCompraUsado());
+				logger.info("montoPorProcesar:"+tarjeta.getMontoPorProcesar());
+				logger.info("dispEfectivoUsado:"+tarjeta.getDispEfectivoUsado());
+				logger.info("++++++++++++++++++++++++++++");	
 			
 			}else{
         		UsefulWebApplication
@@ -188,8 +189,8 @@ public class BuscarTarjetaFacade {
         	}
 			
 		} catch (InternalExcepcion e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
+ 			e.printStackTrace();
 		}
 		
 		
@@ -197,28 +198,7 @@ public class BuscarTarjetaFacade {
 		return tarjeta;
 	}
 	
-//	public void actualizarSaldoTarjeta(String numTarjeta)
-//			throws ServiceException {
-//		
-//		
-//		SaldoTarjeta saldoTarjeta = fWMCProcesos
-//				.consultarSaldosPorTarjeta(numTarjeta);
-//		
-//		
-//		Tarjeta tarjeta = new Tarjeta();
-//		tarjeta.setNumTarjeta(numTarjeta);
-//		tarjeta.setFechaInicioLinea(saldoTarjeta.getFechaApertura());
-//		tarjeta.setFechaTerminoLinea(saldoTarjeta.getFechaExpiracion());
-//		tarjeta.setMontoLineaAsignado(saldoTarjeta.getLineaCredito());
-//		tarjeta.setMontoLineaActual(saldoTarjeta.getDispActual());
-//		tarjeta.setMontoCompraUsado(saldoTarjeta.getPagoTotal());
-//		tarjeta.setMontoPorProcesar(saldoTarjeta.getImporteMora());
-//		tarjeta.setDispEfectivoUsado(saldoTarjeta.getEfectivo()
-//				- saldoTarjeta.getDispEfectivo());
-//		
-//		// tarjetaService.actualizarSaldos(tarjeta);
-//
-//	}
+ 
 	
 	
 	

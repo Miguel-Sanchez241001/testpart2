@@ -55,8 +55,7 @@ public class Fecha {
 		try {
 			return fechaFormato.parse(fecha);
 		} catch (ParseException e) {
-			System.out.println(e.getMessage());
-			logger.info(e.getMessage());
+ 			logger.info(e.getMessage());
 		}
 		return null;
 	}

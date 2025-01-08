@@ -1,17 +1,6 @@
 package pe.bn.com.sate.ope.infrastructure.facade;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,60 +8,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.WebServiceException;
-import javax.xml.ws.soap.SOAPFaultException;
-import com.ibm.wsspi.webservices.Constants; // Importa las constantes relevantes
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import pe.bn.com.sate.ope.application.view.AutorizarSolicitudesController;
 import pe.bn.com.sate.ope.infrastructure.exception.ExternalServiceMCProcesosException;
-import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
-import pe.bn.com.sate.ope.infrastructure.exception.ServiceException;
-import pe.bn.com.sate.ope.infrastructure.service.external.domain.mc.BasicHttpsBinding_IService1Proxy;
 import pe.bn.com.sate.ope.persistence.mapper.internal.ParametroMapper;
-import pe.bn.com.sate.ope.persistence.mapper.internal.TarjetaMapper;
-import pe.bn.com.sate.ope.transversal.dto.sate.ModificacionTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.MovimientoTarjetaExpediente;
-import pe.bn.com.sate.ope.transversal.dto.sate.SaldoTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.ws.ConsultaMovimientos;
-import pe.bn.com.sate.ope.transversal.dto.ws.ConsultaSaldos;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosCliente;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
+import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionClientes;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOModificacionTarjeta;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosExpediente;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaMovimientosExpediente;
-import pe.bn.com.sate.ope.transversal.dto.ws.DTOConsultaDatosTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.ws.DTOwservice;
 import pe.bn.com.sate.ope.transversal.util.Fecha;
 import pe.bn.com.sate.ope.transversal.util.NumeroALetras;
-import pe.bn.com.sate.ope.transversal.util.ServicioWebUtil;
 import pe.bn.com.sate.ope.transversal.util.SoapClientUtil;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
-import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.componentes.Parametros;
-import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesWS;
 import pe.bn.com.sate.ope.transversal.util.excepciones.InternalExcepcion;
 
@@ -81,9 +36,6 @@ public class FWMCProcesos {
 
 	private @Autowired
 	ParametroMapper parametroMapper;
-
-	private @Autowired
-	TarjetaMapper tarjetaMapper;
 
 	private @Autowired
 	Parametros parametros;
@@ -112,11 +64,11 @@ public class FWMCProcesos {
 			
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String fechaTerminal = sdf.format(new Date());
-		System.out.println("fechaTerminal:"+fechaTerminal);
+		logger.info("fechaTerminal:"+fechaTerminal);
 			        
 		DateFormat dateFormat = new SimpleDateFormat("HHmmss");
 		String horaTerminal = dateFormat.format(new Date());	       
-		System.out.println("horaTerminal:"+horaTerminal);	
+		logger.info("horaTerminal:"+horaTerminal);	
 	
 	 /*fecha de expiacion*/
 	    SimpleDateFormat sdfanio = new SimpleDateFormat("yyyy");
@@ -212,19 +164,18 @@ public class FWMCProcesos {
 		String codEmisor = parametros.getCodigoEmisorMc();	
 		String codUsuario = parametros.getCodigoUsuarioMc();	
 		String numTerminal = parametros.getNumTerminalMc();	
-		String comercio = parametros.getWsComercioMc();	
-		String numReferenciaWS = wsdlAS+NumeroALetras.llenarCerosAlaIzquierda(Long.toString(parametroMapper.obtenerNumeroReferenciaWS()),10);
+ 		String numReferenciaWS = wsdlAS+NumeroALetras.llenarCerosAlaIzquierda(Long.toString(parametroMapper.obtenerNumeroReferenciaWS()),10);
 		
 		String usuario = parametros.getWsUsuarioMc();
 		String clave = parametros.getWsClaveMc();		
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 	    String fechaTerminal = sdf.format(new Date());
-	    System.out.println("fechaTerminal:"+fechaTerminal);
+	    logger.info("fechaTerminal:"+fechaTerminal);
 	        
 	    DateFormat dateFormat = new SimpleDateFormat("HHmmss");
 	    String horaTerminal = dateFormat.format(new Date());	       
-	    System.out.println("horaTerminal:"+horaTerminal);	
+	    logger.info("horaTerminal:"+horaTerminal);	
 		
 	    DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_BLOQUEO_TARJETA);
 		Class<DTOModificacionTarjeta> dtoClass = DTOModificacionTarjeta.class;
@@ -327,11 +278,11 @@ public class FWMCProcesos {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 	    String fechaTerminal = sdf.format(new Date());
-	    System.out.println("fechaTerminal:"+fechaTerminal);
+	    logger.info("fechaTerminal:"+fechaTerminal);
 	        
 	    DateFormat dateFormat = new SimpleDateFormat("HHmmss");
 	    String horaTerminal = dateFormat.format(new Date());	       
-	    System.out.println("horaTerminal:"+horaTerminal);	
+	    logger.info("horaTerminal:"+horaTerminal);	
 		
 	    /*fecha de expiacion*/
 	    SimpleDateFormat sdfanio = new SimpleDateFormat("yyyy");
@@ -767,11 +718,11 @@ public class FWMCProcesos {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 	    String fechaTerminal = sdf.format(new Date());
-	    System.out.println("fechaTerminal:"+fechaTerminal);
+	    logger.info("fechaTerminal:"+fechaTerminal);
 	        
 	    DateFormat dateFormat = new SimpleDateFormat("HHmmss");
 	    String horaTerminal = dateFormat.format(new Date());	       
-	    System.out.println("horaTerminal:"+horaTerminal);
+	    logger.info("horaTerminal:"+horaTerminal);
 	    
 	    /*fecha de expiacion*/
 	    SimpleDateFormat sdfanio = new SimpleDateFormat("yyyy");
@@ -884,11 +835,11 @@ public class FWMCProcesos {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 	    String fechaTerminal = sdf.format(new Date());
-	    System.out.println("fechaTerminal:"+fechaTerminal);
+	    logger.info("fechaTerminal:"+fechaTerminal);
 	        
 	    DateFormat dateFormat = new SimpleDateFormat("HHmmss");
 	    String horaTerminal = dateFormat.format(new Date());	       
-	    System.out.println("horaTerminal:"+horaTerminal);		
+	    logger.info("horaTerminal:"+horaTerminal);		
 		
 		DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_MODIFICACION_CLIENTES);
 		Class<DTOModificacionClientes> dtoClass = DTOModificacionClientes.class;
@@ -996,11 +947,11 @@ public class FWMCProcesos {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 	    String fechaTerminal = sdf.format(new Date());
-	    System.out.println("fechaTerminal:"+fechaTerminal);
+	    logger.info("fechaTerminal:"+fechaTerminal);
 	        
 	    DateFormat dateFormat = new SimpleDateFormat("HHmmss");
 	    String horaTerminal = dateFormat.format(new Date());	       
-	    System.out.println("horaTerminal:"+horaTerminal);
+	    logger.info("horaTerminal:"+horaTerminal);
 	    	
 		
 	    DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_CONSULTA_DATOS_CLIENTE);
@@ -1087,325 +1038,13 @@ public class FWMCProcesos {
 	
 	
 	
-	public DTOModificacionTarjeta bloqueoDeTarjeta(int idTarjeta, String motivoBloqueo) throws InternalExcepcion {
-		String wsdlUrl = parametros.getWsSoapMc();
-		DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_BLOQUEO_TARJETA);
-		Class<DTOModificacionTarjeta> dtoClass = DTOModificacionTarjeta.class;
-		DTOModificacionTarjeta responseDTO = null;
+	 
 
-
-		Map<String, String> inputRequest = ConstantesWS
-				.getModificacionTarjetaMap();
-		
-		
-		inputRequest.put(ConstantesWS.COD_EMISOR, "971");
-		inputRequest.put(ConstantesWS.COD_USUARIO, "TW9999");
-		inputRequest.put(ConstantesWS.NUM_TERMINAL, "11010101");
-		inputRequest.put(ConstantesWS.NUM_REFERENCIA, "AC2020000322");
-		inputRequest.put(ConstantesWS.ORGANIZACION, "941");
-		inputRequest.put(ConstantesWS.NUM_TARJETA, "000000009");
-		inputRequest.put(ConstantesWS.FECHA_EXPIRACION, "2701");
-		inputRequest.put(ConstantesWS.CODIGO_BLOQUEO, "A3");
-		inputRequest.put(ConstantesWS.MOTIVO_BLOQUEO, "Robo");
-		inputRequest.put(ConstantesWS.COMERCIO, "9999999");
-		inputRequest.put(ConstantesWS.FECHA_TXN_TERMINAL, "20160224");
-		inputRequest.put(ConstantesWS.HORA_TXN_TERMINAL, "172020");
-		inputRequest.put(ConstantesWS.WS_USUARIO, "prueba1234");
-		inputRequest.put(ConstantesWS.WS_CLAVE, "prueba1234567890");
-		inputRequest.put(ConstantesWS.RESERVADO, "");
-		
-		String soapRequestPrevie = ConstantesWS.generarXml(
-				ConstantesWS.MODIFICACION_TARJETA_XML, inputRequest);
-		
-
-		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
-
-		logger.info("Request generado: " + soapRequest);
-
-		int maxRetries = 5;
-		int attempt = 0;
-		boolean success = false;
-
-		while (attempt < maxRetries && !success) {
-			attempt++;
-			String dataWS = "";
-			try {
-				dataWS = SoapClientUtil.sendSoapRequest(wsdlUrl,
-						dto.getSoapAction(),
-						soapRequest);
-			} catch (ExternalServiceMCProcesosException e) {
-				throw e;
-			}
-
-			try {
-
-				logger.debug("Respuesta del servidor:");
-				logger.debug(dataWS);
-
-				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
-						.toString());
-				String resultado = SoapClientUtil.getTextFromElement(
-						documentoXML, dto.getResultTag());
-
-				String contenidoXML = resultado.substring(
-						resultado.indexOf(dto.getStartTag()),
-						resultado.indexOf(dto.getEndTag())
-								+ dto.getEndTag().length());
-
-				responseDTO = SoapClientUtil.convertirXMLAObjeto(
-						new StringReader(contenidoXML),
-						dtoClass);
-
-				logger.debug("Objeto de respuesta: " + responseDTO);
-				success = true;
-				logger.debug("Conexión exitosa en el intento " + attempt);
-			} catch (InternalExcepcion e) {
-				throw e;
-			}
-
-		}
-		return responseDTO;
-	}
-
-	public DTOConsultaMovimientosExpediente consultaDeMovimientoPorExpediente(int expedienteId) throws InternalExcepcion {
-		String wsdlUrl = parametros.getWsSoapMc();
-		DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_CONSULTA_MOVIMIENTOS_EXPEDIENTE);
-		Class<DTOConsultaMovimientosExpediente> dtoClass = DTOConsultaMovimientosExpediente.class;
-		DTOConsultaMovimientosExpediente responseDTO = null;
-
-
-		Map<String, String> consultaMovimientosExpedienteMap = ConstantesWS
-				.getConsultaMovimientosExpedienteMap();
-		
-		
-		consultaMovimientosExpedienteMap.put(ConstantesWS.COD_EMISOR, "941");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.COD_USUARIO, "CS00000001");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.NUM_TERMINAL, "12345678");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.NUM_REFERENCIA, "ORD20160224");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.ORGANIZACION, "941");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.NUM_TARJETA, "526983659");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.FECHA_EXPIRACION, "");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.COMERCIO, "2999994");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.MONEDA, "604");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.FECHA_TXN_TERMINAL, "20160224");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.HORA_TXN_TERMINAL, "172020");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.WS_USUARIO, "0944006748");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.WS_CLAVE, "dRUch4hupAvuduBE");
-		consultaMovimientosExpedienteMap.put(ConstantesWS.RESERVADO, "");
-		
-		String soapRequestPrevie = ConstantesWS.generarXml(
-				ConstantesWS.CONSULTA_MOVIMIENTOS_EXPEDIENTE_XML, consultaMovimientosExpedienteMap);
-		
-
-		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
-
-		logger.info("Request generado: " + soapRequest);
-
-		int maxRetries = 5;
-		int attempt = 0;
-		boolean success = false;
-
-		while (attempt < maxRetries && !success) {
-			attempt++;
-			String dataWS = "";
-			try {
-				dataWS = SoapClientUtil.sendSoapRequest(wsdlUrl,
-						dto.getSoapAction(),
-						soapRequest);
-			} catch (ExternalServiceMCProcesosException e) {
-				throw e;
-			}
-
-			try {
-
-				logger.debug("Respuesta del servidor:");
-				logger.debug(dataWS);
-
-				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
-						.toString());
-				String resultado = SoapClientUtil.getTextFromElement(
-						documentoXML, dto.getResultTag());
-
-				String contenidoXML = resultado.substring(
-						resultado.indexOf(dto.getStartTag()),
-						resultado.indexOf(dto.getEndTag())
-								+ dto.getEndTag().length());
-
-				responseDTO = SoapClientUtil.convertirXMLAObjeto(
-						new StringReader(contenidoXML),
-						dtoClass);
-
-				logger.debug("Objeto de respuesta: " + responseDTO);
-				success = true;
-				logger.debug("Conexión exitosa en el intento " + attempt);
-			} catch (InternalExcepcion e) {
-				throw e;
-			}
-
-		}
-		return responseDTO;
-	}
-
-	public DTOConsultaDatosExpediente consultaDeDatosPorExpediente(int expedienteId) throws InternalExcepcion {
-		String wsdlUrl = parametros.getWsSoapMc();
-		DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_CONSULTA_DATOS_EXPEDIENTE);
-		Class<DTOConsultaDatosExpediente> dtoClass = DTOConsultaDatosExpediente.class;
-		DTOConsultaDatosExpediente responseDTO = null;
-
-
-		Map<String, String> inputRequest = ConstantesWS
-				.getConsultaDatosExpedienteMap();
-		
-		
-		inputRequest.put(ConstantesWS.COD_EMISOR, "971");
-		inputRequest.put(ConstantesWS.COD_USUARIO, "TW9999");
-		inputRequest.put(ConstantesWS.NUM_TERMINAL, "11010101");
-		inputRequest.put(ConstantesWS.NUM_REFERENCIA, "AC2020000322");
-		inputRequest.put(ConstantesWS.ORGANIZACION, "941");
-		inputRequest.put(ConstantesWS.NRO_DOCUMENTO, "74851254");
-		inputRequest.put(ConstantesWS.CORREO_ELECTRONICO, "prueba@hotmail.com");
-		inputRequest.put(ConstantesWS.NRO_CELULAR, "965845214");
-		inputRequest.put(ConstantesWS.FECHA_EXPIRACION, "2701");
-		inputRequest.put(ConstantesWS.COMERCIO, "9999999");
-		inputRequest.put(ConstantesWS.FECHA_TXN_TERMINAL, "20160224");
-		inputRequest.put(ConstantesWS.HORA_TXN_TERMINAL, "172020");
-		inputRequest.put(ConstantesWS.WS_USUARIO, "prueba1234");
-		inputRequest.put(ConstantesWS.WS_CLAVE, "prueba1234567890");
-		inputRequest.put(ConstantesWS.RESERVADO, "");
-		
-		String soapRequestPrevie = ConstantesWS.generarXml(
-				ConstantesWS.CONSULTA_DATOS_EXPEDIENTE_XML, inputRequest);
-		
-
-		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
-
-		logger.info("Request generado: " + soapRequest);
-
-		int maxRetries = 5;
-		int attempt = 0;
-		boolean success = false;
-
-		while (attempt < maxRetries && !success) {
-			attempt++;
-			String dataWS = "";
-			try {
-				dataWS = SoapClientUtil.sendSoapRequest(wsdlUrl,
-						dto.getSoapAction(),
-						soapRequest);
-			} catch (ExternalServiceMCProcesosException e) {
-				throw e;
-			}
-
-			try {
-
-				logger.debug("Respuesta del servidor:");
-				logger.debug(dataWS);
-
-				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
-						.toString());
-				String resultado = SoapClientUtil.getTextFromElement(
-						documentoXML, dto.getResultTag());
-
-				String contenidoXML = resultado.substring(
-						resultado.indexOf(dto.getStartTag()),
-						resultado.indexOf(dto.getEndTag())
-								+ dto.getEndTag().length());
-
-				responseDTO = SoapClientUtil.convertirXMLAObjeto(
-						new StringReader(contenidoXML),
-						dtoClass);
-
-				logger.debug("Objeto de respuesta: " + responseDTO);
-				success = true;
-				logger.debug("Conexión exitosa en el intento " + attempt);
-			} catch (InternalExcepcion e) {
-				throw e;
-			}
-
-		}
-		return responseDTO;
-	}
+	 
+	 
 
 	
-	public DTOModificacionClientes actualizacionDeDatos(int idTarjeta, String nuevosDatos) throws InternalExcepcion {
-		String wsdlUrl = parametros.getWsSoapMc();
-		DTOwservice dto = new DTOwservice(ConstantesWS.SOACTION_MODIFICACION_CLIENTE);
-		Class<DTOModificacionClientes> dtoClass = DTOModificacionClientes.class;
-
-
-		Map<String, String> inputRequest = ConstantesWS
-				.getModificacionClienteMap();
-		
-		
-		inputRequest.put(ConstantesWS.COD_EMISOR, "971");
-		inputRequest.put(ConstantesWS.COD_USUARIO, "TW9999");
-		inputRequest.put(ConstantesWS.NUM_TERMINAL, "11010101");
-		inputRequest.put(ConstantesWS.NUM_REFERENCIA, "AC2020000322");
-		inputRequest.put(ConstantesWS.ORGANIZACION, "941");
-		inputRequest.put(ConstantesWS.NRO_DOCUMENTO, "74851254");
-		inputRequest.put(ConstantesWS.CORREO_ELECTRONICO, "prueba@hotmail.com");
-		inputRequest.put(ConstantesWS.NRO_CELULAR, "965845214");
-		inputRequest.put(ConstantesWS.FECHA_EXPIRACION, "2701");
-		inputRequest.put(ConstantesWS.COMERCIO, "9999999");
-		inputRequest.put(ConstantesWS.FECHA_TXN_TERMINAL, "20160224");
-		inputRequest.put(ConstantesWS.HORA_TXN_TERMINAL, "172020");
-		inputRequest.put(ConstantesWS.WS_USUARIO, "prueba1234");
-		inputRequest.put(ConstantesWS.WS_CLAVE, "prueba1234567890");
-		inputRequest.put(ConstantesWS.RESERVADO, "");
-		
-		String soapRequestPrevie = ConstantesWS.generarXml(
-				ConstantesWS.MODIFICACION_CLIENTE_XML, inputRequest);
-		
-
-		String soapRequest = dto.getSoapTemplate().replace("SOAP_CONTENT", soapRequestPrevie);
-
-		logger.info("Request generado: " + soapRequest);
-
-		int maxRetries = 5;
-		int attempt = 0;
-		boolean success = false;
-		DTOModificacionClientes responseDTO = null;
-
-		while (attempt < maxRetries && !success) {
-			attempt++;
-			String dataWS = "";
-			try {
-				dataWS = SoapClientUtil.sendSoapRequest(wsdlUrl,
-						dto.getSoapAction(),
-						soapRequest);
-			} catch (ExternalServiceMCProcesosException e) {
-				throw e;
-			}
-
-			try {
-
-				logger.debug("Respuesta del servidor:");
-				logger.debug(dataWS);
-
-				Document documentoXML = SoapClientUtil.parseXmlResponse(dataWS
-						.toString());
-				String resultado = SoapClientUtil.getTextFromElement(
-						documentoXML, dto.getResultTag());
-
-				String contenidoXML = resultado.substring(
-						resultado.indexOf(dto.getStartTag()),
-						resultado.indexOf(dto.getEndTag())
-								+ dto.getEndTag().length());
-
-				responseDTO = SoapClientUtil.convertirXMLAObjeto(
-						new StringReader(contenidoXML),
-						dtoClass);
-
-				logger.debug("Objeto de respuesta: " + responseDTO);
-				success = true;
-				logger.debug("Conexión exitosa en el intento " + attempt);
-			} catch (InternalExcepcion e) {
-				throw e;
-			}
-
-		}
-		return responseDTO;
-	}
+	 
 
 	
 

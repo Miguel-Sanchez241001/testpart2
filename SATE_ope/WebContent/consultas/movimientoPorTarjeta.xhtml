@@ -14,7 +14,8 @@
 		<h2>MOVIMIENTOS POR TARJETA</h2>
 
 		<h:form id="formMovimientoTarjeta">
-		<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
+			<input type="hidden" name="csrf_token"
+				value="#{sessionScope.csrf_token}" />
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 					<h:panelGrid style="width:80%;text-align:center;">
@@ -76,6 +77,7 @@
 							</p:inputText>
 						</p:panelGrid>
 
+
 						<p:commandButton id="buscarMovimientos" value="Buscar"
 							styleClass="btnGrande" style="margin-left:20px;"
 							actionListener="#{consultarMovimientosController.buscarAsignaciones()}"
@@ -88,6 +90,10 @@
 
 						<div class="dashed"></div>
 
+
+
+
+
 						<h:panelGrid id="pgResultadoFin"
 							style="width:100%;text-align:center;" columns="1">
 
@@ -98,12 +104,11 @@
 								<p:panelGrid id="pgExporter" columns="1"
 									style="float:right; margin-right:2px;">
 									<p:commandButton value="Descargar Documento"
-										icon="ui-icon-arrowthick-1-s"
-										ajax="false">
+										icon="ui-icon-arrowthick-1-s" ajax="false">
 										<p:dataExporter type="xls" target="dtSolicitudes"
-											fileName="Movimientos_por_tarjeta" 
+											fileName="Movimientos_por_tarjeta"
 											sheetName="Reporte_Movimientos"
-											 postProcessor="#{consultarMovimientosController.customizeXLS}" />
+											postProcessor="#{consultarMovimientosController.customizeXLS}" />
 									</p:commandButton>
 								</p:panelGrid>
 
@@ -197,7 +202,8 @@
 			draggable="false" position="center" showEffect="clip"
 			header="Seleccionar Asignación" widgetVar="wvSeleccionarAsignacion">
 			<h:form id="formSeleccionarAsignacion">
-<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
+				<input type="hidden" name="csrf_token"
+					value="#{sessionScope.csrf_token}" />
 				<p:panelGrid id="panel-seleccionarAsignacion" columns="1"
 					style="widht:100%">
 					<h:outputText value="Lista de Asignación" />

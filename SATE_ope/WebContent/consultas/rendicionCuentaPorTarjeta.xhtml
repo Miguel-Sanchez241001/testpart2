@@ -15,24 +15,79 @@
 
 		<h2>RENDICIÓN DE CUENTAS POR TARJETA</h2>
 		<h:form id="formRendicionCuenta">
-		<input type="hidden" name="csrf_token" value="#{sessionScope.csrf_token}"/>
+			<input type="hidden" name="csrf_token"
+				value="#{sessionScope.csrf_token}" />
 			<center>
 				<p:panel style="margin:30px 80px 30px 80px;padding:20px;">
 					<h:panelGrid style="width:80%;text-align:center;">
-						<p:panelGrid columns="2" style="margin:0 auto 10px;">
-							<h:outputText value="Nro.tarjeta *" />
-							<p:inputText id="numTarjeta" required="true"
-								requiredMessage="Ingrese el número de tarjeta"
-								value="#{buscarTarjetaController.buscarTarjetaModel.numDocumento}"></p:inputText>
 
+
+						<p:panelGrid id="pgBusquedaRendicion" columns="4"
+							style="margin:0 auto 10px;">
+
+							<h:outputText value="Consultar por" style="margin-left:20px;" />
+							
+							<p:selectOneMenu id="somTipoBusquedaPor"
+								style="width:162px;vertical-align:middle;margin-left:20px;"
+								
+								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.tipoBusquedaPor}"
+								
+								required="true" requiredMessage="Seleccione tipo de busqueda">
+								<p:ajax event="change"
+									update="formRendicionCuenta:somTipoBusqueda, formRendicionCuenta:numDocumento, formRendicionCuenta:pgResultadoFin"
+									listener="#{rendicionCuentasTarjetaController.buscarTipoBusqueda()}" />
+								<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
+								<f:selectItems
+									value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.listaTipoBusquedaPor}"
+									var="item" itemLabel="#{item}" itemValue="#{item}" />
+							</p:selectOneMenu>
+
+
+
+
+
+							<h:outputText value="Seleccionar" style="margin-left:20px;" />
+							<p:selectOneMenu id="somTipoBusqueda"
+								widgetVar="selectTipoBusqueda"
+								style="width:162px;vertical-align:middle;margin-left:20px;"
+								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.tipoBusqueda}"
+								required="true" requiredMessage="Seleccione tipo de documento">
+								<p:ajax event="change"
+									update="formRendicionCuenta:numDocumento" />
+								<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
+								<f:selectItems
+									value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.listaTipoBusqueda}"
+									var="item" itemLabel="#{item.descripcion}"
+									itemValue="#{item.id}" />
+							</p:selectOneMenu>
+
+
+
+
+							<h:outputText value="Número" style="margin-left:20px;" />
+
+							<p:inputText style="margin-left:20px;" id="numDocumento"
+								required="true"
+								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.numeroDocumento}"
+								maxlength="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.obtenerBusquedaLength()}"
+								onkeypress="javascript:return jsValidarKey(event,/[0-9]/);"
+								requiredMessage="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.obtenerBusquedaRequiredMessage()}"
+								validatorMessage="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.obtenerBusquedaValidatorMessage()}">
+
+								<f:validateLength
+									minimum="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.obtenerBusquedaLength()}" />
+
+							</p:inputText>
 						</p:panelGrid>
 
 						<p:commandButton id="buscarRendCuenta" value="Buscar"
-							styleClass="btnGrande" process="@this numTarjeta"
+							styleClass="btnGrande" process="@form"
 							onstart="PF('statusDialog').show()"
+							actionListener="#{rendicionCuentasTarjetaController.buscarTarjeta()}"
 							oncomplete="PF('statusDialog').hide()"
-							update="formRendicionCuenta" />
-
+							update="formRendicionCuenta:pgResultado" />
+							
+				 
 
 						<div>
 							<p:messages id="msgs" showDetail="true" showSummary="false"
@@ -44,44 +99,44 @@
 
 						<p:panel id="pgResultado" style="margin-top:10px;border:none;">
 							<center>
-								<p:dataTable var="solicitud" id="dtSolicitudes" rendered="false"
-									value="#{autorizarSolicitudesController.autorizarSolicitudModel.solicitudesTarjeta}"
-									rowKey="#{solicitud.id}"
+								<p:dataTable var="cuentaTarjeta" id="dtCuentasTarjeta" rendered="false"
+									value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.listaCuentasTarjeta}"
+									rowKey="#{cuentaTarjeta.id}"
 									style="table-layout: fixed;margin-top:30px;width:80%;"
 									rowIndexVar="index">
 
 									<p:column headerText="Fecha autorización"
 										style="text-align: center">
 										<h:outputText
-											value="#{autorizarSolicitudesController.autorizarSolicitudModel.formatoNumeroSolicitud(solicitud.id)}" />
+											value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.formatoNumerocuentaTarjeta(cuentaTarjeta.id)}" />
 									</p:column>
 									<p:column headerText="Fecha salida" style="text-align: center">
 										<h:outputText
-											value="#{autorizarSolicitudesController.autorizarSolicitudModel.descripcionTipoDocumento(solicitud.tipoDocumento)}" />
+											value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionTipoDocumento(cuentaTarjeta.tipoDocumento)}" />
 									</p:column>
 									<p:column headerText="Fecha retorno" style="text-align: center">
-										<h:outputText value="#{solicitud.numDocumento}" />
+										<h:outputText value="#{cuentaTarjeta.numDocumento}" />
 									</p:column>
 									<p:column headerText="Duración" style="text-align: center">
-										<h:outputText value="#{solicitud.nombres}" />
+										<h:outputText value="#{cuentaTarjeta.nombres}" />
 									</p:column>
 									<p:column headerText="Monto línea asignado (S/.)"
 										style="text-align: center">
-										<h:outputText value="#{solicitud.apellidos}" />
+										<h:outputText value="#{cuentaTarjeta.apellidos}" />
 									</p:column>
 									<p:column headerText="Monto línea utilizado (S/.)"
 										style="text-align: center">
 										<h:outputText
-											value="#{autorizarSolicitudesController.autorizarSolicitudModel.descripcionDisposicionEfectivo(solicitud.dispEfectivo)}" />
+											value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionDisposicionEfectivo(cuentaTarjeta.dispEfectivo)}" />
 									</p:column>
 									<p:column headerText="Nro.autorización"
 										style="text-align: center">
-										<h:outputText value="#{solicitud.usoExtranjero}" />
+										<h:outputText value="#{cuentaTarjeta.usoExtranjero}" />
 									</p:column>
 									<p:column headerText="Monto línea devuelta (S/.)"
 										style="text-align: center">
 										<h:outputText
-											value="#{autorizarSolicitudesController.autorizarSolicitudModel.descripcionTipoTarjeta(solicitud.tipoTarjeta)}" />
+											value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionTipoTarjeta(cuentaTarjeta.tipoTarjeta)}" />
 									</p:column>
 								</p:dataTable>
 
