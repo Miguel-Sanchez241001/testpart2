@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import lombok.ToString;
 import pe.bn.com.sate.ope.application.model.CabeceraModel;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
@@ -17,6 +18,7 @@ import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 
 @Controller("cabeceraController")
 @Scope("view")
+@ToString
 public class CabeceraController {
 
 	private final static Logger logger = Logger

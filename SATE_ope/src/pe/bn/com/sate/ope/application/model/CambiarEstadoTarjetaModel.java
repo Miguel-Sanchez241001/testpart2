@@ -72,20 +72,29 @@ public class CambiarEstadoTarjetaModel {
 		return CodDocumentoWebservice.descripcionCodDocumentoWebservice(codigo);
 	}
 
-	public String descripcionTipoTarjeta(String codigo, String diseno) {
-		return TipoTarjetaNegocio.descripcionTipotarjeta(codigo, diseno);
-	}
+	
 
-	public String descripcionTipoTarjetaWS(String codigo) {
-		return TipoTarjeta.descripcionTipotarjeta(codigo);
-	}
+
 	public String  descricionTarSinCeros(String numtar) {
 		return StringsUtils.quitarCeroIzquierdaString(numtar);
 	}
+	
 	public String descripcionEstadoTarjeta(String codigo) {
 		return TipoEstadoTarjeta.descripcionTipoEstadoTarjeta(codigo);
 	}
-
+	public String descripcionTipoTarjeta(String codigo, String diseno) {
+		return TipoTarjetaNegocio.descripcionTipotarjeta(codigo, diseno);
+	}
+	public String descripcionTipoTarjetaWS(String codigo) {
+		return TipoTarjeta.descripcionTipotarjeta(codigo);
+	}
+	public String descripcionNcombreCompleto() {
+		Cliente cleinteTemp = datosTarjetaCliente.getCliente();
+		return cleinteTemp.getNombres()+ " " +  cleinteTemp.getApCompleto();
+	}
+	
+	
+	
 	public String descripcionMotivoBloqueoWS(String codigo) {
 		return MotivosBloqueoWS.descripcionMotivoBloqueoWS(codigo);
 	}
@@ -97,10 +106,7 @@ public class CambiarEstadoTarjetaModel {
 	public String descripcionNumeroTarjeta(String numTarjeta) {
 		return UsefulWebApplication.formatoNumTarjeta(numTarjeta);
 	}
-	public String descripcionNcombreCompleto() {
-		Cliente cleinteTemp = datosTarjetaCliente.getCliente();
-		return cleinteTemp.getNombres()+ " " +  cleinteTemp.getApCompleto();
-	}
+	
 	public void iniciarEstadoTarjeta() {
 		estadoTarjeta = new EstadoTarjeta();
  

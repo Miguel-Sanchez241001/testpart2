@@ -90,29 +90,20 @@ public class NotificacionServiceImpl implements NotificacionService {
 			DatosCorreo datos = new DatosCorreo();
 			datos.setAsunto("Acceso a Tarjeta Empresarial - Banco de la Nacion");
 			// TODO CAMBIAR ======= > CORREO ELECTRONICO
-			datos.setCorreoDestinatario("pra_msanchezs@bn.com.pe"); // Se puede cambiar por usuario.getCorreoLaboral()
-																	// si es necesario.
-			// datos.setCorreoDestinatario(usuario.getCorreoLaboral());
+			datos.setCorreoDestinatario(usuario.getCorreoLaboral());
 
 			// Configura los parámetros del correo.
 			DatosParametro params = new DatosParametro();
 			params.setParametro1(usuario.nombreCompleto());
 			params.setParametro2(clave);
-			params.setParametro3(new Date().toString()); // Se puede cambiar por una fecha formateada si es necesario.
-			// params.setParametro4("http://localhost:9080/SATE_ope/"); // Se puede
-			// descomentar si se requiere.
+			params.setParametro3(new Date().toString()); 
 
-			// Establece los datos del correo y parámetros en el mensaje de requisitos.
+
 			rlm.setDatosCorreo(datos);
 			rlm.setDatosParametro(params);
-
-			// Agrega el mensaje de requisitos a la lista.
 			arr.getItem().add(rlm);
 			rqMessage.setReqListMessage(arr);
-
-			// Envía el mensaje utilizando el servicio de mensajería.
 			serviceMessage.sendMessage(rqMessage);
-
 		} catch (Exception ex) {
 			logger.error("Error en enviarMailUsuarioClave: " + ex.getMessage(), ex);
 			throw new InternalServiceException(ex.getMessage(), ex);
@@ -280,11 +271,9 @@ public class NotificacionServiceImpl implements NotificacionService {
 	public void enviarMailAsignacion(AsignacionCorreo asicoreo) {
 
 		try {
-			// Crear el objeto EmailRequest
 			EmailRequest emailRequest = new EmailRequest();
 			emailRequest.setAttachments(new ArrayList<>());
 
-			// Plantilla HTML con parámetros dinámicos
 			String body = String.format("<!DOCTYPE html>" + "<html lang='es'>" + "<head>" + "    <meta charset='UTF-8'>"
 					+ "    <title>Notificación de Asignación</title>" + "    <style>"
 					+ "        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #ffffff; }"

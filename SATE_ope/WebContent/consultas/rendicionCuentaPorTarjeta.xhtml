@@ -26,12 +26,10 @@
 							style="margin:0 auto 10px;">
 
 							<h:outputText value="Consultar por" style="margin-left:20px;" />
-							
+
 							<p:selectOneMenu id="somTipoBusquedaPor"
 								style="width:162px;vertical-align:middle;margin-left:20px;"
-								
 								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.tipoBusquedaPor}"
-								
 								required="true" requiredMessage="Seleccione tipo de busqueda">
 								<p:ajax event="change"
 									update="formRendicionCuenta:somTipoBusqueda, formRendicionCuenta:numDocumento, formRendicionCuenta:pgResultadoFin"
@@ -52,8 +50,7 @@
 								style="width:162px;vertical-align:middle;margin-left:20px;"
 								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.tipoBusqueda}"
 								required="true" requiredMessage="Seleccione tipo de documento">
-								<p:ajax event="change"
-									update="formRendicionCuenta:numDocumento" />
+								<p:ajax event="change" update="formRendicionCuenta:numDocumento" />
 								<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
 								<f:selectItems
 									value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.listaTipoBusqueda}"
@@ -83,69 +80,179 @@
 						<p:commandButton id="buscarRendCuenta" value="Buscar"
 							styleClass="btnGrande" process="@form"
 							onstart="PF('statusDialog').show()"
-							actionListener="#{rendicionCuentasTarjetaController.buscarTarjeta()}"
+							actionListener="#{rendicionCuentasTarjetaController.buscarListaTarjetas()}"
 							oncomplete="PF('statusDialog').hide()"
-							update="formRendicionCuenta:pgResultado" />
-							
-				 
+							update="formRendicionCuenta" />
 
-						<div>
-							<p:messages id="msgs" showDetail="true" showSummary="false"
-								closable="true" />
-						</div>
+
+
+						<p:messages id="msgs" autoUpdate="true" showDetail="true"
+							showSummary="false" closable="true" />
 
 						<div class="dashed"></div>
 
-
-						<p:panel id="pgResultado" style="margin-top:10px;border:none;">
+						<p:panel id="pgReporte" style="margin-top:10px;border:none;">
+						
 							<center>
-								<p:dataTable var="cuentaTarjeta" id="dtCuentasTarjeta" rendered="false"
-									value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.listaCuentasTarjeta}"
-									rowKey="#{cuentaTarjeta.id}"
-									style="table-layout: fixed;margin-top:30px;width:80%;"
-									rowIndexVar="index">
+								<p:panel id="pgResultadoFin"
+								rendered="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.listaCuentasTarjeta!=null and !rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.listaCuentasTarjeta.isEmpty()}">
+									<p:panelGrid id="pgExporter" columns="2"
+										style="float:right;margin-right:2px;">
 
-									<p:column headerText="Fecha autorización"
-										style="text-align: center">
-										<h:outputText
-											value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.formatoNumerocuentaTarjeta(cuentaTarjeta.id)}" />
-									</p:column>
-									<p:column headerText="Fecha salida" style="text-align: center">
-										<h:outputText
-											value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionTipoDocumento(cuentaTarjeta.tipoDocumento)}" />
-									</p:column>
-									<p:column headerText="Fecha retorno" style="text-align: center">
-										<h:outputText value="#{cuentaTarjeta.numDocumento}" />
-									</p:column>
-									<p:column headerText="Duración" style="text-align: center">
-										<h:outputText value="#{cuentaTarjeta.nombres}" />
-									</p:column>
-									<p:column headerText="Monto línea asignado (S/.)"
-										style="text-align: center">
-										<h:outputText value="#{cuentaTarjeta.apellidos}" />
-									</p:column>
-									<p:column headerText="Monto línea utilizado (S/.)"
-										style="text-align: center">
-										<h:outputText
-											value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionDisposicionEfectivo(cuentaTarjeta.dispEfectivo)}" />
-									</p:column>
-									<p:column headerText="Nro.autorización"
-										style="text-align: center">
-										<h:outputText value="#{cuentaTarjeta.usoExtranjero}" />
-									</p:column>
-									<p:column headerText="Monto línea devuelta (S/.)"
-										style="text-align: center">
-										<h:outputText
-											value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionTipoTarjeta(cuentaTarjeta.tipoTarjeta)}" />
-									</p:column>
-								</p:dataTable>
+										<p:commandButton value="Descargar Documento"
+											icon="ui-icon-arrowthick-1-s" ajax="false">
+											<p:dataExporter type="xls" target="dtCuentasTarjeta"
+												fileName="lista_Rendicion_Cuentas"
+												postProcessor="#{rendicionCuentasTarjetaController.customizeXLS}" />
+										</p:commandButton>
+									</p:panelGrid>
+									<p:dataTable var="cuentaTarjeta" id="dtCuentasTarjeta"
+										value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.listaCuentasTarjeta}"
+										rowKey="#{cuentaTarjeta.id}"
+										style="table-layout: fixed; margin-top:30px; width:80%;"
+										rowIndexVar="index">
 
+										<p:column style="text-align: center;">
+											<f:facet name="header">
+												<h:outputText value="Fecha Autorización" />
+											</f:facet>
+											<h:outputText value="#{cuentaTarjeta.fechaAutorizacion}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center;">
+											<f:facet name="header">
+												<h:outputText value="Fecha Salida" />
+											</f:facet>
+											<h:outputText value="#{cuentaTarjeta.fechaSalida}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center;">
+											<f:facet name="header">
+												<h:outputText value="Fecha Retorno" />
+											</f:facet>
+											<h:outputText value="#{cuentaTarjeta.fechaRetorno}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center;">
+											<f:facet name="header">
+												<h:outputText value="Duración (días)" />
+											</f:facet>
+											<h:outputText value="#{cuentaTarjeta.duracion}" />
+										</p:column>
+
+										<p:column style="text-align: center;">
+											<f:facet name="header">
+												<h:outputText value="Monto Línea Asignado (S/.)" />
+											</f:facet>
+											<h:outputText value="#{cuentaTarjeta.montoLineaAsignado}">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center;">
+											<f:facet name="header">
+												<h:outputText value="Monto Línea Utilizado (S/.)" />
+											</f:facet>
+											<h:outputText value="#{cuentaTarjeta.montoLineaUtilizado}">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+										<p:column style="text-align: center;">
+											<f:facet name="header">
+												<h:outputText value="N° Autorización" />
+											</f:facet>
+											<h:outputText value="#{cuentaTarjeta.numeroAutorizacion}" />
+										</p:column>
+
+										<p:column style="text-align: center;">
+											<f:facet name="header">
+												<h:outputText value="Monto Línea Devuelta (S/.)" />
+											</f:facet>
+											<h:outputText value="#{cuentaTarjeta.montoLineaDevuelta}">
+												<f:convertNumber pattern="#,##0.00" />
+											</h:outputText>
+										</p:column>
+
+									</p:dataTable>
+								</p:panel>
 							</center>
 						</p:panel>
+
+
+
+
+
+
+
+
+
 					</h:panelGrid>
 				</p:panel>
 			</center>
 		</h:form>
 
+
+
+		<p:dialog id="dgSeleccionarTarjeta" modal="true" closable="true"
+			appendTo="@(body)" resizable="false" closeOnEscape="false"
+			draggable="false" position="center" showEffect="clip"
+			header="Seleccionar tarjeta" widgetVar="wvSeleccionarTajeta">
+
+			<h:form id="formSeleccionarTarjetaCuenta">
+				<input type="hidden" name="csrf_token"
+					value="#{sessionScope.csrf_token}" />
+				<p:panelGrid id="panel-seleccionarTarjeta" columns="1"
+					style="widht:100%">
+					<h:outputText value="Lista de tarjetas" />
+					<p:dataTable id="tablaTarjetas"
+						selection="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.tarjetaSeleccionada}"
+						value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.datosTarjetaCliente.tarjetas}"
+						selectionMode="single" var="firmante" rowKey="#{firmante.id}"
+						emptyMessage="No hay tarjetas"
+						style="width:100%;table-layout: fixed;" rowIndexVar="index">
+
+						<p:ajax event="rowSelect"
+							listener="#{rendicionCuentasTarjetaController.seleccionarTarjeta}"
+							update=":formRendicionCuenta" onstart="PF('statusDialog').show()"
+							onsuccess="PF('statusDialog').hide()"
+							oncomplete="PF('wvSeleccionarTajeta').hide()" />
+
+
+						<p:column headerText="Número de tarjeta"
+							style="widht:30%;text-align:left; vertical-align: middle;">
+							<h:outputText
+								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descricionTarSinCeros(firmante.numTarjeta)}" />
+						</p:column>
+						<p:column headerText="Nombre del cliente Completo"
+							style="widht:20%;text-align:center; vertical-align: middle;">
+							<h:outputText
+								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionNcombreCompleto()}" />
+						</p:column>
+						<p:column headerText="Tipo de Tarjeta"
+							style="widht:50%; text-align:left;vertical-align: middle;">
+							<h:outputText
+								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionTipoTarjetaWS(firmante.tipoTarjeta)}" />
+						</p:column>
+						<p:column headerText="Tipo de Gasto"
+							style="widht:50%; text-align:left;vertical-align: middle;">
+							<h:outputText
+								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionTipoTarjeta(firmante.tipoTarjeta,firmante.diseno)}" />
+						</p:column>
+						<p:column headerText="Estado"
+							style="widht:50%; text-align:left;vertical-align: middle;">
+							<h:outputText
+								value="#{rendicionCuentasTarjetaController.rendicionCuentasTarjetaModel.descripcionEstadoTarjeta(firmante.estado)}" />
+						</p:column>
+					</p:dataTable>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>

@@ -56,13 +56,19 @@ public interface UsuarioMapper {
 			"JOIN BN_SATE.bnsate00_empresa emp " +
 			"ON rem.b00_id_emp = emp.b00_id_emp " +
 			"WHERE " +
-			"emp.b00_num_ruc = #{ruc} AND usu.b02_num_documento = #{numeroDocumento}")
+			"emp.b00_num_ruc = #{ruc} AND usu.b02_num_documento = #{numeroDocumento} AND rem.B03_FEC_REGISTRO = (" + 
+			"      SELECT MAX(B03_FEC_REGISTRO)" + 
+			"      FROM BN_SATE.BNSATE03_REP_EMP" + 
+			"      WHERE b00_id_emp = emp.b00_id_emp" + 
+			"  )")
 	@ResultMap("mapUsuario")
 	public Usuario existeUsuarioEmpresa(
 			@Param("numeroDocumento") String numDocumento,
 			@Param("ruc") String ruc);
 
-	@Select("SELECT * FROM BN_SATE.BNSATE00_EMPRESA emp JOIN BN_SATE.BNSATE02_USUARIO rep ON emp.b02_rep = rep.b02_rep WHERE emp.B00_NUM_RUC =#{ruc} AND rep.b02_num_documento = #{numeroDocumento}")
+	@Select("SELECT * FROM BN_SATE.BNSATE00_EMPRESA emp "
+			+ "JOIN BN_SATE.BNSATE02_USUARIO rep ON emp.b02_rep = rep.b02_rep "
+			+ "WHERE emp.B00_NUM_RUC =#{ruc} AND rep.b02_num_documento = #{numeroDocumento}")
 	@ResultMap("mapUsuario")
 	public Usuario existeRepresentanteEmpresa(
 			@Param("numeroDocumento") String numDocumento,

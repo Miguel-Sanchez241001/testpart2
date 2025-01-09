@@ -128,12 +128,9 @@ public class CambiarEstadoTarjetaController implements Serializable {
 	}
 
 	public void buscarTarjeta() {
-		// MGL
+
 		UsefulWebApplication.mostrarDialogo("statusDialog");
 		try {
-
-		
-
 			String numtarjeta = StringsUtils.quitarCeroIzquierdaString(
 					cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().getNumTarjeta());
 			cambiarEstadoTarjetaModel.getDatosTarjetaCliente().getTarjeta().setNumTarjeta(numtarjeta);

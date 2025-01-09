@@ -5,9 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
+import pe.bn.com.sate.ope.transversal.dto.sate.Cliente;
 import pe.bn.com.sate.ope.transversal.dto.sate.CuentaTarjeta;
 import pe.bn.com.sate.ope.transversal.dto.sate.DatosTarjetaCliente;
+import pe.bn.com.sate.ope.transversal.dto.sate.Tarjeta;
+import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoBusqueda;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjeta;
+import pe.bn.com.sate.ope.transversal.util.enums.TipoTarjetaNegocio;
  
 
  @Data
@@ -24,8 +30,7 @@ public class RendicionCuentasTarjetaModel {
 	
 	private List<CuentaTarjeta> listaCuentasTarjeta;
 
-	
-	
+	private  Tarjeta   tarjetaSeleccionada;
 	public RendicionCuentasTarjetaModel() {
  		tipoBusqueda = TipoBusqueda.NUM_TARJETA.getId();	
 		listaTipoBusquedaPor = new ArrayList<>();
@@ -55,5 +60,23 @@ public class RendicionCuentasTarjetaModel {
 	public String obtenerBusquedaRequiredMessage() {
 		return "Ingrese un número de "
 				+ TipoBusqueda.tipoBusquedaLetras(tipoBusqueda);
+	}
+	
+	public String  descricionTarSinCeros(String numtar) {
+		return StringsUtils.quitarCeroIzquierdaString(numtar);
+	}
+	
+	public String descripcionEstadoTarjeta(String codigo) {
+		return TipoEstadoTarjeta.descripcionTipoEstadoTarjeta(codigo);
+	}
+	public String descripcionTipoTarjeta(String codigo, String diseno) {
+		return TipoTarjetaNegocio.descripcionTipotarjeta(codigo, diseno);
+	}
+	public String descripcionTipoTarjetaWS(String codigo) {
+		return TipoTarjeta.descripcionTipotarjeta(codigo);
+	}
+	public String descripcionNcombreCompleto() {
+		Cliente cleinteTemp = datosTarjetaCliente.getCliente();
+		return cleinteTemp.getNombres()+ " " +  cleinteTemp.getApCompleto();
 	}
 }
