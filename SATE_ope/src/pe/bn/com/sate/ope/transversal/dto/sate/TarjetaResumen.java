@@ -12,6 +12,7 @@ public class TarjetaResumen {
 	private String usuarioCreacion;
 	private Date fechaCreacion;
 	private String estado;
+	private String motivo;
 	private Date fechaEstado;
 	private String tipoTarjeta;
 	private String diseno;
@@ -20,7 +21,8 @@ public class TarjetaResumen {
 	private String numeroDocumento;
 	private String nombres;
 	private String apellidos;
-
+	private String telefono;
+	private String correo;
 	 
 
 }

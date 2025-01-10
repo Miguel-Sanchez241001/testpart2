@@ -23,6 +23,8 @@ import lombok.Setter;
 import pe.bn.com.sate.ope.application.model.ReporteResumenModel;
 import pe.bn.com.sate.ope.infrastructure.exception.InternalServiceException;
 import pe.bn.com.sate.ope.infrastructure.facade.ReporteResumenFacade;
+import pe.bn.com.sate.ope.infrastructure.service.internal.EmpresaService;
+import pe.bn.com.sate.ope.transversal.dto.sate.Empresa;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
 import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 
@@ -38,7 +40,8 @@ public class ReporteResumenController {
 
 	@Autowired
 	private ReporteResumenFacade reporteResumenFacade;
-
+	private @Autowired
+	EmpresaService empresaService;
 	@PostConstruct
 	public void init() {
 		reporteResumenModel = new ReporteResumenModel();
@@ -95,21 +98,42 @@ public class ReporteResumenController {
 		
 		String titulo = "";
 		String nombreHoja = "";
-		
+
+		// Obtener la empresa basada en el RUC
+		Empresa empresa = empresaService.buscarEmpresaPorRUC(UsefulWebApplication.obtenerUsuario().getRuc());
+
+		// Utilizar StringBuilder para construir cadenas dinámicas
+		StringBuilder sbTitulo = new StringBuilder();
+
 		switch (reporteResumenModel.getTipoReporteSeleccionado()) {
-		case 1:
-			titulo = "Reporte de Tarjeta";
-			nombreHoja = "Lista Tarjeta";
-			break;
-		case 2:
-			titulo = "Reporte de Transacciones";
-			nombreHoja = "Lista Transacciones";
-			break;
-		case 3:
-			titulo = "Reporte de Cargos";
-			nombreHoja = "Lista Cargos";
-			break;
+		    case 1:
+		        sbTitulo.append("Carte de Tarjetas - ")
+		                .append(empresa.getRazonSocial())
+		                .append(" ")
+		                .append(reporteResumenModel.descripcionRangoFechas());
+		        titulo = sbTitulo.toString();
+		        nombreHoja = "Lista Tarjeta";
+		        break;
+		    case 2:
+		        sbTitulo.append("Reporte de Transacciones - ")
+		                .append(empresa.getRazonSocial())
+		                .append(" ")
+		                .append(reporteResumenModel.descripcionRangoFechas());
+		        titulo = sbTitulo.toString();
+		        nombreHoja = "Lista Transacciones";
+		        break;
+		    case 3:
+		        sbTitulo.append("Reporte de Cargos - ")
+		                .append(empresa.getRazonSocial())
+		                .append(" ")
+		                .append(reporteResumenModel.descripcionRangoFechas());
+		        titulo = sbTitulo.toString();
+		        nombreHoja = "Lista Cargos";
+		        break;
+		    default:
+		        throw new IllegalArgumentException("Tipo de reporte no soportado: " + reporteResumenModel.getTipoReporteSeleccionado());
 		}
+
 		
 		// Casting del documento a un HSSFWorkbook
 		HSSFWorkbook workbook = (HSSFWorkbook) document;
@@ -121,7 +145,7 @@ public class ReporteResumenController {
 		// Crear la nueva fila al inicio para el título
 		Row titleRow = sheet.createRow(0); // Ahora la fila 0 está vacía
 		Cell titleCell = titleRow.createCell(0); // Primera celda
-
+		titleRow.setHeightInPoints(41);
 		// Agregar el texto del título
 		titleCell.setCellValue(titulo);
 
@@ -129,13 +153,19 @@ public class ReporteResumenController {
 		CellStyle titleStyle = workbook.createCellStyle();
 		Font titleFont = workbook.createFont();
 		titleFont.setBoldweight(Font.BOLDWEIGHT_BOLD); // Negrita
-		titleFont.setFontHeightInPoints((short) 16); // Tamaño de fuente
+		titleFont.setFontHeightInPoints((short) 14); // Tamaño de fuente
 		titleFont.setColor(HSSFColor.WHITE.index);
 
 		titleStyle.setFont(titleFont);
-		titleStyle.setAlignment(CellStyle.ALIGN_CENTER); // Centrar horizontalmente
+ 		titleStyle.setAlignment(CellStyle.ALIGN_CENTER);          // Alineación horizontal al centro
+		titleStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER); // Alineación vertical al centro
+
+		
 		titleStyle.setFillForegroundColor(HSSFColor.DARK_RED.index);
 		titleStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		titleStyle.setWrapText(true);
+		
+		
 		titleCell.setCellStyle(titleStyle);
 
 		CellStyle labelStyle = workbook.createCellStyle();
@@ -157,6 +187,7 @@ public class ReporteResumenController {
 
 		Row headerRow = sheet.getRow(1); // La fila 1 tiene los encabezados
 		if (headerRow != null) {
+		   
 
 			// Recorrer todas las celdas de la fila de encabezados
 			for (int cellNum = 0; cellNum < headerRow.getLastCellNum(); cellNum++) {

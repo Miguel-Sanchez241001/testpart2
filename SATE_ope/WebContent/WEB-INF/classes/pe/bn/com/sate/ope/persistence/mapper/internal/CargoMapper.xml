@@ -3,6 +3,10 @@
 <mapper namespace="pe.bn.com.sate.ope.persistence.mapper.internal.CargoMapper">
 
     <resultMap id="mapCargo" type="Cargo">
+    <result property="numeroExpediente" column="numeroExpediente" /> <!-- Alias usado en la consulta -->
+    <result property="numeroDocumento" column="B15_DOCUMENTO" /> <!-- Alias usado en la consulta -->
+    <result property="nombre" column="B15_NOMBRE" /> <!-- Alias usado en la consulta -->
+    <result property="fechaInicio" column="fechaInicio" /> <!-- Alias usado en la consulta -->
         <result property="fechaCorte" column="fechaCorte" /> <!-- Alias usado en la consulta -->
         <result property="fechaProceso" column="fechaProceso" /> <!-- Alias usado en la consulta -->
         <result property="numeroCuenta" column="numeroCuenta" /> <!-- Alias usado en la consulta -->

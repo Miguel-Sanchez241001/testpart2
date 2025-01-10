@@ -2,12 +2,13 @@ package pe.bn.com.sate.ope.transversal.util.enums;
 
 public enum TipoEstadoTarjeta {
 
-	SOLICITUD_TARJETA_REGISTRADA("1", "Solicitud tarjeta creada"), SOLICITUD_TARJETA_AUTORIZADA(
-			"2", "Solicitud tarjeta autorizada"), SOLICITUD_TARJETA_ENVIADA(
-			"3", "Solicitud tarjeta enviada"), SOLICITUD_TARJETA_CANCELADA("4",
-			"Solicitud tarjeta cancelada"), TARJETA_ACTIVADA("5",
-			"Tarjeta activada"), TARJETA_BLOQUEADA("6", "Tarjeta bloqueada"), TARJETA_CANCELADA(
-			"7", "Tarjeta cancelada");
+	SOLICITUD_TARJETA_REGISTRADA("1", "Solicitud tarjeta creada"),
+	SOLICITUD_TARJETA_AUTORIZADA("2", "Solicitud tarjeta autorizada"),
+	SOLICITUD_TARJETA_ENVIADA("3", "Solicitud tarjeta enviada"),
+	SOLICITUD_TARJETA_CANCELADA("4","Solicitud tarjeta cancelada"),
+	TARJETA_ACTIVADA("5","Tarjeta activada"),
+	TARJETA_BLOQUEADA("6", "Tarjeta bloqueada"),
+	TARJETA_CANCELADA("7", "Tarjeta cancelada");
 
 	private String cod;
 	private String descripcion;

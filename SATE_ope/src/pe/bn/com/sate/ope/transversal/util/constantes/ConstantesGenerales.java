@@ -1,5 +1,10 @@
 package pe.bn.com.sate.ope.transversal.util.constantes;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+
 public class ConstantesGenerales {
 
 	public static final int TIEMPO_MAXIMO_INACTIVIDAD = 1000 * 60 * 10;
@@ -10,7 +15,15 @@ public class ConstantesGenerales {
 
 	public static final String DESC_VERSIONES = "Versiones";
 	public static final String DESC_MENSAJES = "Mensajes";
-	public static String PORCENTAJE_EFECTIVO = "10000"; 
+	private static final AtomicReference<String> PORCENTAJE_EFECTIVO = new AtomicReference<>("10000");
+
+	public static String getPorcentajeEfectivo() {
+		return PORCENTAJE_EFECTIVO.get();
+	}
+
+	public static void setPorcentajeEfectivo(String nuevoValor) {
+		PORCENTAJE_EFECTIVO.set(nuevoValor);
+	}
 
 	/**
 	 * Constantes para los mensajes de validacion, operacion exitosa
@@ -70,7 +83,7 @@ public class ConstantesGenerales {
 
 	public static final String BIM_CORPORATE = "530927";
 	public static final String BIM_BLACK = "531013";
-	
+
 	public static final String ENTREGA_AGENCIA_BN = "4";
 	public static final String ENTREGA_UNIDAD_EJECUTORA = "3";
 
@@ -112,7 +125,7 @@ public class ConstantesGenerales {
 	public final static String PARAM_WSCLAVEMC = "WSCLAVEMC";
 	public static final String PARAM_WSURLSOAPMC = "WSURLSOAPMC";
 	public final static String PARAM_COMERCIO = "COMERCIO";
-	
+
 	// GRUPO TIEMPO
 	public final static String GRUPO_TIEMPO = "TIEMPO";
 	public final static String PARAM_SESIONEXPIRADATIEMPO = "SESIONEXPIRADATIEMPO";
@@ -122,7 +135,7 @@ public class ConstantesGenerales {
 	// GRUPO CONEXION_SFTP_MC
 	public final static String GRUPO_CONEXION_SFTP_MC = "CONEXION_SFTP_MC";
 	public final static String PARAM_URLSERVICESATEREST = "URLSERVICESATEREST";
-	
+
 	// GRUPO SERVICE_ALDEAMO
 	public final static String GRUPO_SERVICE_ALDEAMO = "SERVICE_ALDEAMO";
 	public final static String PARAM_URLALDEAMO = "URLALDEAMO";
@@ -138,7 +151,7 @@ public class ConstantesGenerales {
 
 	// CONSTANTES CODIGO_REQUERIMIENTO ENVIO SMS Y CORREO
 	public static Integer COD_REQUERIMIENTO_ENVIO_SMS = 52;
-	//public static Integer COD_REQUERIMIENTO_ENVIO_CORREO = 97;
+	// public static Integer COD_REQUERIMIENTO_ENVIO_CORREO = 97;
 	public static Integer COD_REQUERIMIENTO_ENVIO_CORREO = 34;
 	public static String CONST_RespSoN_S = "S";
 
@@ -182,44 +195,65 @@ public class ConstantesGenerales {
 	public static String ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_IGF = "Error con WS InterfaceGatewayFacade, consulte con el administrador.";
 	public static String ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_MC = "Error con WS MC, consulte con el administrador.";
 	public static String ERROR_PERSISTENCE_EXTERNAL_WEB_SERVICE_RENIEC = "Error con WS RENIEC, consulte con el administrador.";
-	
-	
-
 
 	// TODO MODIFICAR =========> RUTA CLAVE SEGURA SATE OPE
 	public static final String RUTA_CLAVE_SEGURA = "C://opt//software//key//sate//clavesegurades.key";
-	//public static final String RUTA_CLAVE_SEGURA = "//opt//software//key//sate//clavesegurades.key";
-
-	/*MGL*/
+	// public static final String RUTA_CLAVE_SEGURA =
+	// "//opt//software//key//sate//clavesegurades.key";
+	/* MGL */
 	public static final String certificadoIzipay = "D:/certificado/certificadoIzipay.crt";
-	//public static final String certificadoIzipay = "//opt//software//certificado//certificadoIzipay.crt";
-	
-		public static final String certiAldeamo = "D:/certificado/certificadoAdelamo.crt";
-	//public static final String certiAldeamo = "//opt//software//certificado//certificadoAdelamo.crt";
+	// public static final String certificadoIzipay =
+	// "//opt//software//certificado//certificadoIzipay.crt";
+
+	public static final String certiAldeamo = "D:/certificado/certificadoAdelamo.crt";
+	// public static final String certiAldeamo =
+	// "//opt//software//certificado//certificadoAdelamo.crt";
 
 	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_NUMDOCUMENTO = "No se encontro la tarjeta con los datos ingresados.";
 	public static String ERROR_MENSAJE_NO_EXISTE_TIPO_TARJETA = "No se encontro la tarjeta con los datos ingresados.";
-	
-	public static String ERROR_MENSAJE_NO_EXISTE_MOVIMIENTO_TIPO_TARJETA ="No hay movimientos realizados con la tarjeta empresarial.";
-	
-	
+
+	public static String ERROR_MENSAJE_NO_EXISTE_MOVIMIENTO_TIPO_TARJETA = "No hay movimientos realizados con la tarjeta empresarial.";
+
 	public static String ERROR_MENSAJE_TARJETAS_BLOQUEADAS = "La tarjeta se encuetra bloqueada.";
-	
-	
-	
+
 	public static String ERROR_MENSAJE_NO_EXISTE_TAREMP_NUM_DOCUMENTO = "No existe tarjeta empresarial asociada a tipo y número de documento.";
 	public static String ERROR_MENSAJE_NO_EXISTE_TAREMP_TIP_TARJETA = "No existe tarjeta empresarial asociada a número de tarjeta.";
 
-	
-	
-	
-	
 	public static final String COD_TARJETA = "2";
 	public static final String COD_TIPODOC = "1";
-	
+
 	public static final String CODIGO_DNI = "1";
 	public static final String CODIGO_CE = "4";
 
-	
 	public static final String ACTUALIZA_EXITO = "Se actualizo correctamente";
+	
+	
+	
+    private static final Map<String, String> CODIGOS_BLOQUEO;
+
+    static {
+        Map<String, String> tempMap = new HashMap<>();
+        tempMap.put("E", "PERDIDA");
+        tempMap.put("F", "FRAUDE");
+        tempMap.put("I", "CANCELACION CUENTA");
+        tempMap.put("K", "BLOQUEO TEMPORAL");
+        tempMap.put("L", "FALLECIDO");
+        tempMap.put("N", "NORMAL");
+        tempMap.put("P", "PREVENTIVO");
+        tempMap.put("Q", "MAL REALCE");
+        tempMap.put("R", "NO RECLAMADA");
+        tempMap.put("S", "SOBREGIRO");
+        tempMap.put("T", "ALERTA");
+        tempMap.put("W", "CANC.TARJ.EXPIR");
+        tempMap.put("X", "ROBO");
+        tempMap.put("Z", "ADMINISTRATIVO");
+
+        CODIGOS_BLOQUEO = Collections.unmodifiableMap(tempMap);
+    }
+	
+    public static String obtenerDescripcionBloqueo(String codigo) {
+        return CODIGOS_BLOQUEO.getOrDefault(codigo, "Descripción no encontrada");
+    }
+	
+	
 }

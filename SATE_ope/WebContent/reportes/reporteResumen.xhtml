@@ -124,6 +124,20 @@
 										</p:column>
 										<p:column style="text-align: center">
 											<f:facet name="header">
+												<h:outputText value="Cod. Estado" />
+											</f:facet>
+											<h:outputText
+												value="#{tarjeta.motivo!=null?tarjeta.motivo:'--'}" />
+										</p:column>
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Descripcion Estado" />
+											</f:facet>
+											<h:outputText
+												value="#{tarjeta.estado!=null?reporteResumenController.reporteResumenModel.motivoEnLetras(tarjeta.motivo):'--'}" />
+										</p:column>
+										<p:column style="text-align: center">
+											<f:facet name="header">
 												<h:outputText value="Fecha Estado Tarjeta" />
 											</f:facet>
 											<h:outputText
@@ -172,6 +186,20 @@
 											</f:facet>
 											<h:outputText
 												value="#{tarjeta.apellidos!=null?tarjeta.apellidos:'--'}" />
+										</p:column>}
+											<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Telefono" />
+											</f:facet>
+											<h:outputText
+												value="#{tarjeta.telefono!=null?tarjeta.telefono:'--'}" />
+										</p:column>
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Correo" />
+											</f:facet>
+											<h:outputText
+												value="#{tarjeta.correo!=null?tarjeta.correo:'--'}" />
 										</p:column>
 									</p:dataTable>
 								</p:panel>
@@ -198,7 +226,13 @@
 										rowsPerPageTemplate="5,10,15" rowKey="#{transaccion.id}"
 										style="table-layout: fixed;margin-top:30px;width:80%;"
 										rowIndexVar="index">
-
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Numero Expediente" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.numeroExpediente!=null?transaccion.numeroExpediente:'--'}" />
+										</p:column>
 										<p:column style="text-align: center">
 											<f:facet name="header">
 												<h:outputText value="Numero Tarjeta" />
@@ -206,7 +240,13 @@
 											<h:outputText
 												value="#{transaccion.numeroTarjeta!=null?transaccion.numeroTarjeta:'--'}" />
 										</p:column>
-
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Moneda Cuenta" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.monedaCuenta!=null?transaccion.monedaCuenta:'--'}" />
+										</p:column>
 										<p:column style="text-align: center">
 											<f:facet name="header">
 												<h:outputText value="Fecha Operación" />
@@ -234,7 +274,13 @@
 											<h:outputText
 												value="#{transaccion.operacion!=null?transaccion.operacion:'--'}" />
 										</p:column>
-
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Moneda Transaccion" />
+											</f:facet>
+											<h:outputText
+												value="#{transaccion.monedaTransaccion!=null?transaccion.monedaTransaccion:'--'}" />
+										</p:column>
 										<p:column style="text-align: center">
 											<f:facet name="header">
 												<h:outputText value="Comercio" />
@@ -255,15 +301,7 @@
 
 										<p:column style="text-align: center">
 											<f:facet name="header">
-												<h:outputText value="Autorización PMC" />
-											</f:facet>
-											<h:outputText
-												value="#{transaccion.autorizacionPMC!=null?transaccion.autorizacionPMC:'--'}" />
-										</p:column>
-
-										<p:column style="text-align: center">
-											<f:facet name="header">
-												<h:outputText value="N° Autorización" />
+												<h:outputText value="Cod. Autorización" />
 											</f:facet>
 											<h:outputText
 												value="#{transaccion.numeroAutorizacion!=null?transaccion.numeroAutorizacion:'--'}" />
@@ -289,7 +327,8 @@
 										<p:commandButton value="Descargar Documento"
 											icon="ui-icon-arrowthick-1-s" ajax="false">
 											<p:dataExporter type="xls" target="dtListadoCargos"
-												fileName="lista_cargo" postProcessor="#{reporteResumenController.customizeXLS}" />
+												fileName="lista_cargo"
+												postProcessor="#{reporteResumenController.customizeXLS}" />
 										</p:commandButton>
 									</p:panelGrid>
 									<p:dataTable var="cargo" id="dtListadoCargos"
@@ -301,7 +340,41 @@
 										rowsPerPageTemplate="5,10,15" rowKey="#{cargo.id}"
 										style="table-layout: fixed;margin-top:30px;width:80%;"
 										rowIndexVar="index">
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Numero Expediente" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.numeroExpediente!=null?cargo.numeroExpediente:'--'}">
 
+											</h:outputText>
+										</p:column>
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Numero Documento" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.numeroDocumento!=null?cargo.numeroDocumento:'--'}">
+
+											</h:outputText>
+										</p:column>
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Nombre" />
+											</f:facet>
+											<h:outputText value="#{cargo.nombre!=null?cargo.nombre:'--'}">
+
+											</h:outputText>
+										</p:column>
+										<p:column style="text-align: center">
+											<f:facet name="header">
+												<h:outputText value="Fecha de Inicio" />
+											</f:facet>
+											<h:outputText
+												value="#{cargo.fechaInicio!=null?cargo.fechaInicio:'--'}">
+												<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+											</h:outputText>
+										</p:column>
 										<p:column style="text-align: center">
 											<f:facet name="header">
 												<h:outputText value="Fecha de corte" />

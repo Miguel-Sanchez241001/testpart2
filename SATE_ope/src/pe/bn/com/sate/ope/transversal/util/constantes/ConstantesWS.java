@@ -24,6 +24,7 @@ public class ConstantesWS {
 	public static final String NRO_DOCUMENTO       = "[NRO_DOCUMENTO]";       // Dinamico => Frontend/Sistema
 	public static final String CORREO_ELECTRONICO  = "[CORREO_ELECTRONICO]";  // Dinamico => Frontend/Sistema
 	public static final String NRO_CELULAR         = "[NRO_CELULAR]";         // Dinamico => Frontend/Sistema
+	public static final String DIRECION_BLOQUEO    = "[DIRECION_BLOQUEO]";	   // Dinamico => Frontend/Sistema
 	public static final String COD_MONEDA = "1";
 	
 	
@@ -69,7 +70,7 @@ public class ConstantesWS {
 			    + "  <CodigoBloqueo>[CODIGO_BLOQUEO]</CodigoBloqueo>\n"
 			    + "  <MotivoBloqueo>[MOTIVO_BLOQUEO]</MotivoBloqueo>\n"
 			    + "  <DireccionEnvioTipoVia></DireccionEnvioTipoVia>\n"
-			    + "  <DireccionEnvioNombreVia></DireccionEnvioNombreVia>\n"
+			    + "  <DireccionEnvioNombreVia>[DIRECION_BLOQUEO]</DireccionEnvioNombreVia>\n"
 			    + "  <DireccionEnvioNum></DireccionEnvioNum>\n"
 			    + "  <DireccionEnvioNumDpto></DireccionEnvioNumDpto>\n"
 			    + "  <DireccionEnvioOficina></DireccionEnvioOficina>\n"
@@ -337,6 +338,7 @@ public class ConstantesWS {
 	    bloqueoTarjetaMap.put(WS_USUARIO, "prueba1234");
 	    bloqueoTarjetaMap.put(WS_CLAVE, "prueba1234567890");
 	    bloqueoTarjetaMap.put(RESERVADO, "");
+	    bloqueoTarjetaMap.put(DIRECION_BLOQUEO, "");
 	    bloqueoTarjetaMap.put(MONEDA, "1"); // Agregado para MonedaProducto
 	    return bloqueoTarjetaMap;
 	}

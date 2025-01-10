@@ -70,9 +70,10 @@
 						<f:attribute name="pagina"
 							value="/consultas/movimientoPorTarjeta.jsf?faces-redirect=true" />
 					</p:commandButton>
+					
 					<p:commandButton value="Rendición de cuentas por tarjeta"
 						styleClass="subMenuBtn"
-						rendered="#{seguridadController.renderizar('ACCESO_CONSULTA_CLIENTE')}"
+						rendered="false"
 						actionListener="#{seguridadController.redireccionar}">
 						<f:attribute name="pagina"
 							value="/consultas/rendicionCuentaPorTarjeta.jsf?faces-redirect=true" />

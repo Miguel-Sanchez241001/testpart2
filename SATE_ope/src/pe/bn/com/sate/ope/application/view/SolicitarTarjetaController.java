@@ -179,26 +179,17 @@ public class SolicitarTarjetaController implements Serializable {
     public void buscarTipoTarjetaNegocio() {
     	
     	  if (solicitarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim().equals(ConstantesGenerales.BIM_BLACK)) {
-              solicitarTarjetaModel.setListaTipoTarjetaNegocio(
-              		TipoTarjetaNegocio.buscarTipoTarjetaBLACK());
+              solicitarTarjetaModel.setListaTipoTarjetaNegocio(tarjetaService.consultaTipoTarjetaNegocio(solicitarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim()));
+              
           } else if (solicitarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim().equals(ConstantesGenerales.BIM_CORPORATE)) {
-              solicitarTarjetaModel.setListaTipoTarjetaNegocio(
-              		TipoTarjetaNegocio.buscarTipoTarjetaCORP());
+              solicitarTarjetaModel.setListaTipoTarjetaNegocio(tarjetaService.consultaTipoTarjetaNegocio(solicitarTarjetaModel.getTipoTarjetaSeleccionada().getCodigoBim()));
+
           
           } else {
               solicitarTarjetaModel.setListaTipoTarjetaNegocio(null);
           }
     	  
-    /*    if (solicitarTarjetaModel.getTarjeta().getUsoExtranjero().equals(ConstantesGenerales.USO_EXTRANJERO)) {
-            solicitarTarjetaModel.setListaTipoTarjetaNegocio(
-            		TipoTarjetaNegocio.buscarTipoTarjetaUsoNacional());
-        } else if (solicitarTarjetaModel.getTarjeta().getUsoExtranjero().equals(ConstantesGenerales.USO_NACIONAL)) {
-            solicitarTarjetaModel.setListaTipoTarjetaNegocio(
-            		TipoTarjetaNegocio.buscarTipoTarjetaUsoNacional());
-        
-        } else {
-            solicitarTarjetaModel.setListaTipoTarjetaNegocio(null);
-        }*/
+ 
     }
     /**
      * Fija el tipo de tarjeta y el diseño seleccionados en el modelo.

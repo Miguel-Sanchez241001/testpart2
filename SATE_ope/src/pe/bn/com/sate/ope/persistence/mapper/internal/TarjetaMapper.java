@@ -229,14 +229,17 @@ public interface TarjetaMapper {
     		"            END AS b05_usuario_creacion,   " + 
     		"    tar.b05_fec_creacion,   " + 
     		"    eta.b07_estado,   " + 
+    		"    NVL(eta.B07_MOTIVO,'N') AS B07_MOTIVO,   " + 
     		"    eta.b07_fec_registro,   " + 
     		"    tar.b05_tipo_tarjeta,   " + 
     		"    tar.b05_diseno,   " + 
-    		"     SUBSTR(tar.b05_num_tarjeta, 4) AS B05_NUM_TARJETA,   " + 
+    		"     SUBSTR(tar.b05_num_tarjeta, 4, 4) || '****' || SUBSTR(tar.b05_num_tarjeta, -4) AS B05_NUM_TARJETA,   " + 
     		"    cli.b06_tipo_documento,   " + 
     		"    cli.b06_num_documento,   " + 
     		"    cli.b06_nombres,   " + 
-    		"    cli.b06_appaterno || ' ' || cli.b06_apmaterno AS b06_apellidos  " + 
+    		"    cli.b06_appaterno || ' ' || cli.b06_apmaterno AS b06_apellidos,  " +
+    		"    tar.B05_NUM_CELULAR AS b06_telefono,  " + 
+    		"    tar.B05_EMAIL        AS b06_correo  " + 
     		"FROM   " + 
     		"    BN_SATE.BNSATE05_TARJETA tar  " + 
     		"JOIN   " + 

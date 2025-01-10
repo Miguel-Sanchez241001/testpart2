@@ -11,44 +11,36 @@ import pe.bn.com.sate.ope.transversal.dto.sate.Transaccion;
 public interface TransaccionMapper {
 
 	@Select("SELECT " +
-	        "SUBSTR(B14_NUM_TARJETA, 4, 4) || '****' || SUBSTR(B14_NUM_TARJETA, -4) AS numeroTarjeta, " +
-	        "B14_FEC_OPERACION AS fechaOperacion, " +
-	        "B14_FEC_POSTEO AS fechaPosteo, " +
-	        "CASE B14_OPERACION " +
-	        "    WHEN '001' THEN 'DISP EFECTIVO VENTANILLA - BN (REVOLVING)' " +
-	        "    WHEN '002' THEN 'DISP EFECTIVO ATM - BN (REVOLVING) (SVC 1)' " +
-	        "    WHEN '003' THEN 'DISP EFECTIVO ATM EXTERIOR (REVOLVING) (SVC 2)' " +
-	        "    WHEN '004' THEN 'DISP EFECTIVO VENTANILLA EXTERIOR (REVOLVING)' " +
-	        "    WHEN '005' THEN 'DISP EFECTIVO CAJERO CORRESPONSAL BN (REVOLVING)' " +
-	        "    WHEN '006' THEN 'DISP EFECTIVO ATM BN' " +
-	        "    WHEN '020' THEN 'COMPRA LOCAL REVOLVING' " +
-	        "    WHEN '029' THEN 'COMPRAS EN EL EXTERIOR' " +
-	        "    WHEN '050' THEN 'PAGO A CUENTA VENTANILLA' " +
-	        "    WHEN '051' THEN 'PAGO CARGO EN CUENTA' " +
-	        "    WHEN '083' THEN 'DISP EFECTIVO ATM CUOTA - BN (SVC 3)' " +
-	        "    WHEN '084' THEN 'DISP EFECTIVO VENTANILLA CUOTA - BN' " +
-	        "    WHEN '089' THEN 'COMPRA EN CUOTA' " +
-	        "    ELSE B14_OPERACION " +
-	        "END AS operacion, " +
-	        "B14_COMERCIO AS comercio, " +
-	        "B14_MONTO AS monto, " +
-	        "B14_AUTORIZACION_PMC AS autorizacionPMC, " +
-	        "B14_NUM_AUTORIZACION AS numeroAutorizacion, " +
-	        "CASE B14_ESTADO " +
-	        "    WHEN '1' THEN 'Procesada' " +
-	        "    ELSE 'Pendiente' " +
-	        "END AS estado " +
-	        "FROM BN_SATE.BNSATE14_TRANSACCION_HIS " +
+	        "    asi.B04_CODIGO_ASIGNACION AS numeroExpediente, " +
+	        "    SUBSTR(B14_NUM_TARJETA, 4, 4) || '****' || SUBSTR(B14_NUM_TARJETA, -4) AS numeroTarjeta, " +
+	        "    CASE WHEN B14_MONEDA_CUENTA = '0000' THEN 'SOLES' " +
+	        "         WHEN B14_MONEDA_CUENTA = '0001' THEN 'DOLARES' END AS monedaCuenta, " +
+	        "    B14_FEC_OPERACION AS fechaOperacion, " +
+	        "    B14_FEC_POSTEO AS fechaPosteo, " +
+	        "    (SELECT TXN.B24_DESC FROM BN_SATE.BNSATE24_COD_TRANSACCIONES TXN WHERE TXN.B124_COD = B14_OPERACION) AS operacion, " +
+	        "    B14_COMERCIO AS comercio, " +
+	        "    B14_MONTO AS monto, " +
+	        "    CASE WHEN B14_MONEDA_TRANSACCION = '0000' THEN 'SOLES' " +
+	        "         WHEN B14_MONEDA_TRANSACCION = '0001' THEN 'DOLARES' END AS monedaTransaccion, " +
+	        "    B14_NUM_AUTORIZACION AS numeroAutorizacion, " +
+	        "    CASE B14_ESTADO WHEN '1' THEN 'Procesada' ELSE 'Pendiente' END AS estado " +
+	        "FROM " +
+	        "    BN_SATE.BNSATE14_TRANSACCION_HIS his " +
+	        "JOIN " +
+	        "    BN_SATE.BNSATE04_ASIGNACION asi " +
+	        "ON " +
+	        "    asi.B04_CUENTA_EXPEDIENTE = his.B14_NUM_CUENTA_EXPEDIENTE " +
 	        "WHERE " +
-	        "B14_CUENTA_CARGO = SUBSTR(#{cuentaCorriente}, -14) AND " +
-	        "TRUNC(B14_FEC_OPERACION) BETWEEN " +
-	        "TRUNC(TO_DATE(#{fechaInicio}, 'dd/mm/yy')) AND " +
-	        "TRUNC(TO_DATE(#{fechaFin}, 'dd/mm/yy'))")
+	        "    his.B14_CUENTA_CARGO = SUBSTR(#{cuentaCorriente}, -14) " +
+	        "    AND TRUNC(his.B14_FEC_OPERACION) BETWEEN " +
+	        "        TRUNC(TO_DATE(#{fechaInicio}, 'dd/mm/yy')) " +
+	        "        AND TRUNC(TO_DATE(#{fechaFin}, 'dd/mm/yy'))")
 	@ResultMap("mapTransaccion")
-	public List<Transaccion> obtenerlistaTransacciones(
+	public List<Transaccion> obtenerListaTransacciones( 
 	        @Param("cuentaCorriente") String cuentaCorriente,
 	        @Param("fechaInicio") String fechaInicio,
 	        @Param("fechaFin") String fechaFin);
+
 
 
 }

@@ -75,6 +75,7 @@
 		<result property="usuarioCreacion" column="b05_usuario_creacion" />
 		<result property="fechaCreacion" column="b05_fec_creacion" />
 		<result property="estado" column="b07_estado" />
+		<result property="motivo" column="B07_MOTIVO" />
 		<result property="fechaEstado" column="b07_fec_registro" />
 		<result property="tipoTarjeta" column="B05_TIPO_TARJETA" />
 		<result property="diseno" column="B05_DISENO" />
@@ -83,6 +84,8 @@
 		<result property="numeroDocumento" column="b06_num_documento" />
 		<result property="nombres" column="b06_nombres" />
 		<result property="apellidos" column="b06_apellidos" />
+		<result property="telefono" column="b06_telefono" />
+		<result property="correo" column="b06_correo" />
 	</resultMap>
 
 </mapper>

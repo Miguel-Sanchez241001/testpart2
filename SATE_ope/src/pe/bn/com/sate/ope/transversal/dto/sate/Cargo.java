@@ -13,6 +13,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Cargo {
+	
+	
+	private String numeroExpediente;
+	private String numeroDocumento;
+	private String nombre;
+	private Date fechaInicio;
 	private Date fechaCorte;
 	private Date fechaProceso;
 	private String numeroCuenta;

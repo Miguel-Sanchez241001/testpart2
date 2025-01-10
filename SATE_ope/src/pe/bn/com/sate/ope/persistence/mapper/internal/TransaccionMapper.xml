@@ -3,13 +3,15 @@
 <mapper namespace="pe.bn.com.sate.ope.persistence.mapper.internal.TransaccionMapper">
 
 <resultMap id="mapTransaccion" type="Transaccion">
+	<result property="numeroExpediente" column="numeroExpediente" />
     <result property="numeroTarjeta" column="numeroTarjeta" />
+    <result property="monedaCuenta" column="monedaCuenta" />
     <result property="fechaOperacion" column="fechaOperacion" />
     <result property="fechaPosteo" column="fechaPosteo" />
     <result property="operacion" column="operacion" />
     <result property="comercio" column="comercio" />
     <result property="monto" column="monto" />
-    <result property="autorizacionPMC" column="autorizacionPMC" />
+    <result property="monedaTransaccion" column="monedaTransaccion" />
     <result property="numeroAutorizacion" column="numeroAutorizacion" />
     <result property="estado" column="estado" />
 </resultMap>

@@ -8,6 +8,8 @@ import pe.bn.com.sate.ope.transversal.dto.sate.Cargo;
 import pe.bn.com.sate.ope.transversal.dto.sate.TarjetaResumen;
 import pe.bn.com.sate.ope.transversal.dto.sate.Transaccion;
 import pe.bn.com.sate.ope.transversal.util.Fecha;
+import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
+import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoWS;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoDocumento;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoEstadoTarjeta;
 import pe.bn.com.sate.ope.transversal.util.enums.TipoReporteResumen;
@@ -41,13 +43,21 @@ public class ReporteResumenModel {
 	public String estadoEnLetras(String estado) {
 		return TipoEstadoTarjeta.enLetras(estado);
 	}
-
+	public String motivoEnLetras(String motivo) {
+		return ConstantesGenerales.obtenerDescripcionBloqueo(motivo);
+	}
 	public String tipoDocumentoLetras(String tipoDocumento) {
 		return TipoDocumento.tipoDocumentoBducLetras(tipoDocumento);
 
 	}
 	public  String descripcionTipoTar(String codigo,String diseno) {
 		return TipoTarjetaNegocio.descripcionTipotarjetaConplete(codigo, diseno) ;
-
+	}
+	
+	
+	public String descripcionRangoFechas() {
+		
+		return fechaCorteInicialSeleccionada + " - "+fechaCorteFinalSeleccionada;
+		
 	}
 }

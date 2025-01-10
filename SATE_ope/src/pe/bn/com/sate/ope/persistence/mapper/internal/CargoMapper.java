@@ -11,6 +11,10 @@ import pe.bn.com.sate.ope.transversal.dto.sate.Cargo;
 public interface CargoMapper {
 
 	@Select("SELECT " +
+			   "B15_NUM_EXPEDIENTE AS numeroExpediente, " +
+			   "B15_DOCUMENTO AS B15_DOCUMENTO, " +
+			   "B15_NOMBRE AS B15_NOMBRE," +
+			   "B15_FEC_INICIO AS fechaInicio, " +
 	        "B15_FEC_CORTE AS fechaCorte, " +
 	        "B15_FEC_PROCESO AS fechaProceso, " +
 	        "B15_CUENTA_CARGO AS numeroCuenta, " +

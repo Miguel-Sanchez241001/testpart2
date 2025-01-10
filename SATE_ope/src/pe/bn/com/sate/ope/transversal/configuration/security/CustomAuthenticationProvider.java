@@ -98,8 +98,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                     if (usuario.getEstado() != null && !usuario.getEstado().equals(TipoEstado.INACTIVO.getId())) {
                         if (usuarioService.existeUsuarioEmpresa(usuario, usernameAndDomain[0])) {
                         	compService.asignarParametros();
-                            ConstantesGenerales.PORCENTAJE_EFECTIVO = parametroMapper.buscarParametro("15", "PR.EFECTIVO").getValor();
-                            return fwInterfaceGateway.buscarUsuarioInterfaceGateway(
+                        	ConstantesGenerales.setPorcentajeEfectivo(
+                        		    parametroMapper.buscarParametro("15", "0").getValor().split("-")[1]
+                        		);                            return fwInterfaceGateway.buscarUsuarioInterfaceGateway(
                                     usernameAndDomain[0], empresa.getCic(), usernameAndDomain[1], usernameAndDomain[2], password);
                         } else {
                             String mensaje = "Usuario no tiene acceso a esta " + TipoEmpresa.tipoEmpresaLetras(empresa.getTipo());

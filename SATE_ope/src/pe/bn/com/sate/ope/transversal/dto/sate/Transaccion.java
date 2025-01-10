@@ -15,13 +15,15 @@ import lombok.ToString;
 @ToString
 public class Transaccion {
 
+	private String numeroExpediente;
 	private String numeroTarjeta;
+	private String monedaCuenta;
 	private Date fechaOperacion;
 	private Date fechaPosteo;
 	private String operacion;
 	private String comercio;
 	private Double monto;
-	private String autorizacionPMC;
+	private String monedaTransaccion;
 	private String numeroAutorizacion;
 	private String estado;
 

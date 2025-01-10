@@ -15,6 +15,7 @@ import pe.bn.com.sate.ope.transversal.dto.tablas.Agencia;
 import pe.bn.com.sate.ope.transversal.dto.tablas.Ubigeo;
 import pe.bn.com.sate.ope.transversal.util.StringsUtils;
 import pe.bn.com.sate.ope.transversal.util.UsefulWebApplication;
+import pe.bn.com.sate.ope.transversal.util.constantes.ConstantesGenerales;
 import pe.bn.com.sate.ope.transversal.util.enums.CodDocumentoWebservice;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoCuenta;
 import pe.bn.com.sate.ope.transversal.util.enums.MotivosBloqueoTarjeta;
@@ -96,7 +97,7 @@ public class CambiarEstadoTarjetaModel {
 	
 	
 	public String descripcionMotivoBloqueoWS(String codigo) {
-		return MotivosBloqueoWS.descripcionMotivoBloqueoWS(codigo);
+		return ConstantesGenerales.obtenerDescripcionBloqueo(codigo);
 	}
 
 	public String descripcionMotivoBloqueotarjeta(String codigo) {

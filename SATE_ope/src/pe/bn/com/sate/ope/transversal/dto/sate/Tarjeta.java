@@ -72,7 +72,7 @@ public class Tarjeta {
 
 	public void setUsoDispocionEfectivo(String usoDispocionEfectivo) {
 		if (usoDispocionEfectivo.equals("T")) {
-			setPorcentajeDisposicionEfectivo(ConstantesGenerales.PORCENTAJE_EFECTIVO);
+			setPorcentajeDisposicionEfectivo(ConstantesGenerales.getPorcentajeEfectivo());
 		}else{
 			setPorcentajeDisposicionEfectivo("00000");
 		}

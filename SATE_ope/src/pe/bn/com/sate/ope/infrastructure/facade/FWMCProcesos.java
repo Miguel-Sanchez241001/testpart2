@@ -154,7 +154,8 @@ public class FWMCProcesos {
 			String tipoMoneda, 
 			String numTarjeta,
 			String codMotivo,
-			String desMotivo
+			String desMotivo,
+			String direccionBloqueo
 			) throws InternalExcepcion {
 		//MGL
 		/*obtener valores*/
@@ -202,7 +203,7 @@ public class FWMCProcesos {
 		inputRequest.put(ConstantesWS.WS_USUARIO, usuario);
 		inputRequest.put(ConstantesWS.WS_CLAVE, clave);
 		inputRequest.put(ConstantesWS.RESERVADO, "");
-		
+		inputRequest.put(ConstantesWS.DIRECION_BLOQUEO, direccionBloqueo);
 		String soapRequestPrevie = ConstantesWS.generarXml(
 				ConstantesWS.MODIFICACION_TARJETA_XML, inputRequest);
 		

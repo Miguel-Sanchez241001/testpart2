@@ -50,7 +50,7 @@ public class ReporteResumenFacade {
 
 	public List<Transaccion> obtenerListaTransacciones(String fechaInicio,
 			String fechaFin) throws ServiceException {
-		return transaccionMapper.obtenerlistaTransacciones(
+		return transaccionMapper.obtenerListaTransacciones(
 				empresaService.buscarEmpresaPorRUC(
 						UsefulWebApplication.obtenerUsuario().getRuc())
 						.getCuentaCorriente(), fechaInicio, fechaFin);

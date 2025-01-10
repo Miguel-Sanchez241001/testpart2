@@ -427,9 +427,9 @@ public class TarjetaServiceImpl implements TarjetaService {
 
 		try {
 			String ENCARGO, CAJACHICA, VIATICO;
-			CAJACHICA = parametroMapper.buscarParametro("15", "CAJACHICA").getValor();
-			VIATICO = parametroMapper.buscarParametro("15", "VIATICO").getValor();
-			ENCARGO = parametroMapper.buscarParametro("15", "ENCARGO").getValor();
+			CAJACHICA = parametroMapper.buscarParametro("15", "0").getValor().split("-")[1];
+			VIATICO = parametroMapper.buscarParametro("15", "2").getValor().split("-")[1];
+			ENCARGO = parametroMapper.buscarParametro("15", "3").getValor().split("-")[1];
 			List<TipoTarjetaNegocio> listaBase;
 			if (bim.equals(ConstantesGenerales.BIM_BLACK)) {
 				listaBase = TipoTarjetaNegocio.buscarTipoTarjetaBLACK();
@@ -478,6 +478,7 @@ public class TarjetaServiceImpl implements TarjetaService {
 	        EstadoTarjeta estadoTarjeta = new EstadoTarjeta();
 	        estadoTarjeta.setIdTarjeta(tarjeta.getId());
 	        estadoTarjeta.setEstado(codEstadoActivada);
+	        estadoTarjeta.setMotivo(codNormal);
 	        estadoTarjeta.setFechaRegistro(new Date());
 	        estadoTarjeta.setUsuarioRegistro(UsefulWebApplication.obtenerUsuario().getUsername());
 	        estadoTarjeta.setCodAutorizacion(data.getIdTransaccion());

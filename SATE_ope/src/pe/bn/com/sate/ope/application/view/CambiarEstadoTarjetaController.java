@@ -244,7 +244,7 @@ public class CambiarEstadoTarjetaController implements Serializable {
 					try {
 
 						final DTOModificacionTarjeta modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda,
-								numTarjeta, codMotivo, desMotivo);
+								numTarjeta, codMotivo, desMotivo,"");
 						logger.info("codRespuesta:" + modificacionTarjeta.getCodRespuesta());
 						logger.info("desRespuesta:" + modificacionTarjeta.getDescRespuesta());
 						ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -312,7 +312,7 @@ public class CambiarEstadoTarjetaController implements Serializable {
 					logger.info("desMotivo:" + desMotivo);
  
 					final DTOModificacionTarjeta modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda,
-							numTarjeta, codMotivo, desMotivo);
+							numTarjeta, codMotivo, desMotivo,"");
  					logger.info("codRespuesta:" + modificacionTarjeta.getCodRespuesta());
 					logger.info("desRespuesta:" + modificacionTarjeta.getDescRespuesta());
 					ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -397,10 +397,11 @@ public class CambiarEstadoTarjetaController implements Serializable {
 
 		logger.info("codMotivo:" + codMotivo);
 		logger.info("desMotivo:" + desMotivo);
-
+		Agencia  agencia = cambiarEstadoTarjetaModel.getAgenciaSeleccionada();
+		String direcionBloqueo = agencia.getCodAgencia() +" - "+ agencia.getDescripcion().trim();
 		try {
 
-			modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda, numTarjeta, codMotivo, desMotivo);
+			modificacionTarjeta = fwmcProcesos.modificacionTarjeta(tipoMoneda, numTarjeta, codMotivo, desMotivo,direcionBloqueo);
 			// modificacionTarjeta.setCodRespuesta("0000");
 			logger.info("codRespuesta : " + modificacionTarjeta.getCodRespuesta());
 			logger.info("desRespuesta:" + modificacionTarjeta.getDescRespuesta());
