@@ -67,8 +67,9 @@ public class CompServiceImpl implements CompService {
 				}
 				logger.info("Parámetros asignados exitosamente");
 			} else {
-				logger.error("No se pudieron obtener los datos Comp");
-				throw new Exception("No se pudo obtener los datos Comp");
+				logger.error("ERROR EN OBTENCION DE PARAMETROS COD: "+sParam.getProceso().getCodigo());
+				logger.error("ERROR EN OBTENCION DE PARAMETROS DESCRIPCION: "+sParam.getProceso().getDescripcion());
+				throw new Exception("ERROR EN OBTENCION DE PARAMETROS COD: "+sParam.getProceso().getCodigo().concat(sParam.getProceso().getDescripcion()));
 			}
 		} else {
 			logger.error("Error al leer el archivo clavesegurades.key");
